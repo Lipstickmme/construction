@@ -6,7 +6,7 @@ import { capabilities, processSteps } from '@/data/services'
 
 export function Sustainable() {
   return (
-    <section id="sustainable" className="shell py-16 lg:py-24">
+    <section id="process" className="shell scroll-mt-[8.5rem] py-16 lg:py-24">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div>
           <SectionHeading

@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from '@/components/ui/Icon'
 import { Img } from '@/components/ui/Img'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { serviceCards } from '@/data/services'
+import { ProjectPrompt } from './ProjectPrompt'
 
 export function ServicesRail() {
   const railRef = useRef<HTMLUListElement>(null)
@@ -18,7 +19,7 @@ export function ServicesRail() {
 
   return (
     <section
-      id="our-services"
+      id="projects"
       className="relative scroll-mt-[8.5rem] overflow-hidden bg-navy py-16 lg:py-24"
     >
       {/* Faint blueprint grid, as in the reference. */}
@@ -107,16 +108,7 @@ export function ServicesRail() {
           ))}
         </ul>
 
-        <p className="shell mt-10 text-center text-sm text-white/70">
-          Have a project in mind? You're welcome to send a{' '}
-          <Link to="/contact" className="font-medium text-gold underline underline-offset-4">
-            message
-          </Link>{' '}
-          or{' '}
-          <Link to="/contact#call-back" className="font-medium text-gold underline underline-offset-4">
-            give us a call.
-          </Link>
-        </p>
+        <ProjectPrompt tone="light" className="shell mt-10" />
       </div>
     </section>
   )

@@ -3,10 +3,11 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { ChevronDown, Close, Menu } from '@/components/ui/Icon'
 import { Logo } from '@/components/ui/Logo'
 import { mainNav } from '@/data/navigation'
+import { site, telHref } from '@/data/site'
 import { ThemeToggle } from './ThemeToggle'
 
 const navItemClass = (isActive: boolean) =>
-  `relative flex items-center gap-1 py-1 font-display text-[0.72rem] font-medium tracking-[0.09em] uppercase transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-6 after:rounded-full after:bg-navy after:transition-opacity after:content-[''] dark:after:bg-gold ${
+  `relative flex items-center gap-1 py-1 font-display text-[0.7rem] font-medium tracking-[0.08em] whitespace-nowrap uppercase transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-6 after:rounded-full after:bg-navy after:transition-opacity after:content-[''] dark:after:bg-gold ${
     isActive ? 'text-ink after:opacity-100' : 'text-body hover:text-ink after:opacity-0'
   }`
 
@@ -51,7 +52,7 @@ export function Header() {
           className="hidden lg:block"
           onMouseLeave={() => setOpenMenu(null)}
         >
-          <ul className="flex items-center gap-7">
+          <ul className="flex items-center gap-4 xl:gap-6">
             {mainNav.map((item) => {
               const isOpen = openMenu === item.label
 
@@ -110,7 +111,27 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
+          {/* Quote block — the reference keeps this beside the nav. Needs a
+              wide viewport to sit alongside six nav items without crowding. */}
+          <div className="hidden text-right 2xl:block">
+            <p className="font-display text-[0.6rem] font-semibold tracking-[0.14em] whitespace-nowrap text-body uppercase">
+              Request A Quote
+            </p>
+            <p className="mt-0.5 font-display text-[0.7rem] font-semibold text-ink">
+              <a href={telHref(site.phones[0])} className="hover:text-gold">
+                {site.phones[0]}
+              </a>
+            </p>
+          </div>
+
+          <Link
+            to="/contact#call-back"
+            className="hidden rounded-md bg-gold px-4 py-2.5 font-display text-[0.68rem] font-semibold tracking-wide whitespace-nowrap text-navy uppercase transition-transform hover:-translate-y-0.5 xl:block"
+          >
+            Call me Back
+          </Link>
+
           <ThemeToggle />
           <button
             type="button"

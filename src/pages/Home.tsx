@@ -1,6 +1,8 @@
 import { FindUs } from '@/components/home/FindUs'
 import { Hero } from '@/components/home/Hero'
 import { Infrastructure } from '@/components/home/Infrastructure'
+import { LatestNews } from '@/components/home/LatestNews'
+import { ProjectPrompt } from '@/components/home/ProjectPrompt'
 import { SectionNav } from '@/components/home/SectionNav'
 import { ServicesRail } from '@/components/home/ServicesRail'
 import { Sustainable } from '@/components/home/Sustainable'
@@ -12,9 +14,12 @@ export default function Home() {
       <Hero />
       <SectionNav />
       <WhatWeDo />
+      <ProjectPrompt className="shell pb-16" />
       <ServicesRail />
       <Sustainable />
       <Infrastructure />
+      <LatestNews />
+      <ProjectPrompt className="shell pb-16" />
       <FindUs />
     </>
   )

@@ -10,8 +10,9 @@ export type NavItem = NavLink & {
   children?: NavLink[]
 }
 
-/** Sub-pages under Corporate Responsibility. */
+/** Sub-pages under Corporate Responsibility, in the reference's order. */
 export const responsibilityPages: NavLink[] = [
+  { label: 'Sustainability', to: '/corporate-responsibility/sustainability' },
   {
     label: 'Corporate Social Responsibility',
     to: '/corporate-responsibility/csr',
@@ -20,7 +21,6 @@ export const responsibilityPages: NavLink[] = [
     label: 'Diversity & Inclusion',
     to: '/corporate-responsibility/diversity-and-inclusion',
   },
-  { label: 'Sustainability', to: '/corporate-responsibility/sustainability' },
 ]
 
 /** Top bar — the primary site sections. */
@@ -31,7 +31,7 @@ export const mainNav: NavItem[] = [
     label: 'Services',
     to: '/services',
     children: services.map((service) => ({
-      label: service.navLabel,
+      label: service.title,
       to: `/services#${service.id}`,
     })),
   },
@@ -55,10 +55,10 @@ export type SectionLink = {
 }
 
 export const sectionNav: SectionLink[] = [
-  { label: 'Our Services', targetId: 'our-services' },
-  { label: 'Recent Projects', targetId: 'infrastructure' },
+  { label: 'Our Services', targetId: 'services' },
+  { label: 'Recent Projects', targetId: 'projects' },
   { label: 'The Process', targetId: 'process' },
-  { label: 'Contact', targetId: 'find-us' },
+  { label: 'Contact', targetId: 'contact' },
 ]
 
 /** Footer quick links, rendered as two adjacent columns. */

@@ -64,6 +64,14 @@ export const services: Service[] = [
       'Takes place after the design has been completed, all drawings have been completed and approved by the local building department and construction begins.',
     image: images.serviceConstructionAdministration,
   },
+  {
+    id: 'geology-and-mine-engineering',
+    title: 'Geology and Mine Engineering',
+    navLabel: 'Geology and Mine Engineering',
+    excerpt:
+      'Ground investigation, resource assessment and mine design — the geotechnical groundwork that tells you what can safely be built, and how.',
+    image: images.serviceGeology,
+  },
 ]
 
 export type ServiceCard = {
@@ -120,16 +128,16 @@ export const offerings: Offering[] = [
   {
     id: 'roadworks',
     icon: 'crane',
-    title: 'Roadworks, Tunnels, Bridges',
+    title: 'Roadworks, Tunnels, Bridges, Drainage and Concrete Structures',
     description:
-      'Design and delivery of roads, highways, tunnels and crossings — from site preparation and grading through to pavement, signage and road marking.',
+      'AtlasBridge Construction offers a range of services related to roadworks, tunnels, bridges, drainage, and concrete structures.',
   },
   {
     id: 'architectural-design',
     icon: 'blueprint',
     title: 'Architectural Design',
     description:
-      'Concept development, technical drawings and planning approvals, produced in step with the engineering team so the build never fights the drawing.',
+      'From initial concept drawings that sketch out an artist’s impression of what your home will look like post-build to three-dimensional modelling...',
     badge: 'Offer',
   },
   {
@@ -137,7 +145,7 @@ export const offerings: Offering[] = [
     icon: 'helmet',
     title: 'General Contractor',
     description:
-      'Single point of accountability across trades, programme and budget, with rigorous site supervision and reporting from mobilisation to handover.',
+      "We're one-stop general contractor who can oversee and simplify the entire project process from inspection, design, approval to construction.",
   },
 ]
 

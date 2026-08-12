@@ -4,7 +4,7 @@ import { offerings } from '@/data/services'
 
 export function WhatWeDo() {
   return (
-    <section id="what-we-do" className="shell py-16 lg:py-24">
+    <section id="services" className="shell scroll-mt-[8.5rem] py-16 lg:py-24">
       <SectionHeading
         align="center"
         eyebrow="What we do"

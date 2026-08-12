@@ -53,8 +53,12 @@ export function SectionNav() {
 
   return (
     <div className="sticky top-[72px] z-40 border-b border-line bg-surface-muted">
-      <nav aria-label="Page sections" className="shell">
-        <ul className="grid grid-cols-2 sm:grid-cols-4">
+      <nav aria-label="Page sections" className="shell flex items-stretch gap-6">
+        <span className="hidden items-center font-display text-[0.62rem] font-semibold tracking-[0.18em] text-body uppercase lg:flex">
+          Menu
+        </span>
+
+        <ul className="grid flex-1 grid-cols-2 sm:grid-cols-4">
           {sectionNav.map((item) => {
             const isActive = active === item.targetId
 

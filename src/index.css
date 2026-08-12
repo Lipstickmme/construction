@@ -8,34 +8,42 @@
  * `navy` and `gold` are fixed brand colours — they read the same in both themes.
  * Everything else is a semantic token that flips between light and dark below.
  */
+/*
+ * Palette taken from the live site's Elementor global colours:
+ *   primary   #002E42   secondary #FAD55B
+ *   text      #002E42B3 (primary at 70%)
+ * Body copy is the navy at 70% alpha rather than a separate grey.
+ */
 :root {
-  --brand-navy: #0a2e4e;
-  --brand-navy-deep: #062136;
-  --brand-gold: #f6ce4a;
-  --brand-gold-soft: #fbe6a4;
+  --brand-navy: #002e42;
+  --brand-navy-deep: #001d2b;
+  --brand-teal: #24444a;
+  --brand-gold: #fad55b;
+  --brand-gold-soft: #fdefc2;
 
   --bg: #ffffff;
   --surface: #ffffff;
-  --surface-muted: #f4f6f8;
-  --ink: #0f3a61;
-  --body: #6b8aa6;
-  --border: #e3e9ef;
-  --shadow-color: 15 58 97;
+  --surface-muted: #f4f4f4;
+  --ink: #002e42;
+  --body: #002e42b3;
+  --border: #002e4217;
+  --shadow-color: 0 46 66;
 }
 
 .dark {
-  --bg: #071c2f;
-  --surface: #0b2740;
-  --surface-muted: #0a2135;
-  --ink: #eaf2f9;
-  --body: #9db4c9;
-  --border: #17395a;
+  --bg: #001a26;
+  --surface: #002331;
+  --surface-muted: #002e42;
+  --ink: #eaf3f7;
+  --body: #a2b2c9;
+  --border: #ffffff1f;
   --shadow-color: 0 0 0;
 }
 
 @theme inline {
   --color-navy: var(--brand-navy);
   --color-navy-deep: var(--brand-navy-deep);
+  --color-teal: var(--brand-teal);
   --color-gold: var(--brand-gold);
   --color-gold-soft: var(--brand-gold-soft);
 
@@ -46,8 +54,8 @@
   --color-body: var(--body);
   --color-line: var(--border);
 
-  --font-display: 'Poppins', 'Segoe UI', system-ui, sans-serif;
-  --font-sans: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Outfit', 'Segoe UI', system-ui, sans-serif;
 
   --shadow-card: 0 18px 40px -24px rgb(var(--shadow-color) / 0.35);
   --shadow-float: 0 20px 45px -20px rgb(var(--shadow-color) / 0.45);

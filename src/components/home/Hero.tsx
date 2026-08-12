@@ -1,74 +1,133 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from '@/components/ui/Icon'
-import { HeroSlideshow } from './HeroSlideshow'
+import { Img } from '@/components/ui/Img'
+import { heroEyebrow, heroSlides } from '@/data/hero'
 
-const stats = [
-  { value: '25+', label: 'Years on site' },
-  { value: '480', label: 'Projects delivered' },
-  { value: '9', label: 'Countries' },
-]
+const INTERVAL_MS = 7000
 
 export function Hero() {
-  return (
-    <section className="relative isolate overflow-hidden">
-      <HeroSlideshow />
+  const [active, setActive] = useState(0)
+  const [hovered, setHovered] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null)
 
-      {/* Navy wash over the artwork, plus a stronger fade on the left so the
-          copy holds up against a busy photograph. */}
+  // Respect users who have asked for reduced motion. Tracked separately from
+  // hover so moving the pointer away can't restart it for them.
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setReducedMotion(query.matches)
+    sync()
+    query.addEventListener('change', sync)
+    return () => query.removeEventListener('change', sync)
+  }, [])
+
+  const paused = hovered || reducedMotion
+
+  useEffect(() => {
+    if (paused) return
+    timer.current = setInterval(() => {
+      setActive((current) => (current + 1) % heroSlides.length)
+    }, INTERVAL_MS)
+    return () => {
+      if (timer.current) clearInterval(timer.current)
+    }
+  }, [paused])
+
+  return (
+    <section
+      className="relative isolate overflow-hidden"
+      aria-roledescription="carousel"
+      aria-label="AtlasBridge Construction"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Background artwork — one layer per slide, cross-faded with a slow
+          Ken Burns drift on whichever slide is showing. */}
+      <div aria-hidden="true" className="absolute inset-0 -z-20">
+        {heroSlides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={`absolute inset-0 transition-opacity duration-[1400ms] ease-out ${
+              index === active ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <Img
+              slot={slide.image}
+              alt=""
+              loading={index === 0 ? 'eager' : 'lazy'}
+              placeholder="plain"
+              className={`size-full transition-transform duration-[9000ms] ease-out ${
+                index === active ? 'scale-110' : 'scale-100'
+              }`}
+            />
+          </div>
+        ))}
+      </div>
+
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-navy/75" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep/80 via-navy-deep/30 to-transparent"
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep/85 via-navy-deep/40 to-transparent"
       />
 
-      <div className="shell flex min-h-[34rem] flex-col justify-center py-24 lg:min-h-[40rem]">
-        <div className="max-w-2xl">
-          <span className="eyebrow bg-white/15 text-white">Construction</span>
+      <div className="shell flex min-h-[36rem] flex-col justify-center py-24 lg:min-h-[44rem]">
+        {heroSlides.map((slide, index) => (
+          <div
+            key={slide.id}
+            aria-hidden={index !== active}
+            className={`max-w-2xl transition-all duration-700 ease-out ${
+              index === active
+                ? 'translate-y-0 opacity-100'
+                : 'pointer-events-none absolute translate-y-4 opacity-0'
+            }`}
+          >
+            <span className="font-display text-[0.72rem] font-semibold tracking-[0.22em] text-white/80 uppercase">
+              {heroEyebrow}
+            </span>
 
-          <h1 className="mt-6 font-display text-4xl leading-[1.3] font-bold text-white sm:text-5xl lg:text-[3.4rem]">
-            We build the infrastructure
-            <br />
-            <span className="highlight-solid">cities depend on.</span>
-          </h1>
+            <h1 className="mt-5 font-display text-4xl leading-[1.08] font-bold text-white sm:text-6xl lg:text-7xl">
+              {slide.titleLead}
+              <br />
+              <span className="text-gold">{slide.titleAccent}</span>
+            </h1>
 
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/75">
-            Civil engineering, commercial development and heavy infrastructure —
-            planned, engineered and delivered by one accountable team, from
-            first survey through to handover.
-          </p>
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/75">
+              {slide.body}
+            </p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 rounded-md bg-gold px-6 py-3.5 font-display text-[0.78rem] font-semibold tracking-wide text-navy uppercase transition-transform hover:-translate-y-0.5"
-            >
-              Explore our services
-              <ArrowRight className="size-4" />
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-md border border-white/40 px-6 py-3.5 font-display text-[0.78rem] font-semibold tracking-wide text-white uppercase transition-colors hover:bg-white/10"
-            >
-              Talk to our team
-            </Link>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <Link
+                to="/services"
+                className="inline-flex items-center gap-2 rounded-md bg-gold px-7 py-4 font-display text-[0.78rem] font-semibold tracking-wide text-navy uppercase transition-transform hover:-translate-y-0.5"
+              >
+                Explore our services
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-md border border-white/40 px-7 py-4 font-display text-[0.78rem] font-semibold tracking-wide text-white uppercase transition-colors hover:bg-white/10"
+              >
+                Talk to our team
+              </Link>
+            </div>
           </div>
+        ))}
+      </div>
 
-          <dl className="mt-12 flex flex-wrap gap-x-12 gap-y-6 border-t border-white/20 pt-8">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <dt className="sr-only">{stat.label}</dt>
-                <dd>
-                  <span className="block font-display text-3xl font-bold text-white">
-                    {stat.value}
-                  </span>
-                  <span className="mt-1 block text-xs tracking-wide text-white/65 uppercase">
-                    {stat.label}
-                  </span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+      <div className="absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 gap-2.5">
+        {heroSlides.map((slide, index) => (
+          <button
+            key={slide.id}
+            type="button"
+            onClick={() => setActive(index)}
+            aria-label={`Show slide ${index + 1}`}
+            aria-current={index === active}
+            className={`h-1.5 rounded-full transition-all ${
+              index === active ? 'w-8 bg-gold' : 'w-1.5 bg-white/60 hover:bg-white'
+            }`}
+          />
+        ))}
       </div>
     </section>
   )

@@ -27,26 +27,21 @@ export const images = {
     size: '240 × 64',
   },
 
-  // Home
-  hero: {
-    src: '/images/hero-construction-site.jpg',
-    alt: 'Crane lifting steel beams over a city construction site',
-    size: '1600 × 1000',
+  // Home — hero slider (three slides, matching the reference)
+  hero1: {
+    src: '/images/hero-bridge-wip.jpg',
+    alt: 'Bridge under construction',
+    size: '2700 × 1800',
   },
   hero2: {
-    src: '/images/hero-bridge.jpg',
-    alt: 'Cable-stayed bridge spanning a river at dusk',
-    size: '1600 × 1000',
+    src: '/images/hero-sd1.jpg',
+    alt: 'Construction site at work',
+    size: '2700 × 1800',
   },
   hero3: {
-    src: '/images/hero-tunnel.jpg',
-    alt: 'Lit road tunnel under construction',
-    size: '1600 × 1000',
-  },
-  hero4: {
-    src: '/images/hero-highrise.jpg',
-    alt: 'Steel frame high-rise against an open sky',
-    size: '1600 × 1000',
+    src: '/images/hero-img1.jpg',
+    alt: 'Completed infrastructure project',
+    size: '2700 × 1800',
   },
   sustainable: {
     src: '/images/sustainable-excavator.jpg',
@@ -122,6 +117,11 @@ export const images = {
     alt: 'Supervisor with a laptop overlooking an active site',
     size: '800 × 560',
   },
+  serviceGeology: {
+    src: '/images/service-geology-mine-engineering.jpg',
+    alt: 'Geologist logging core samples at a mine site',
+    size: '800 × 560',
+  },
 
   // About page
   aboutHero: {
@@ -155,6 +155,23 @@ export const images = {
     src: '/images/responsibility-sustainability.jpg',
     alt: 'Many hands cupping soil with a seedling growing from it',
     size: '1200 × 700',
+  },
+
+  // Latest News
+  newsOne: {
+    src: '/images/news-1.jpg',
+    alt: 'Bridge deck under replacement at night',
+    size: '800 × 560',
+  },
+  newsTwo: {
+    src: '/images/news-2.jpg',
+    alt: 'Concrete pour in progress',
+    size: '800 × 560',
+  },
+  newsThree: {
+    src: '/images/news-3.jpg',
+    alt: 'Apprentices on site with a supervising engineer',
+    size: '800 × 560',
   },
 
   // Careers
