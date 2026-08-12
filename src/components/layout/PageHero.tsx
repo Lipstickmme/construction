@@ -37,7 +37,7 @@ export function PageHero({
         placeholder="plain"
         className="absolute inset-0 -z-10 size-full"
       />
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-navy/80" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-overlay" />
 
       <div className="shell flex min-h-[19rem] flex-col items-center justify-center py-16 text-center lg:min-h-[22rem]">
         {crumb && (

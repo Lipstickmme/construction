@@ -18,8 +18,18 @@
   --brand-navy: #002e42;
   --brand-navy-deep: #001d2b;
   --brand-teal: #24444a;
+  /* Chip/eyebrow text on white, straight from the reference's hero layers. */
+  --brand-blue: #002c5f;
   --brand-gold: #fad55b;
   --brand-gold-soft: #fdefc2;
+  /* Hero and page-hero wash: the navy at exactly 64%, as the reference sets it. */
+  --overlay: rgb(0 46 66 / 0.64);
+  /*
+   * Stand-in behind that wash while the real photography is missing. Roughly
+   * the average tone of a daylight building shot, so the overlay renders the
+   * blue it will have once actual images land rather than a flat grey.
+   */
+  --mist: #a2b2c9;
 
   --bg: #ffffff;
   --surface: #ffffff;
@@ -44,6 +54,9 @@
   --color-navy: var(--brand-navy);
   --color-navy-deep: var(--brand-navy-deep);
   --color-teal: var(--brand-teal);
+  --color-blue: var(--brand-blue);
+  --color-overlay: var(--overlay);
+  --color-mist: var(--mist);
   --color-gold: var(--brand-gold);
   --color-gold-soft: var(--brand-gold-soft);
 

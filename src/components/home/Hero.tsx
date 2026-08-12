@@ -65,11 +65,8 @@ export function Hero() {
         ))}
       </div>
 
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-navy/75" />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep/85 via-navy-deep/40 to-transparent"
-      />
+      {/* Single flat wash at the reference's exact value — rgba(0,46,66,.64). */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-overlay" />
 
       <div className="shell flex min-h-[36rem] flex-col justify-center py-24 lg:min-h-[44rem]">
         {heroSlides.map((slide, index) => (
@@ -82,7 +79,8 @@ export function Hero() {
                 : 'pointer-events-none absolute translate-y-4 opacity-0'
             }`}
           >
-            <span className="font-display text-[0.72rem] font-semibold tracking-[0.22em] text-white/80 uppercase">
+            {/* White chip with #002C5F text, as the reference sets it. */}
+            <span className="inline-block rounded-sm bg-white px-4 py-2 font-display text-[0.7rem] font-semibold tracking-[0.16em] text-blue uppercase">
               {heroEyebrow}
             </span>
 

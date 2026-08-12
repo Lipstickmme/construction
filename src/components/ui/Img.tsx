@@ -41,7 +41,7 @@ export function Img({
       return (
         <div
           aria-hidden="true"
-          className={`bg-surface-muted ${className}`}
+          className={`bg-mist ${className}`}
           data-placeholder={filename}
         />
       )

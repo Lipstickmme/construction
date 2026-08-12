@@ -50,10 +50,31 @@ the SERVICES nav dropdown; adding a Corporate Responsibility entry to
 
 ## Design system
 
-Brand colours and semantic tokens are defined in `src/index.css`. `navy` and
-`gold` are fixed; everything else (`bg`, `surface`, `ink`, `body`, `line`) is a
-token that flips for dark mode. Dark mode is a `.dark` class on `<html>`,
-toggled by `ThemeToggle` and persisted to `localStorage`.
+Brand colours and semantic tokens are defined in `src/index.css`, taken from
+the reference site's Elementor globals:
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `navy` | `#002E42` | Headings, dark bands, primary |
+| `gold` | `#FAD55B` | Accent, buttons, highlights |
+| `blue` | `#002C5F` | Chip/eyebrow text on white |
+| `overlay` | `rgb(0 46 66 / 0.64)` | The wash over hero background images |
+| `body` | `#002E42B3` | Body copy — the navy at 70%, not a separate grey |
+
+`navy`, `gold` and `blue` are fixed; the rest (`bg`, `surface`, `ink`, `body`,
+`line`) flip for dark mode.
+
+**The site is white by default.** The reference has no dark mode, so the theme
+does *not* follow `prefers-color-scheme` — a visitor whose OS is dark still
+gets the white site. Dark mode remains available, but only once someone opts
+in with the toggle; the choice persists in `localStorage` and is applied by a
+small inline script in `index.html` so there's no flash on reload.
+
+The `overlay` value is exact — the reference paints one flat
+`rgba(0,46,66,.64)` shape over each hero image, with no gradient. It only
+looks right over real photography; while images are missing, `<Img>`'s `plain`
+placeholder renders `--mist` (`#A2B2C9`), roughly the average tone of a
+daylight building shot, so the band previews the blue it will actually have.
 
 Helpers worth knowing:
 
