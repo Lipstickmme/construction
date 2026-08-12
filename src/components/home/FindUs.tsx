@@ -7,7 +7,7 @@ const cardTitle =
 
 export function FindUs() {
   return (
-    <section id="find-us" className="relative">
+    <section id="find-us" className="relative scroll-mt-[8.5rem]">
       <Img
         slot={images.map}
         className="h-[22rem] w-full sm:h-[26rem] lg:h-[30rem]"

@@ -57,7 +57,7 @@ export function Sustainable() {
 
       <ol
         id="process"
-        className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-card sm:grid-cols-3"
+        className="mt-16 grid scroll-mt-[8.5rem] gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-card sm:grid-cols-3"
       >
         {processSteps.map((step, index) => (
           <li

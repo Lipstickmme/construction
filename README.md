@@ -32,10 +32,10 @@ table.
 ```
 src/
   components/
-    layout/     TopBar, Header, SecondaryNav, PageHero, Footer,
-                CallMeBackTab, ChatWidget, ThemeToggle, Layout
-    home/       Hero, HeroSlideshow, WhatWeDo, ServicesRail,
-                Sustainable, Infrastructure, FindUs
+    layout/     TopBar, Header, PageHero, Footer, CallMeBackTab,
+                ChatWidget, ThemeToggle, Layout
+    home/       Hero, HeroSlideshow, SectionNav, WhatWeDo,
+                ServicesRail, Sustainable, Infrastructure, FindUs
     about/      ValueCards, StatsBand, BrandStrip
     ui/         Img, Icon, Logo, Accordion, SectionHeading
   data/         All copy and content — images, services, navigation,
@@ -55,10 +55,28 @@ Brand colours and semantic tokens are defined in `src/index.css`. `navy` and
 token that flips for dark mode. Dark mode is a `.dark` class on `<html>`,
 toggled by `ThemeToggle` and persisted to `localStorage`.
 
-Two helpers worth knowing:
+Helpers worth knowing:
 
 - `.shell` — the standard max-width page container.
-- `.highlight-gold` — the gold marker-pen effect behind heading words.
+- `.highlight-gold` — the gold marker-pen effect, for headings on a **light**
+  background. It covers only the lower part of each glyph, so the tops rely on
+  the page behind them for contrast.
+- `.highlight-solid` — same idea for headings on a **dark** background (the
+  hero, the navy bands). Fills the whole box so no letter loses contrast.
+- `.rail` — the horizontal card rail that lines up with `.shell` on the left
+  and bleeds off the right edge.
+
+## The home page's section menu
+
+The bar under the hero (`src/components/home/SectionNav.tsx`) is a section
+navigator, not a site menu. Each entry scrolls to a section further down and
+underlines itself while that section is in view; the bar then sticks beneath
+the header as you scroll.
+
+Entries are declared in `sectionNav` in `src/data/navigation.ts`, where each
+`targetId` must match the `id` on a home-page section. Those sections also
+carry `scroll-mt-[8.5rem]` so the two sticky bars don't cover their headings —
+keep that in step with the header height if you change it.
 
 ## Routes
 

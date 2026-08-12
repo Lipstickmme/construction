@@ -84,7 +84,11 @@
 }
 
 @layer components {
-  /* The yellow marker-pen highlight that sits behind the last words of a heading. */
+  /*
+   * The yellow marker-pen highlight behind the last words of a heading. Only
+   * for headings on a light background — the marker covers the lower part of
+   * each glyph, so the tops rely on the page behind them for contrast.
+   */
   .highlight-gold {
     background-image: linear-gradient(
       to top,
@@ -93,15 +97,23 @@
     );
     color: var(--brand-navy);
     padding-inline: 0.12em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   /*
-   * On a dark page the marker only covers part of each glyph, so navy text
-   * would disappear above the gold. Fill the whole box instead.
+   * Same idea on a dark background (the hero, the navy bands, dark mode),
+   * where the marker's exposed glyph tops would vanish. Fills the whole box
+   * so every letter sits on gold.
    */
+  .highlight-solid,
   .dark .highlight-gold {
     background-image: none;
     background-color: var(--brand-gold);
+    color: var(--brand-navy);
+    padding-inline: 0.15em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   .eyebrow {

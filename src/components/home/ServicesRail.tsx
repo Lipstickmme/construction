@@ -17,7 +17,10 @@ export function ServicesRail() {
   }
 
   return (
-    <section id="our-services" className="relative overflow-hidden bg-navy py-16 lg:py-24">
+    <section
+      id="our-services"
+      className="relative scroll-mt-[8.5rem] overflow-hidden bg-navy py-16 lg:py-24"
+    >
       {/* Faint blueprint grid, as in the reference. */}
       <div
         aria-hidden="true"

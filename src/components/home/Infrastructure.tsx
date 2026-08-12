@@ -6,7 +6,10 @@ import { disciplines } from '@/data/services'
 
 export function Infrastructure() {
   return (
-    <section id="infrastructure" className="shell py-16 lg:py-24">
+    <section
+      id="infrastructure"
+      className="shell scroll-mt-[8.5rem] py-16 lg:py-24"
+    >
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
           <div

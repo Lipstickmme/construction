@@ -10,11 +10,6 @@ export type NavItem = NavLink & {
   children?: NavLink[]
 }
 
-export type NavGroup = {
-  label: string
-  items: NavLink[]
-}
-
 /** Sub-pages under Corporate Responsibility. */
 export const responsibilityPages: NavLink[] = [
   {
@@ -49,42 +44,21 @@ export const mainNav: NavItem[] = [
   { label: 'Contact', to: '/contact' },
 ]
 
-/** Second bar — deep links into sections of the pages above. */
-export const secondaryNav: NavGroup[] = [
-  {
-    label: 'Our Services',
-    items: services.map((service) => ({
-      label: service.navLabel,
-      to: `/services#${service.id}`,
-    })),
-  },
-  {
-    label: 'Recent Projects',
-    items: [
-      { label: 'Public Infrastructure', to: '/services#roadworks' },
-      { label: 'Commercial Developments', to: '/services#design-and-build' },
-      { label: 'Historic Restoration', to: '/services#interior-design' },
-      { label: 'Concrete Structures', to: '/services#roadworks' },
-    ],
-  },
-  {
-    label: 'The Process',
-    items: [
-      { label: 'Offering construction plans', to: '/#process' },
-      { label: 'Building the project', to: '/#process' },
-      { label: 'Project assignment', to: '/#process' },
-      { label: 'Pre-construction services', to: '/#sustainable' },
-    ],
-  },
-  {
-    label: 'Contact',
-    items: [
-      { label: 'Send a message', to: '/contact#message' },
-      { label: 'Request a call back', to: '/contact#call-back' },
-      { label: 'Find our office', to: '/#find-us' },
-      { label: 'Careers enquiries', to: '/careers' },
-    ],
-  },
+/**
+ * The bar that sits directly under the hero. Each entry scrolls the page to a
+ * section further down, and highlights itself while that section is in view —
+ * `targetId` must match the `id` on the corresponding home-page section.
+ */
+export type SectionLink = {
+  label: string
+  targetId: string
+}
+
+export const sectionNav: SectionLink[] = [
+  { label: 'Our Services', targetId: 'our-services' },
+  { label: 'Recent Projects', targetId: 'infrastructure' },
+  { label: 'The Process', targetId: 'process' },
+  { label: 'Contact', targetId: 'find-us' },
 ]
 
 /** Footer quick links, rendered as two adjacent columns. */

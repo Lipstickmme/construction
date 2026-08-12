@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { ChevronDown, Close, Menu } from '@/components/ui/Icon'
 import { Logo } from '@/components/ui/Logo'
-import { mainNav, secondaryNav } from '@/data/navigation'
-import { SecondaryNav } from './SecondaryNav'
+import { mainNav } from '@/data/navigation'
 import { ThemeToggle } from './ThemeToggle'
 
 const navItemClass = (isActive: boolean) =>
@@ -130,9 +129,6 @@ export function Header() {
         </div>
       </div>
 
-      {/* The deep-link bar belongs to the home page only. */}
-      {pathname === '/' && <SecondaryNav />}
-
       {mobileOpen && (
         <div
           id="mobile-menu"
@@ -172,24 +168,6 @@ export function Header() {
               ))}
             </ul>
           </nav>
-
-          {pathname === '/' &&
-            secondaryNav.map((group) => (
-              <div key={group.label} className="mt-6">
-                <p className="font-display text-[0.68rem] font-semibold tracking-[0.14em] text-ink uppercase">
-                  {group.label}
-                </p>
-                <ul className="mt-2 space-y-1">
-                  {group.items.map((item) => (
-                    <li key={item.to + item.label}>
-                      <Link to={item.to} className="block py-1.5 text-sm text-body">
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
         </div>
       )}
     </header>
