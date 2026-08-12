@@ -1,0 +1,165 @@
+@import 'tailwindcss';
+
+/* Dark mode is driven by a `.dark` class on <html>, toggled by ThemeToggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Brand palette lifted from the AtlasBridge reference designs.
+ * `navy` and `gold` are fixed brand colours — they read the same in both themes.
+ * Everything else is a semantic token that flips between light and dark below.
+ */
+:root {
+  --brand-navy: #0a2e4e;
+  --brand-navy-deep: #062136;
+  --brand-gold: #f6ce4a;
+  --brand-gold-soft: #fbe6a4;
+
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-muted: #f4f6f8;
+  --ink: #0f3a61;
+  --body: #6b8aa6;
+  --border: #e3e9ef;
+  --shadow-color: 15 58 97;
+}
+
+.dark {
+  --bg: #071c2f;
+  --surface: #0b2740;
+  --surface-muted: #0a2135;
+  --ink: #eaf2f9;
+  --body: #9db4c9;
+  --border: #17395a;
+  --shadow-color: 0 0 0;
+}
+
+@theme inline {
+  --color-navy: var(--brand-navy);
+  --color-navy-deep: var(--brand-navy-deep);
+  --color-gold: var(--brand-gold);
+  --color-gold-soft: var(--brand-gold-soft);
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-line: var(--border);
+
+  --font-display: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+
+  --shadow-card: 0 18px 40px -24px rgb(var(--shadow-color) / 0.35);
+  --shadow-float: 0 20px 45px -20px rgb(var(--shadow-color) / 0.45);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--body);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand-gold);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* The yellow marker-pen highlight that sits behind the last words of a heading. */
+  .highlight-gold {
+    background-image: linear-gradient(
+      to top,
+      var(--brand-gold) 0.62em,
+      transparent 0.62em
+    );
+    color: var(--brand-navy);
+    padding-inline: 0.12em;
+  }
+
+  /*
+   * On a dark page the marker only covers part of each glyph, so navy text
+   * would disappear above the gold. Fill the whole box instead.
+   */
+  .dark .highlight-gold {
+    background-image: none;
+    background-color: var(--brand-gold);
+  }
+
+  .eyebrow {
+    display: inline-block;
+    background-color: var(--surface-muted);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.85rem;
+    border-radius: 0.3rem;
+  }
+
+  .shell {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  /*
+   * Horizontal card rail that lines up with `.shell` on the left but bleeds
+   * off the right edge of the viewport. `scroll-padding` has to match
+   * `padding` or scroll-snap immediately scrolls the leading padding away.
+   */
+  .rail {
+    padding-inline: 1.25rem;
+    scroll-padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    .rail {
+      padding-inline: max(1.25rem, calc((100vw - 76rem) / 2 + 1.25rem));
+      scroll-padding-inline: max(1.25rem, calc((100vw - 76rem) / 2 + 1.25rem));
+    }
+  }
+}
+
+/* Hide the horizontal scrollbar on the services rail while keeping it scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
