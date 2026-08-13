@@ -9,9 +9,6 @@ type LogoProps = {
   className?: string
 }
 
-const boxClass = 'h-14 w-52'
-const markClass = 'object-contain object-left'
-
 export function Logo({ variant = 'dark', className = '' }: LogoProps) {
   const label = `${site.name} ${site.nameSuffix}`
 
@@ -21,37 +18,17 @@ export function Logo({ variant = 'dark', className = '' }: LogoProps) {
       className={`block shrink-0 ${className}`}
       aria-label={`${label} — home`}
     >
-      {variant === 'light' ? (
-        <Img
-          slot={images.logoLight}
-          alt={label}
-          loading="eager"
-          placeholder="compact"
-          className={boxClass}
-          imgClassName={markClass}
-        />
-      ) : (
-        <>
-          {/* The dark mark would disappear on the dark theme's background, so
-              swap to the reversed-out one there. */}
-          <Img
-            slot={images.logo}
-            alt={label}
-            loading="eager"
-            placeholder="compact"
-            className={`${boxClass} dark:hidden`}
-            imgClassName={markClass}
-          />
-          <Img
-            slot={images.logoLight}
-            alt={label}
-            loading="eager"
-            placeholder="compact"
-            className={`${boxClass} hidden dark:block`}
-            imgClassName={markClass}
-          />
-        </>
-      )}
+      <Img
+        slot={variant === 'light' ? images.logoLight : images.logo}
+        alt={label}
+        loading="eager"
+        placeholder="compact"
+        // Sized by height, with the box wide enough for the mark's 3.47:1
+        // ratio so `contain` never has to shrink it to fit the width.
+        className="h-14 w-56"
+        fit="contain"
+        imgClassName="object-left"
+      />
     </Link>
   )
 }

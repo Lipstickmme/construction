@@ -7,7 +7,14 @@ type ImgProps = {
   /** Overrides the slot's default alt text. */
   alt?: string
   className?: string
-  /** Applied to the <img> itself; the wrapper handles layout. */
+  /**
+   * How the image fills its box. Must be a prop rather than a class passed
+   * through `imgClassName`: `object-cover` and `object-contain` have equal
+   * CSS specificity, so a passed-in override loses or wins by stylesheet
+   * order rather than by intent.
+   */
+  fit?: 'cover' | 'contain'
+  /** Extra classes for the <img> itself; the wrapper handles layout. */
   imgClassName?: string
   loading?: 'lazy' | 'eager'
   /**
@@ -29,6 +36,7 @@ export function Img({
   slot,
   alt,
   className = '',
+  fit = 'cover',
   imgClassName = '',
   loading = 'lazy',
   placeholder = 'panel',
@@ -88,7 +96,7 @@ export function Img({
         alt={alt ?? slot.alt}
         loading={loading}
         onError={() => setFailed(true)}
-        className={`size-full object-cover ${imgClassName}`}
+        className={`size-full ${fit === 'contain' ? 'object-contain' : 'object-cover'} ${imgClassName}`}
       />
     </div>
   )

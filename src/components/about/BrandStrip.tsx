@@ -15,8 +15,8 @@ export function BrandStrip() {
               <Img
                 slot={logo}
                 placeholder="compact"
-                className="h-12 w-32 opacity-70"
-                imgClassName="object-contain"
+                className="h-12 w-32"
+                fit="contain"
               />
             </li>
           ))}

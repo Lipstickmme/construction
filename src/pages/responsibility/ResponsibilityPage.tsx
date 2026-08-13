@@ -21,7 +21,7 @@ export default function ResponsibilityPage() {
         <Img
           slot={page.image}
           className="mx-auto aspect-16/9 w-full max-w-2xl rounded-sm"
-          imgClassName="object-contain"
+          fit="contain"
         />
 
         <div className="mt-12">

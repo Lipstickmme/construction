@@ -39,15 +39,16 @@ src/
     about/      ValueCards, StatsBand, BrandStrip
     services/   ServiceSidebar
     ui/         Img, Icon, Logo, Accordion, SectionHeading, MapEmbed
-  data/         All copy and content — images, services, navigation,
-                site details, about, responsibility
+  data/         All copy and content — images, services, serviceContent,
+                navigation, site details, about, responsibility
   pages/        One file per route
 ```
 
 Content lives in `src/data/`, not inside components. Adding a service to
 `services` in `src/data/services.ts` gives it a card on the Services index, an
 entry in the SERVICES nav dropdown, a row in every service page's sidebar, and
-its own page at `/services/<id>`; adding a Corporate Responsibility entry to
+its own page at `/services/<id>` — with its body copy in
+`src/data/serviceContent.ts` under the same `id`; adding a Corporate Responsibility entry to
 `src/data/responsibility.ts` creates its sub-page and its card on the index.
 
 ## Design system
@@ -76,6 +77,21 @@ The `overlay` value is exact — the reference paints one flat
 looks right over real photography; while images are missing, `<Img>`'s `plain`
 placeholder renders `--mist` (`#A2B2C9`), roughly the average tone of a
 daylight building shot, so the band previews the blue it will actually have.
+
+### Images
+
+`<Img>` takes `fit="cover" | "contain"` as a **prop**, not as a class through
+`imgClassName`. The two `object-fit` utilities have equal CSS specificity, so
+passing one as an override is resolved by stylesheet order rather than by
+intent — which silently cropped the logo and the brand marks. Use the prop.
+
+### Service page copy
+
+`src/data/serviceContent.ts` holds each service page's body as a list of
+blocks: `p` (paragraph), `h` (sub-heading), `terms` (bullets leading with a
+bold term) and `list` (plain bullets). This keeps the client's copy structured
+rather than baked into markup, so a page can mix headings, prose and both list
+styles in any order.
 
 Helpers worth knowing:
 

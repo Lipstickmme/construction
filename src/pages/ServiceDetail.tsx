@@ -2,7 +2,54 @@ import { Navigate, useParams } from 'react-router-dom'
 import { PageHero } from '@/components/layout/PageHero'
 import { ServiceSidebar } from '@/components/services/ServiceSidebar'
 import { Img } from '@/components/ui/Img'
+import { serviceContent, type ServiceBlock } from '@/data/serviceContent'
 import { services } from '@/data/services'
+
+function Block({ block }: { block: ServiceBlock }) {
+  if (block.kind === 'h') {
+    return (
+      <h3 className="mt-9 font-display text-base font-bold text-ink">
+        {block.text}
+      </h3>
+    )
+  }
+
+  if (block.kind === 'p') {
+    return (
+      <p className="mt-4 text-sm leading-relaxed text-body">{block.text}</p>
+    )
+  }
+
+  if (block.kind === 'list') {
+    return (
+      <ul className="mt-4 space-y-2">
+        {block.items.map((item) => (
+          <li
+            key={item}
+            className="relative pl-5 text-sm leading-relaxed text-body before:absolute before:top-2 before:left-0 before:size-1.5 before:rounded-full before:bg-gold before:content-['']"
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  return (
+    <ul className="mt-6 space-y-4">
+      {block.items.map((item) => (
+        <li
+          key={item.term}
+          className="border-l-2 border-gold pl-5 text-sm leading-relaxed text-body"
+        >
+          <span className="font-display font-bold text-ink">{item.term}</span>
+          {' — '}
+          {item.text}
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 /**
  * One template for all seven service pages — hero, sidebar, feature image and
@@ -11,8 +58,9 @@ import { services } from '@/data/services'
 export default function ServiceDetail() {
   const { slug } = useParams()
   const service = services.find((entry) => entry.id === slug)
+  const content = slug ? serviceContent[slug] : undefined
 
-  if (!service) return <Navigate to="/services" replace />
+  if (!service || !content) return <Navigate to="/services" replace />
 
   return (
     <>
@@ -47,33 +95,12 @@ export default function ServiceDetail() {
             </div>
 
             <h2 className="mt-12 font-display text-xl font-bold text-ink">
-              {service.detailHeading}
+              {content.heading}
             </h2>
 
-            {service.detailBody.map((paragraph) => (
-              <p
-                key={paragraph}
-                className="mt-4 text-sm leading-relaxed text-body"
-              >
-                {paragraph}
-              </p>
+            {content.blocks.map((block, index) => (
+              <Block key={index} block={block} />
             ))}
-
-            {service.detailBullets && (
-              <ul className="mt-8 space-y-4">
-                {service.detailBullets.map((bullet) => (
-                  <li
-                    key={bullet.term}
-                    className="border-l-2 border-gold pl-5 text-sm leading-relaxed text-body"
-                  >
-                    <span className="font-display font-bold text-ink">
-                      {bullet.term}
-                    </span>
-                    : {bullet.text}
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
         </div>
       </section>

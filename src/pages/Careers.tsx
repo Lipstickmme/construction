@@ -35,7 +35,7 @@ export default function Careers() {
         <Img
           slot={images.careersTeam}
           className="mx-auto aspect-16/9 w-full max-w-3xl rounded-sm"
-          imgClassName="object-contain"
+          fit="contain"
         />
 
         <div className="mt-12">
