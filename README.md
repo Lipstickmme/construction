@@ -33,11 +33,11 @@ table.
 src/
   components/
     layout/     TopBar, Header, PageHero, Footer, CallMeBackTab,
-                ChatWidget, ThemeToggle, Layout
-    home/       Hero, HeroSlideshow, SectionNav, WhatWeDo,
+                ChatWidget, Layout
+    home/       Hero, SectionNav, WhatWeDo, ProjectPrompt,
                 ServicesRail, Sustainable, Infrastructure, FindUs
     about/      ValueCards, StatsBand, BrandStrip
-    ui/         Img, Icon, Logo, Accordion, SectionHeading
+    ui/         Img, Icon, Logo, Accordion, SectionHeading, MapEmbed
   data/         All copy and content — images, services, navigation,
                 site details, about, responsibility
   pages/        One file per route
@@ -64,11 +64,10 @@ the reference site's Elementor globals:
 `navy`, `gold` and `blue` are fixed; the rest (`bg`, `surface`, `ink`, `body`,
 `line`) flip for dark mode.
 
-**The site is white by default.** The reference has no dark mode, so the theme
-does *not* follow `prefers-color-scheme` — a visitor whose OS is dark still
-gets the white site. Dark mode remains available, but only once someone opts
-in with the toggle; the choice persists in `localStorage` and is applied by a
-small inline script in `index.html` so there's no flash on reload.
+**The site is white by default, and there is no theme switcher.** The
+reference has no dark mode, so the header carries only the logo and the nav.
+The `.dark` token block in `index.css` is inert — nothing adds that class. Say
+the word if you want it stripped out entirely.
 
 The `overlay` value is exact — the reference paints one flat
 `rgba(0,46,66,.64)` shape over each hero image, with no gradient. It only
@@ -118,5 +117,5 @@ Any unmatched path renders the 404 page.
 - The contact form, the Call Me Back tab and the chat widget all resolve
   locally with a confirmation message. Point their `onSubmit` handlers at a
   real endpoint when there is one.
-- The map is a static image. Swap it for a Google Maps `<iframe>` in
-  `src/components/home/FindUs.tsx` if you want a live map.
+- The language switcher in the top bar changes its own label and nothing else.
+  Wire it to an i18n setup when you have one.

@@ -11,6 +11,8 @@ type PageHeroProps = {
   subtitle?: string
   /** Defaults to the shared inner-page hero background. */
   image?: ImageSlot
+  /** Replaces the background image entirely — e.g. a live map. */
+  background?: ReactNode
   /** Anchor the chevron scrolls to. */
   scrollTo?: string
   children?: ReactNode
@@ -25,18 +27,21 @@ export function PageHero({
   crumb,
   subtitle = site.heroSubtitle,
   image = images.aboutHero,
+  background,
   scrollTo = '#page-body',
   children,
 }: PageHeroProps) {
   return (
     <section className="relative isolate overflow-hidden">
-      <Img
-        slot={image}
-        alt=""
-        loading="eager"
-        placeholder="plain"
-        className="absolute inset-0 -z-10 size-full"
-      />
+      {background ?? (
+        <Img
+          slot={image}
+          alt=""
+          loading="eager"
+          placeholder="plain"
+          className="absolute inset-0 -z-10 size-full"
+        />
+      )}
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-overlay" />
 
       <div className="shell flex min-h-[19rem] flex-col items-center justify-center py-16 text-center lg:min-h-[22rem]">

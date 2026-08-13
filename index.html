@@ -15,18 +15,6 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <script>
-      // Apply a stored dark-mode choice before first paint. Light is the
-      // default, so visitors who never opted in never see a flash.
-      try {
-        if (localStorage.getItem('atlasbridge-theme') === 'dark') {
-          document.documentElement.classList.add('dark')
-          document.documentElement.style.colorScheme = 'dark'
-        }
-      } catch (e) {
-        /* private mode — fall back to light */
-      }
-    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -24,6 +24,10 @@ These are in place and rendering.
 | `iconbox-2.jpeg` | Home rail — Industrial Engineering And Construction |
 | `Bridges-w7e7e.jpg` | Home rail — Concrete Structures |
 | `k5l-zbRSPds.jpg` | Home — Sustainable Infrastructure Construction |
+| `modern-city-infrastructure.jpg` | Home — Modern City Infrastructure Construction |
+| `hero-bridge-wip.png` | Hero slide 1 — "Construction Solutions" |
+| `hero-sd1.png` | Hero slide 2 — "Building your dreams." |
+| `hero-img1.png` | Hero slide 3 — "Building the future." |
 | `CSR-1024x569.jpg` | Corporate Responsibility — CSR |
 | `sustainability-1028x464-1.jpg` | Corporate Responsibility — Sustainability |
 | `careers.jpg` | Careers |
@@ -34,19 +38,8 @@ Name the file exactly as listed and it wires itself up.
 
 ### Home page
 
-| Filename | Used for | Target size |
-| --- | --- | --- |
-| `hero-bridge-wip.jpg` | Hero slide 1 — "Construction Solutions" | 2700 × 1800 |
-| `hero-sd1.jpg` | Hero slide 2 — "Building your dreams." | 2700 × 1800 |
-| `hero-img1.jpg` | Hero slide 3 — "Building the future." | 2700 × 1800 |
-| `infrastructure-cranes.jpg` | Modern City Infrastructure — portrait, beside the accordion | 900 × 1100 |
-| `map-brisbane.jpg` | Find Us band, and the Contact page hero | 2400 × 700 |
-| `rail-historic-restoration.jpg` | Home rail — Historic Restoration | 800 × 900 |
-| `news-1.jpg`, `news-2.jpg`, `news-3.jpg` | Latest News cards | 800 × 560 each |
-
-The hero images matter most — they sit under the navy wash across the full
-width, so they want wide landscape shots with room on the left for the
-headline.
+Nothing outstanding — every home-page slot is filled, and the map is a live
+Google embed rather than an image.
 
 ### Other pages
 
@@ -60,7 +53,8 @@ headline.
 | `brand-1.svg` … `brand-5.svg` | About — "Trusted by global brands" strip | 160 × 48 each |
 
 `about-hero.jpg` is worth doing early: it's the background for every inner
-page's hero band, so one file fixes five pages.
+page's hero band, so one file fixes five pages. The Contact page is the
+exception — its hero is the live map.
 
 ## Adding a new image slot
 
@@ -74,6 +68,7 @@ surface with no text, for images sitting under a colour wash).
 
 ## Map
 
-`map-brisbane.jpg` is a static image slot. To use a live embed instead,
-replace the `<Img>` in `src/components/home/FindUs.tsx` with a Google Maps
-`<iframe>`.
+The map is a live Google Maps embed (`src/components/ui/MapEmbed.tsx`), used
+both by the home page's Find Us band and as the Contact page hero. It reads
+the office address from `src/data/site.ts` and needs no API key. Swap the URL
+for a Maps Embed API one if you want styling control or usage reporting.

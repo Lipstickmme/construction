@@ -6,6 +6,13 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { serviceCards } from '@/data/services'
 import { ProjectPrompt } from './ProjectPrompt'
 
+/**
+ * The reference's carousel clones its slides so the band reads as continuous
+ * rather than running out. Repeating the four cards reproduces that; the
+ * duplicates are decorative and hidden from assistive tech.
+ */
+const railCards = [...serviceCards, ...serviceCards]
+
 export function ServicesRail() {
   const railRef = useRef<HTMLUListElement>(null)
 
@@ -81,9 +88,11 @@ export function ServicesRail() {
           ref={railRef}
           className="rail no-scrollbar mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2"
         >
-          {serviceCards.map((card) => (
+          {railCards.map((card, index) => (
             <li
-              key={card.id}
+              key={`${card.id}-${index}`}
+              // Clones are decoration; screen readers only need the first pass.
+              aria-hidden={index >= serviceCards.length}
               className="relative w-[15rem] shrink-0 snap-start sm:w-[17rem]"
             >
               <Link to={`/services#${card.id}`} className="group block">

@@ -1,5 +1,4 @@
-import { Img } from '@/components/ui/Img'
-import { images } from '@/data/images'
+import { MapEmbed } from '@/components/ui/MapEmbed'
 import { site, telHref } from '@/data/site'
 
 const cardTitle =
@@ -8,10 +7,7 @@ const cardTitle =
 export function FindUs() {
   return (
     <section id="contact" className="relative scroll-mt-[8.5rem]">
-      <Img
-        slot={images.map}
-        className="h-[22rem] w-full sm:h-[26rem] lg:h-[30rem]"
-      />
+      <MapEmbed className="h-[22rem] w-full sm:h-[26rem] lg:h-[30rem]" />
 
       <div className="pointer-events-none absolute inset-0">
         <div className="shell flex h-full items-center justify-end">

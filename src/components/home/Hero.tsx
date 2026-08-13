@@ -42,27 +42,35 @@ export function Hero() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Background artwork — one layer per slide, cross-faded with a slow
-          Ken Burns drift on whichever slide is showing. */}
+      {/*
+        Background artwork. Each slide cross-fades while drifting, and the
+        drift alternates direction slide to slide so consecutive transitions
+        don't look identical.
+      */}
       <div aria-hidden="true" className="absolute inset-0 -z-20">
-        {heroSlides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-[1400ms] ease-out ${
-              index === active ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <Img
-              slot={slide.image}
-              alt=""
-              loading={index === 0 ? 'eager' : 'lazy'}
-              placeholder="plain"
-              className={`size-full transition-transform duration-[9000ms] ease-out ${
-                index === active ? 'scale-110' : 'scale-100'
+        {heroSlides.map((slide, index) => {
+          const isActive = index === active
+          const drift = index % 2 === 0 ? 'translate-x-4' : '-translate-x-4'
+
+          return (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 transition-opacity duration-[1600ms] ease-out ${
+                isActive ? 'opacity-100' : 'opacity-0'
               }`}
-            />
-          </div>
-        ))}
+            >
+              <Img
+                slot={slide.image}
+                alt=""
+                loading={index === 0 ? 'eager' : 'lazy'}
+                placeholder="plain"
+                className={`size-full transition-transform duration-[10000ms] ease-out ${
+                  isActive ? 'translate-x-0 scale-110' : `${drift} scale-100`
+                }`}
+              />
+            </div>
+          )
+        })}
       </div>
 
       {/* Single flat wash at the reference's exact value — rgba(0,46,66,.64). */}

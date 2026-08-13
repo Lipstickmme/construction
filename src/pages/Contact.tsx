@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { PageHero } from '@/components/layout/PageHero'
-import { images } from '@/data/images'
+import { MapEmbed } from '@/components/ui/MapEmbed'
 import { site, telHref } from '@/data/site'
 
 const labelClass = 'mb-2 block text-xs text-body'
@@ -22,7 +22,9 @@ export default function Contact() {
         title="Contact Us"
         crumb="Home - Contact"
         subtitle=""
-        image={images.map}
+        background={
+          <MapEmbed className="absolute inset-0 -z-10 size-full" />
+        }
       />
 
       <section id="page-body" className="shell pb-16 lg:pb-20">

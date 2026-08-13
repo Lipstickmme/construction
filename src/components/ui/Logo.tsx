@@ -9,7 +9,7 @@ type LogoProps = {
   className?: string
 }
 
-const boxClass = 'h-11 w-40'
+const boxClass = 'h-14 w-52'
 const markClass = 'object-contain object-left'
 
 export function Logo({ variant = 'dark', className = '' }: LogoProps) {

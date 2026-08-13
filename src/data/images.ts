@@ -27,21 +27,21 @@ export const images = {
     size: '300 × 87',
   },
 
-  // Home — hero slider. AWAITING ARTWORK (needs wide landscape shots).
+  // Home — hero slider
   hero1: {
-    src: '/images/hero-bridge-wip.jpg',
+    src: '/images/hero-bridge-wip.png',
     alt: 'Bridge under construction',
-    size: '2700 × 1800',
+    size: '1584 × 672',
   },
   hero2: {
-    src: '/images/hero-sd1.jpg',
+    src: '/images/hero-sd1.png',
     alt: 'Construction site at work',
-    size: '2700 × 1800',
+    size: '1584 × 672',
   },
   hero3: {
-    src: '/images/hero-img1.jpg',
+    src: '/images/hero-img1.png',
     alt: 'Completed infrastructure project',
-    size: '2700 × 1800',
+    size: '1376 × 768',
   },
 
   // Home — sections
@@ -51,18 +51,10 @@ export const images = {
     size: '1920 × 1280',
   },
   infrastructure: {
-    // AWAITING ARTWORK — portrait crop, sits beside the accordion.
-    src: '/images/infrastructure-cranes.jpg',
+    src: '/images/modern-city-infrastructure.jpg',
     alt: 'Tower cranes above a steel frame high-rise',
-    size: '900 × 1100',
+    size: '1024 × 1536',
   },
-  map: {
-    // AWAITING ARTWORK — also used as the Contact page hero.
-    src: '/images/map-brisbane.jpg',
-    alt: 'Map showing the AtlasBridge office at 40 Creek St, Brisbane',
-    size: '2400 × 700',
-  },
-
   // Home — services rail
   railCivilEngineering: {
     src: '/images/7bzbyafVTYg-.jpg',
@@ -84,13 +76,6 @@ export const images = {
     alt: 'Steel girders of a highway bridge seen from below',
     size: '1024 × 521',
   },
-  railRestoration: {
-    // AWAITING ARTWORK
-    src: '/images/rail-historic-restoration.jpg',
-    alt: 'Scaffolding against a restored heritage facade',
-    size: '800 × 900',
-  },
-
   // Services page
   serviceRoadworks: {
     src: '/images/ghf9LjrVg.jpg',
@@ -171,22 +156,6 @@ export const images = {
     size: '1000 × 417',
   },
 
-  // Latest News — all AWAITING ARTWORK
-  newsOne: {
-    src: '/images/news-1.jpg',
-    alt: 'Bridge deck under replacement at night',
-    size: '800 × 560',
-  },
-  newsTwo: {
-    src: '/images/news-2.jpg',
-    alt: 'Concrete pour in progress',
-    size: '800 × 560',
-  },
-  newsThree: {
-    src: '/images/news-3.jpg',
-    alt: 'Apprentices on site with a supervising engineer',
-    size: '800 × 560',
-  },
 } as const satisfies Record<string, ImageSlot>
 
 export type ImageKey = keyof typeof images

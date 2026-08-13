@@ -3,8 +3,6 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { ChevronDown, Close, Menu } from '@/components/ui/Icon'
 import { Logo } from '@/components/ui/Logo'
 import { mainNav } from '@/data/navigation'
-import { site, telHref } from '@/data/site'
-import { ThemeToggle } from './ThemeToggle'
 
 const navItemClass = (isActive: boolean) =>
   `relative flex items-center gap-1 py-1 font-display text-[0.7rem] font-medium tracking-[0.08em] whitespace-nowrap uppercase transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-6 after:rounded-full after:bg-navy after:transition-opacity after:content-[''] dark:after:bg-gold ${
@@ -43,7 +41,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-surface/95 shadow-sm backdrop-blur">
-      <div className="shell flex h-[72px] items-center justify-between gap-6">
+      <div className="shell flex h-[88px] items-center justify-between gap-6">
         <Logo />
 
         <nav
@@ -111,28 +109,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-4">
-          {/* Quote block — the reference keeps this beside the nav. Needs a
-              wide viewport to sit alongside six nav items without crowding. */}
-          <div className="hidden text-right 2xl:block">
-            <p className="font-display text-[0.6rem] font-semibold tracking-[0.14em] whitespace-nowrap text-body uppercase">
-              Request A Quote
-            </p>
-            <p className="mt-0.5 font-display text-[0.7rem] font-semibold text-ink">
-              <a href={telHref(site.phones[0])} className="hover:text-gold">
-                {site.phones[0]}
-              </a>
-            </p>
-          </div>
-
-          <Link
-            to="/contact#call-back"
-            className="hidden rounded-md bg-gold px-4 py-2.5 font-display text-[0.68rem] font-semibold tracking-wide whitespace-nowrap text-navy uppercase transition-transform hover:-translate-y-0.5 xl:block"
-          >
-            Call me Back
-          </Link>
-
-          <ThemeToggle />
+        <div className="flex items-center gap-2">
           <button
             type="button"
             className="grid size-9 place-items-center rounded-full border border-line text-ink lg:hidden"
@@ -153,7 +130,7 @@ export function Header() {
       {mobileOpen && (
         <div
           id="mobile-menu"
-          className="max-h-[calc(100vh-72px)] overflow-y-auto border-t border-line bg-surface px-5 pb-8 lg:hidden"
+          className="max-h-[calc(100vh-88px)] overflow-y-auto border-t border-line bg-surface px-5 pb-8 lg:hidden"
         >
           <nav aria-label="Main (mobile)">
             <ul className="divide-y divide-line">

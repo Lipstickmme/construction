@@ -107,12 +107,6 @@ export const serviceCards: ServiceCard[] = [
     title: 'Concrete Structures',
     image: images.railConcrete,
   },
-  {
-    id: 'historic-restoration',
-    tag: 'Restoration',
-    title: 'Historic Restoration',
-    image: images.railRestoration,
-  },
 ]
 
 export type Offering = {
