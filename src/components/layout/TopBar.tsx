@@ -4,7 +4,7 @@ import { site } from '@/data/site'
 /** Thin utility strip above the header: contact email left, socials right. */
 export function TopBar() {
   return (
-    <div className="border-b border-rule bg-surface">
+    <div className="bg-surface">
       <div className="shell flex h-11 items-center justify-between gap-4">
         <a
           href={`mailto:${site.email}`}
@@ -17,9 +17,9 @@ export function TopBar() {
           </span>
         </a>
 
-        <ul className="flex shrink-0 items-stretch self-stretch border-l border-line">
+        <ul className="flex shrink-0 items-stretch self-stretch border-l border-[color:rgb(0_46_66/0.10)]">
           {site.socials.map((social) => (
-            <li key={social.label} className="flex border-r border-line">
+            <li key={social.label} className="flex border-r border-[color:rgb(0_46_66/0.10)]">
               <a
                 href={social.href}
                 target="_blank"

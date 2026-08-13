@@ -37,8 +37,6 @@
   --ink: #002e42;
   --body: #002e42b3;
   --border: #002e4217;
-  /* Divider between the utility bar and the nav row: lighter still. */
-  --rule: #002e420f;
   --shadow-color: 0 46 66;
 }
 
@@ -68,7 +66,6 @@
   --color-ink: var(--ink);
   --color-body: var(--body);
   --color-line: var(--border);
-  --color-rule: var(--rule);
 
   --font-display: 'Outfit', 'Segoe UI', system-ui, sans-serif;
   --font-sans: 'Outfit', 'Segoe UI', system-ui, sans-serif;
