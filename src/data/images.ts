@@ -1,33 +1,33 @@
 /**
  * Central manifest of every image slot on the site.
  *
- * Nothing here ships with a real file yet — drop your own artwork into
- * `public/images/` using the exact `src` filename below and it appears
- * automatically. Until then each slot renders a labelled placeholder panel
- * (see `src/components/ui/Img.tsx`) showing the filename and target size.
+ * Slots marked "AWAITING ARTWORK" have no file yet and render a labelled
+ * placeholder panel (see `src/components/ui/Img.tsx`) naming the file they
+ * want. Drop a matching file into `public/images/` and it appears on reload.
+ * `public/images/README.md` lists what is still outstanding.
  */
 export type ImageSlot = {
-  /** Path served from `public/` — drop a file here with this exact name. */
+  /** Path served from `public/`. */
   src: string
   /** Default alt text. Override per usage when the context needs it. */
   alt: string
-  /** Recommended export size, shown on the placeholder panel. */
+  /** Actual size where artwork exists, target size where it doesn't. */
   size: string
 }
 
 export const images = {
   logo: {
-    src: '/images/logo.svg',
+    src: '/images/logo-2.png',
     alt: 'AtlasBridge Construction',
-    size: '240 × 64',
+    size: '2080 × 600',
   },
   logoLight: {
-    src: '/images/logo-light.svg',
+    src: '/images/logo-white.png',
     alt: 'AtlasBridge Construction',
-    size: '240 × 64',
+    size: '300 × 87',
   },
 
-  // Home — hero slider (three slides, matching the reference)
+  // Home — hero slider. AWAITING ARTWORK (needs wide landscape shots).
   hero1: {
     src: '/images/hero-bridge-wip.jpg',
     alt: 'Bridge under construction',
@@ -43,17 +43,21 @@ export const images = {
     alt: 'Completed infrastructure project',
     size: '2700 × 1800',
   },
+
+  // Home — sections
   sustainable: {
-    src: '/images/sustainable-excavator.jpg',
+    src: '/images/k5l-zbRSPds.jpg',
     alt: 'Excavator working on a site under a dramatic sky',
-    size: '1000 × 760',
+    size: '1920 × 1280',
   },
   infrastructure: {
+    // AWAITING ARTWORK — portrait crop, sits beside the accordion.
     src: '/images/infrastructure-cranes.jpg',
     alt: 'Tower cranes above a steel frame high-rise',
     size: '900 × 1100',
   },
   map: {
+    // AWAITING ARTWORK — also used as the Contact page hero.
     src: '/images/map-brisbane.jpg',
     alt: 'Map showing the AtlasBridge office at 40 Creek St, Brisbane',
     size: '2400 × 700',
@@ -61,26 +65,27 @@ export const images = {
 
   // Home — services rail
   railCivilEngineering: {
-    src: '/images/rail-civil-engineering.jpg',
-    alt: 'Workers assembling reinforcement steel',
-    size: '800 × 900',
+    src: '/images/7bzbyafVTYg-.jpg',
+    alt: 'Aerial view of a reinforced concrete floor under construction',
+    size: '1920 × 1268',
   },
   railInteriorDesign: {
-    src: '/images/rail-interior-design.jpg',
-    alt: 'Finished kitchen interior with dark cabinetry',
-    size: '800 × 900',
+    src: '/images/3.jpg',
+    alt: 'Contemporary kitchen with high-gloss cabinetry',
+    size: '2560 × 1000',
   },
   railIndustrial: {
-    src: '/images/rail-industrial-engineering.jpg',
-    alt: 'Site engineer in high-visibility gear at golden hour',
-    size: '800 × 900',
+    src: '/images/iconbox-2.jpeg',
+    alt: 'Steel fixers tying reinforcement at sunset',
+    size: '740 × 722',
   },
   railConcrete: {
-    src: '/images/rail-concrete-structures.jpg',
-    alt: 'Steel roof truss structure seen from below',
-    size: '800 × 900',
+    src: '/images/Bridges-w7e7e.jpg',
+    alt: 'Steel girders of a highway bridge seen from below',
+    size: '1024 × 521',
   },
   railRestoration: {
+    // AWAITING ARTWORK
     src: '/images/rail-historic-restoration.jpg',
     alt: 'Scaffolding against a restored heritage facade',
     size: '800 × 900',
@@ -88,42 +93,43 @@ export const images = {
 
   // Services page
   serviceRoadworks: {
-    src: '/images/service-roadworks.jpg',
-    alt: 'Site team reviewing plans on a large roadworks project',
-    size: '800 × 560',
+    src: '/images/ghf9LjrVg.jpg',
+    alt: 'Site team on a post-tensioned deck ahead of a pour',
+    size: '1920 × 1280',
   },
   serviceArchitecturalDesign: {
-    src: '/images/service-architectural-design.jpg',
-    alt: 'Hand sketching an architectural rendering of a house',
-    size: '800 × 560',
+    src: '/images/Architectural-Design.jpg',
+    alt: 'Hand sketching an architectural rendering',
+    size: '2000 × 966',
   },
   serviceDesignAndBuild: {
-    src: '/images/service-design-and-build.jpg',
-    alt: 'Glazed kitchen extension opening onto a garden',
-    size: '800 × 560',
+    src: '/images/Design-and-Build.jpg',
+    alt: 'Glazed extension opening onto a garden',
+    size: '1920 × 1000',
   },
   serviceInteriorDesign: {
-    src: '/images/service-interior-design.jpg',
-    alt: 'Living room with fireplace and warm natural light',
-    size: '800 × 560',
+    src: '/images/Interior-Design-Service.jpg',
+    alt: 'Living room with warm natural light',
+    size: '1024 × 704',
   },
   serviceArchitecturalProgramming: {
-    src: '/images/service-architectural-programming.jpg',
-    alt: 'Team reviewing a scale model around a studio table',
-    size: '800 × 560',
+    src: '/images/Architectural-programming.webp',
+    alt: 'Team reviewing plans around a studio table',
+    size: 'webp',
   },
   serviceConstructionAdministration: {
-    src: '/images/service-construction-administration.jpg',
-    alt: 'Supervisor with a laptop overlooking an active site',
-    size: '800 × 560',
+    src: '/images/Construction-Administration.jpg',
+    alt: 'Supervisor reviewing progress on an active site',
+    size: '1232 × 822',
   },
   serviceGeology: {
+    // AWAITING ARTWORK
     src: '/images/service-geology-mine-engineering.jpg',
     alt: 'Geologist logging core samples at a mine site',
     size: '800 × 560',
   },
 
-  // About page
+  // About page — all AWAITING ARTWORK
   aboutHero: {
     src: '/images/about-hero.jpg',
     alt: 'Glass towers seen from below',
@@ -142,22 +148,30 @@ export const images = {
 
   // Corporate Responsibility
   responsibilityCsr: {
-    src: '/images/responsibility-csr.jpg',
-    alt: 'Corporate social responsibility illustration',
-    size: '1200 × 700',
+    src: '/images/CSR-1024x569.jpg',
+    alt: 'Corporate social responsibility',
+    size: '1024 × 569',
   },
   responsibilityDiversity: {
+    // AWAITING ARTWORK
     src: '/images/responsibility-diversity.jpg',
     alt: 'Illustration of a diverse group of people standing together',
     size: '1200 × 700',
   },
   responsibilitySustainability: {
-    src: '/images/responsibility-sustainability.jpg',
+    src: '/images/sustainability-1028x464-1.jpg',
     alt: 'Many hands cupping soil with a seedling growing from it',
-    size: '1200 × 700',
+    size: '695 × 464',
   },
 
-  // Latest News
+  // Careers
+  careersTeam: {
+    src: '/images/careers.jpg',
+    alt: 'AtlasBridge team members from across the business',
+    size: '1000 × 417',
+  },
+
+  // Latest News — all AWAITING ARTWORK
   newsOne: {
     src: '/images/news-1.jpg',
     alt: 'Bridge deck under replacement at night',
@@ -173,18 +187,11 @@ export const images = {
     alt: 'Apprentices on site with a supervising engineer',
     size: '800 × 560',
   },
-
-  // Careers
-  careersTeam: {
-    src: '/images/careers-team.jpg',
-    alt: 'AtlasBridge team members from across the business',
-    size: '1200 × 700',
-  },
 } as const satisfies Record<string, ImageSlot>
 
 export type ImageKey = keyof typeof images
 
-/** Logo strip under "Trusted by global brands" — mono SVGs work best. */
+/** Logo strip under "Trusted by global brands". All AWAITING ARTWORK. */
 export const brandLogos: ImageSlot[] = [
   { src: '/images/brand-1.svg', alt: 'Houzz', size: '160 × 48' },
   { src: '/images/brand-2.svg', alt: 'MyBuilder.com', size: '160 × 48' },
