@@ -32,6 +32,7 @@ These are in place and rendering.
 | `sustainability-1028x464-1.jpg` | Corporate Responsibility — Sustainability |
 | `careers.jpg` | Careers |
 | `Geology-and-Mine-Engineering.jpg` | Services — Geology and Mine Engineering |
+| `Diversity-Inclusion-1024x465.jpg` | Corporate Responsibility — Diversity & Inclusion |
 | `hero-sd1.png` | Shared inner-page hero band (every page but Contact) |
 | `11.png` | Trusted by global brands — Houzz |
 | `22.png` | Trusted by global brands — MyBuilder.com |
@@ -52,7 +53,6 @@ Google embed rather than an image.
 
 | Filename | Used for | Target size |
 | --- | --- | --- |
-| `responsibility-diversity.jpg` | Corporate Responsibility — Diversity & Inclusion | 1200 × 700 |
 | `about-ceo.jpg` | About — leadership portrait | 760 × 900 |
 | `about-stats-background.jpg` | About — stats band background | 2000 × 700 |
 

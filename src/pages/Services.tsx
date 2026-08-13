@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { PageHero } from '@/components/layout/PageHero'
 import { ChevronRight } from '@/components/ui/Icon'
-import { Img } from '@/components/ui/Img'
+import { TiltImage } from '@/components/ui/TiltImage'
 import { services } from '@/data/services'
 
 export default function Services() {
@@ -15,9 +15,9 @@ export default function Services() {
             <li
               key={service.id}
               id={service.id}
-              className="flex scroll-mt-32 flex-col overflow-hidden rounded-lg border border-line bg-surface shadow-card transition-transform hover:-translate-y-1"
+              className="flex scroll-mt-32 flex-col overflow-hidden rounded-lg border border-line bg-surface shadow-card"
             >
-              <Img slot={service.image} className="aspect-16/11 w-full" />
+              <TiltImage slot={service.image} className="aspect-16/11 w-full" />
 
               <div className="flex flex-1 flex-col p-6">
                 <span className="eyebrow self-start">Services</span>

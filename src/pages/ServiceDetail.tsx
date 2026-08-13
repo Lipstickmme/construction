@@ -1,7 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom'
 import { PageHero } from '@/components/layout/PageHero'
 import { ServiceSidebar } from '@/components/services/ServiceSidebar'
-import { Img } from '@/components/ui/Img'
+import { TiltImage } from '@/components/ui/TiltImage'
 import { serviceContent, type ServiceBlock } from '@/data/serviceContent'
 import { services } from '@/data/services'
 
@@ -72,7 +72,7 @@ export default function ServiceDetail() {
 
           <div>
             <div className="relative isolate overflow-hidden rounded-sm">
-              <Img slot={service.image} className="aspect-16/9 w-full" />
+              <TiltImage slot={service.image} className="aspect-16/9 w-full" max={5} />
 
               <div
                 aria-hidden="true"

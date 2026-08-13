@@ -37,6 +37,8 @@
   --ink: #002e42;
   --body: #002e42b3;
   --border: #002e4217;
+  /* Divider between the utility bar and the nav row: lighter still. */
+  --rule: #002e420f;
   --shadow-color: 0 46 66;
 }
 
@@ -66,6 +68,7 @@
   --color-ink: var(--ink);
   --color-body: var(--body);
   --color-line: var(--border);
+  --color-rule: var(--rule);
 
   --font-display: 'Outfit', 'Segoe UI', system-ui, sans-serif;
   --font-sans: 'Outfit', 'Segoe UI', system-ui, sans-serif;
@@ -173,6 +176,41 @@
       scroll-padding-inline: max(1.25rem, calc((100vw - 76rem) / 2 + 1.25rem));
     }
   }
+}
+
+/*
+ * Hero entrance animations. Upper lines slide in from the left, lower ones
+ * rise up; both start invisible and are held there by `backwards` so a
+ * staggered delay doesn't flash the final state first.
+ */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(1.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-slide-in {
+  animation: slide-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.anim-slide-up {
+  animation: slide-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 /* Hide the horizontal scrollbar on the services rail while keeping it scrollable. */

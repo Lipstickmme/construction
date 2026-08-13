@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ArrowRight } from '@/components/ui/Icon'
 import { Img } from '@/components/ui/Img'
 import { heroEyebrow, heroSlides } from '@/data/hero'
 
@@ -77,48 +75,56 @@ export function Hero() {
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-overlay" />
 
       <div className="shell flex min-h-[36rem] flex-col justify-center py-24 lg:min-h-[44rem]">
-        {heroSlides.map((slide, index) => (
-          <div
-            key={slide.id}
-            aria-hidden={index !== active}
-            className={`max-w-2xl transition-all duration-700 ease-out ${
-              index === active
-                ? 'translate-y-0 opacity-100'
-                : 'pointer-events-none absolute translate-y-4 opacity-0'
-            }`}
-          >
-            {/* White chip with #002C5F text, as the reference sets it. */}
-            <span className="inline-block rounded-sm bg-white px-4 py-2 font-display text-[0.7rem] font-semibold tracking-[0.16em] text-blue uppercase">
-              {heroEyebrow}
-            </span>
+        {heroSlides.map((slide, index) => {
+          const isActive = index === active
 
-            <h1 className="mt-5 font-display text-4xl leading-[1.08] font-bold text-white sm:text-6xl lg:text-7xl">
-              {slide.titleLead}
-              <br />
-              <span className="text-gold">{slide.titleAccent}</span>
-            </h1>
+          return (
+            <div
+              key={slide.id}
+              aria-hidden={!isActive}
+              className={
+                isActive ? 'max-w-2xl' : 'pointer-events-none absolute max-w-2xl opacity-0'
+              }
+            >
+              {/*
+                Each line animates in on its own delay whenever the slide
+                becomes active. `key` is tied to `active` so React remounts
+                these nodes and the animation replays on every slide change.
+                Upper lines slide in from the left, lower ones rise up.
+              */}
+              <div key={`eyebrow-${active}`} className={isActive ? 'anim-slide-in' : ''}>
+                {/* White chip with #002C5F text, as the reference sets it. */}
+                <span className="inline-block rounded-sm bg-white px-4 py-2 font-display text-[0.7rem] font-semibold tracking-[0.16em] text-blue uppercase">
+                  {heroEyebrow}
+                </span>
+              </div>
 
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/75">
-              {slide.body}
-            </p>
+              <h1 className="mt-5 font-display text-4xl leading-[1.08] font-bold text-white sm:text-6xl lg:text-7xl">
+                <span
+                  key={`lead-${active}`}
+                  className={`block ${isActive ? 'anim-slide-in [animation-delay:120ms]' : ''}`}
+                >
+                  {slide.titleLead}
+                </span>
+                <span
+                  key={`accent-${active}`}
+                  className={`block text-gold ${isActive ? 'anim-slide-in [animation-delay:240ms]' : ''}`}
+                >
+                  {slide.titleAccent}
+                </span>
+              </h1>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 rounded-md bg-gold px-7 py-4 font-display text-[0.78rem] font-semibold tracking-wide text-navy uppercase transition-transform hover:-translate-y-0.5"
+              <p
+                key={`body-${active}`}
+                className={`mt-6 max-w-lg text-base leading-relaxed font-bold text-white/85 ${
+                  isActive ? 'anim-slide-up [animation-delay:380ms]' : ''
+                }`}
               >
-                Explore our services
-                <ArrowRight className="size-4" />
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-md border border-white/40 px-7 py-4 font-display text-[0.78rem] font-semibold tracking-wide text-white uppercase transition-colors hover:bg-white/10"
-              >
-                Talk to our team
-              </Link>
+                {slide.body}
+              </p>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       <div className="absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 gap-2.5">

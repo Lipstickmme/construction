@@ -1,4 +1,5 @@
 import { Bulb, Chat, Presentation, Users } from '@/components/ui/Icon'
+import { CountUp } from '@/components/ui/CountUp'
 import { Img } from '@/components/ui/Img'
 import { images } from '@/data/images'
 import { stats, type Stat } from '@/data/about'
@@ -30,7 +31,7 @@ export function StatsBand() {
                 <StatIcon icon={stat.icon} />
               </div>
               <dd className="mt-5 font-display text-4xl font-bold text-white">
-                {stat.value}
+                <CountUp value={stat.value} />
               </dd>
               <dt className="mt-2 text-xs tracking-wide text-white/70">
                 {stat.label}

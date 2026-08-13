@@ -4,7 +4,7 @@ import { site } from '@/data/site'
 /** Thin utility strip above the header: contact email left, socials right. */
 export function TopBar() {
   return (
-    <div className="border-b border-line bg-surface">
+    <div className="border-b border-rule bg-surface">
       <div className="shell flex h-11 items-center justify-between gap-4">
         <a
           href={`mailto:${site.email}`}

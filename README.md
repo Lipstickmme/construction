@@ -38,7 +38,8 @@ src/
                 ServicesRail, Sustainable, Infrastructure, FindUs
     about/      ValueCards, StatsBand, BrandStrip
     services/   ServiceSidebar
-    ui/         Img, Icon, Logo, Accordion, SectionHeading, MapEmbed
+    ui/         Img, TiltImage, CountUp, Icon, Logo, Accordion,
+                SectionHeading, MapEmbed
   data/         All copy and content — images, services, serviceContent,
                 navigation, site details, about, responsibility
   pages/        One file per route
@@ -92,6 +93,19 @@ blocks: `p` (paragraph), `h` (sub-heading), `terms` (bullets leading with a
 bold term) and `list` (plain bullets). This keeps the client's copy structured
 rather than baked into markup, so a page can mix headings, prose and both list
 styles in any order.
+
+### Motion
+
+- Hero lines animate in whenever the slide changes: upper lines slide in from
+  the left (`.anim-slide-in`), the paragraph rises (`.anim-slide-up`), on a
+  stagger. They replay because each node is keyed on the active slide index,
+  so React remounts them.
+- `<TiltImage>` tilts towards whichever side the pointer is on. Mouse only —
+  a coarse pointer would leave it stuck mid-rotation after a tap.
+- `<CountUp>` counts to its figure the first time it scrolls into view. It
+  parses a trailing suffix, so `170k+` counts the number and keeps the `k+`.
+
+All three respect `prefers-reduced-motion`.
 
 Helpers worth knowing:
 

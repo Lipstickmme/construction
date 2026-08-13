@@ -140,10 +140,9 @@ export const images = {
     size: '1024 × 569',
   },
   responsibilityDiversity: {
-    // AWAITING ARTWORK
-    src: '/images/responsibility-diversity.jpg',
+    src: '/images/Diversity-Inclusion-1024x465.jpg',
     alt: 'Illustration of a diverse group of people standing together',
-    size: '1200 × 700',
+    size: '1024 × 465',
   },
   responsibilitySustainability: {
     src: '/images/sustainability-1028x464-1.jpg',

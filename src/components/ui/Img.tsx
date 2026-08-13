@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import type { ImageSlot } from '@/data/images'
 
 type ImgProps = {
@@ -16,6 +16,8 @@ type ImgProps = {
   fit?: 'cover' | 'contain'
   /** Extra classes for the <img> itself; the wrapper handles layout. */
   imgClassName?: string
+  /** Inline styles on the wrapper, for values a class can't express. */
+  style?: CSSProperties
   loading?: 'lazy' | 'eager'
   /**
    * How the missing-file placeholder is drawn:
@@ -38,6 +40,7 @@ export function Img({
   className = '',
   fit = 'cover',
   imgClassName = '',
+  style,
   loading = 'lazy',
   placeholder = 'panel',
 }: ImgProps) {
@@ -50,6 +53,7 @@ export function Img({
         <div
           aria-hidden="true"
           className={`bg-mist ${className}`}
+          style={style}
           data-placeholder={filename}
         />
       )
@@ -90,7 +94,7 @@ export function Img({
   }
 
   return (
-    <div className={`overflow-hidden ${className}`}>
+    <div className={`overflow-hidden ${className}`} style={style}>
       <img
         src={slot.src}
         alt={alt ?? slot.alt}

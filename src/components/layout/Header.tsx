@@ -40,7 +40,7 @@ export function Header() {
   }, [openMenu])
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-surface">
+    <header className="sticky top-0 z-50 border-b border-rule bg-surface">
       <div className="shell flex h-[76px] items-center justify-between gap-6">
         <Logo />
 
