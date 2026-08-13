@@ -26,7 +26,7 @@ export function PageHero({
   title,
   crumb,
   subtitle = site.heroSubtitle,
-  image = images.aboutHero,
+  image = images.pageHero,
   background,
   scrollTo = '#page-body',
   children,
@@ -44,14 +44,14 @@ export function PageHero({
       )}
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-overlay" />
 
-      <div className="shell flex min-h-[19rem] flex-col items-center justify-center py-16 text-center lg:min-h-[22rem]">
+      <div className="shell flex min-h-[13rem] flex-col items-center justify-center py-10 text-center lg:min-h-[15rem]">
         {crumb && (
           <p className="font-display text-[0.62rem] font-semibold tracking-[0.2em] text-white/70 uppercase">
             {crumb}
           </p>
         )}
 
-        <h1 className="mt-2 font-display text-4xl font-bold text-white sm:text-5xl">
+        <h1 className="font-display text-4xl font-bold text-white sm:text-5xl">
           {title}
         </h1>
 
@@ -66,7 +66,7 @@ export function PageHero({
         <a
           href={scrollTo}
           aria-label="Scroll to page content"
-          className="mt-8 text-white/80 transition-colors hover:text-gold"
+          className="mt-6 text-white/80 transition-colors hover:text-gold"
         >
           <ChevronDown className="size-7" />
         </a>

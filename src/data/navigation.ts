@@ -32,7 +32,7 @@ export const mainNav: NavItem[] = [
     to: '/services',
     children: services.map((service) => ({
       label: service.title,
-      to: `/services#${service.id}`,
+      to: `/services/${service.id}`,
     })),
   },
   {

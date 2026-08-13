@@ -15,7 +15,7 @@ export default function ResponsibilityPage() {
 
   return (
     <>
-      <PageHero title={page.title} crumb="Home - Corporate Responsibility" />
+      <PageHero title={page.title} />
 
       <section id="page-body" className="shell py-14 lg:py-16">
         <Img

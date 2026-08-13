@@ -37,6 +37,7 @@ src/
     home/       Hero, SectionNav, WhatWeDo, ProjectPrompt,
                 ServicesRail, Sustainable, Infrastructure, FindUs
     about/      ValueCards, StatsBand, BrandStrip
+    services/   ServiceSidebar
     ui/         Img, Icon, Logo, Accordion, SectionHeading, MapEmbed
   data/         All copy and content — images, services, navigation,
                 site details, about, responsibility
@@ -44,8 +45,9 @@ src/
 ```
 
 Content lives in `src/data/`, not inside components. Adding a service to
-`services` in `src/data/services.ts` puts it on the Services page **and** in
-the SERVICES nav dropdown; adding a Corporate Responsibility entry to
+`services` in `src/data/services.ts` gives it a card on the Services index, an
+entry in the SERVICES nav dropdown, a row in every service page's sidebar, and
+its own page at `/services/<id>`; adding a Corporate Responsibility entry to
 `src/data/responsibility.ts` creates its sub-page and its card on the index.
 
 ## Design system
@@ -104,7 +106,8 @@ keep that in step with the header height if you change it.
 | --- | --- |
 | `/` | Home |
 | `/about` | About |
-| `/services` | Services |
+| `/services` | Services index |
+| `/services/:slug` | One page per service — 7 of them, driven by `services` |
 | `/corporate-responsibility` | Responsibility index |
 | `/corporate-responsibility/:slug` | `csr`, `diversity-and-inclusion`, `sustainability` |
 | `/careers` | Careers |

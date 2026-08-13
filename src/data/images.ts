@@ -114,13 +114,16 @@ export const images = {
     size: '800 × 560',
   },
 
-  // About page — all AWAITING ARTWORK
-  aboutHero: {
-    src: '/images/about-hero.jpg',
-    alt: 'Glass towers seen from below',
-    size: '2000 × 900',
+  // Shared inner-page hero band — every page but Contact, which uses the map.
+  pageHero: {
+    src: '/images/hero-sd1.png',
+    alt: '',
+    size: '1584 × 672',
   },
+
+  // About page
   aboutFeature: {
+    // AWAITING ARTWORK
     src: '/images/about-ceo.jpg',
     alt: 'Andreas Wojcik, Chief Executive Officer',
     size: '760 × 900',
@@ -160,11 +163,11 @@ export const images = {
 
 export type ImageKey = keyof typeof images
 
-/** Logo strip under "Trusted by global brands". All AWAITING ARTWORK. */
+/** Logo strip under "Trusted by global brands", in the reference's order. */
 export const brandLogos: ImageSlot[] = [
-  { src: '/images/brand-1.svg', alt: 'Houzz', size: '160 × 48' },
-  { src: '/images/brand-2.svg', alt: 'MyBuilder.com', size: '160 × 48' },
-  { src: '/images/brand-3.svg', alt: 'Logitech', size: '160 × 48' },
-  { src: '/images/brand-4.svg', alt: 'Naked People', size: '160 × 48' },
-  { src: '/images/brand-5.svg', alt: 'Zurich', size: '160 × 48' },
+  { src: '/images/11.png', alt: 'Houzz', size: '160 × 48' },
+  { src: '/images/22.png', alt: 'MyBuilder.com', size: '160 × 48' },
+  { src: '/images/logitech-2-1.svg', alt: 'Logitech', size: '160 × 48' },
+  { src: '/images/44.png', alt: 'Rated People', size: '160 × 48' },
+  { src: '/images/66.png', alt: 'Zurich', size: '160 × 48' },
 ]

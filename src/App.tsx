@@ -7,6 +7,7 @@ import CorporateResponsibility from '@/pages/CorporateResponsibility'
 import Home from '@/pages/Home'
 import NotFound from '@/pages/NotFound'
 import ResponsibilityPage from '@/pages/responsibility/ResponsibilityPage'
+import ServiceDetail from '@/pages/ServiceDetail'
 import Services from '@/pages/Services'
 
 export default function App() {
@@ -15,7 +16,10 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
-        <Route path="services" element={<Services />} />
+        <Route path="services">
+          <Route index element={<Services />} />
+          <Route path=":slug" element={<ServiceDetail />} />
+        </Route>
         <Route path="corporate-responsibility">
           <Route index element={<CorporateResponsibility />} />
           <Route path=":slug" element={<ResponsibilityPage />} />

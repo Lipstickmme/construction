@@ -8,10 +8,7 @@ import { responsibilityContent } from '@/data/responsibility'
 export default function CorporateResponsibility() {
   return (
     <>
-      <PageHero
-        title="Corporate Responsibility"
-        crumb="Home - Corporate Responsibility"
-      />
+      <PageHero title="Corporate Responsibility" />
 
       <section id="page-body" className="shell py-16 lg:py-20">
         <p className="max-w-2xl text-sm leading-relaxed text-body">

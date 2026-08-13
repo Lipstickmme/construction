@@ -31,6 +31,12 @@ These are in place and rendering.
 | `CSR-1024x569.jpg` | Corporate Responsibility — CSR |
 | `sustainability-1028x464-1.jpg` | Corporate Responsibility — Sustainability |
 | `careers.jpg` | Careers |
+| `hero-sd1.png` | Shared inner-page hero band (every page but Contact) |
+| `11.png` | Trusted by global brands — Houzz |
+| `22.png` | Trusted by global brands — MyBuilder.com |
+| `logitech-2-1.svg` | Trusted by global brands — Logitech |
+| `44.png` | Trusted by global brands — Rated People |
+| `66.png` | Trusted by global brands — Zurich |
 
 ## Still needed
 
@@ -47,14 +53,12 @@ Google embed rather than an image.
 | --- | --- | --- |
 | `service-geology-mine-engineering.jpg` | Services — Geology and Mine Engineering | 800 × 560 |
 | `responsibility-diversity.jpg` | Corporate Responsibility — Diversity & Inclusion | 1200 × 700 |
-| `about-hero.jpg` | Shared inner-page hero background (About, Services, Careers, Corporate Responsibility) | 2000 × 900 |
 | `about-ceo.jpg` | About — leadership portrait | 760 × 900 |
 | `about-stats-background.jpg` | About — stats band background | 2000 × 700 |
 | `brand-1.svg` … `brand-5.svg` | About — "Trusted by global brands" strip | 160 × 48 each |
 
-`about-hero.jpg` is worth doing early: it's the background for every inner
-page's hero band, so one file fixes five pages. The Contact page is the
-exception — its hero is the live map.
+Every inner page's hero band uses `hero-sd1.png`, cropped thin. The Contact
+page is the exception — its hero is the live map.
 
 ## Adding a new image slot
 

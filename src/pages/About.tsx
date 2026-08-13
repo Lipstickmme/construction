@@ -12,7 +12,7 @@ export default function About() {
 
   return (
     <>
-      <PageHero title="About" crumb="Home - About" />
+      <PageHero title="About" />
 
       <section id="page-body" className="shell py-14 lg:py-16">
         <p className="text-sm leading-relaxed text-body">{welcome}</p>

@@ -29,7 +29,7 @@ const roles = [
 export default function Careers() {
   return (
     <>
-      <PageHero title="Careers" crumb="Home - Careers" />
+      <PageHero title="Careers" />
 
       <section id="page-body" className="shell py-14 lg:py-16">
         <Img

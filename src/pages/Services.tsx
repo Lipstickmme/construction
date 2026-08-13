@@ -7,7 +7,7 @@ import { services } from '@/data/services'
 export default function Services() {
   return (
     <>
-      <PageHero title="Services" crumb="Home - Services" />
+      <PageHero title="Services" />
 
       <section id="page-body" className="shell py-16 lg:py-20">
         <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
@@ -30,7 +30,7 @@ export default function Services() {
                 </p>
 
                 <Link
-                  to="/contact"
+                  to={`/services/${service.id}`}
                   className="mt-5 inline-flex items-center gap-1 self-start font-display text-sm font-medium text-ink transition-colors hover:text-gold"
                 >
                   Learn More
