@@ -1,171 +1,51 @@
 /**
- * Central manifest of every image slot on the site.
+ * Image manifest.
  *
- * Slots marked "AWAITING ARTWORK" have no file yet and render a labelled
- * placeholder panel (see `src/components/ui/Img.tsx`) naming the file they
- * want. Drop a matching file into `public/images/` and it appears on reload.
- * `public/images/README.md` lists what is still outstanding.
+ * The three `axis-*` files are the supplied photography. They are small
+ * (236px wide), so they are only ever rendered in cards sized to suit —
+ * never as a full-bleed background, where they would visibly soften.
+ * Slots marked AWAITING ARTWORK render a labelled placeholder panel.
  */
 export type ImageSlot = {
-  /** Path served from `public/`. */
   src: string
-  /** Default alt text. Override per usage when the context needs it. */
   alt: string
-  /** Actual size where artwork exists, target size where it doesn't. */
+  /** Actual size where artwork exists, target size where it does not. */
   size: string
 }
 
 export const images = {
-  logo: {
-    src: '/images/logo-2.png',
-    alt: 'AtlasBridge Construction',
-    size: '2080 × 600',
+  plant: {
+    src: '/images/axis-plant.jpg',
+    alt: 'Engineers in high-visibility gear at a process plant',
+    size: '236 × 353',
   },
-  logoLight: {
-    src: '/images/logo-white.png',
-    alt: 'AtlasBridge Construction',
-    size: '300 × 87',
+  offshore: {
+    src: '/images/axis-offshore.jpg',
+    alt: 'Offshore platform and crane above open water',
+    size: '236 × 354',
   },
-
-  // Home — hero slider
-  hero1: {
-    src: '/images/hero-bridge-wip.png',
-    alt: 'Bridge under construction',
-    size: '1584 × 672',
-  },
-  hero2: {
-    src: '/images/hero-sd1.png',
-    alt: 'Construction site at work',
-    size: '1584 × 672',
-  },
-  hero3: {
-    src: '/images/hero-img1.png',
-    alt: 'Completed infrastructure project',
-    size: '1376 × 768',
+  mechanical: {
+    src: '/images/axis-mechanical.jpg',
+    alt: 'Crew assembling a pressure vessel and pipework',
+    size: '236 × 295',
   },
 
-  // Home — sections
-  sustainable: {
-    src: '/images/k5l-zbRSPds.jpg',
-    alt: 'Excavator working on a site under a dramatic sky',
-    size: '1920 × 1280',
+  // AWAITING ARTWORK — wide crops for the full-bleed bands.
+  heroWide: {
+    src: '/images/axis-hero-wide.jpg',
+    alt: 'Industrial facility at scale',
+    size: '2400 × 1350',
   },
-  infrastructure: {
-    src: '/images/modern-city-infrastructure.jpg',
-    alt: 'Tower cranes above a steel frame high-rise',
-    size: '1024 × 1536',
+  aboutWide: {
+    src: '/images/axis-about-wide.jpg',
+    alt: 'Site team reviewing plant drawings',
+    size: '1800 × 1200',
   },
-  // Home — services rail
-  railCivilEngineering: {
-    src: '/images/7bzbyafVTYg-.jpg',
-    alt: 'Aerial view of a reinforced concrete floor under construction',
-    size: '1920 × 1268',
+  ctaWide: {
+    src: '/images/axis-cta-wide.jpg',
+    alt: 'Structural steel against an evening sky',
+    size: '2400 × 900',
   },
-  railInteriorDesign: {
-    src: '/images/3.jpg',
-    alt: 'Contemporary kitchen with high-gloss cabinetry',
-    size: '2560 × 1000',
-  },
-  railIndustrial: {
-    src: '/images/iconbox-2.jpeg',
-    alt: 'Steel fixers tying reinforcement at sunset',
-    size: '740 × 722',
-  },
-  railConcrete: {
-    src: '/images/Bridges-w7e7e.jpg',
-    alt: 'Steel girders of a highway bridge seen from below',
-    size: '1024 × 521',
-  },
-  // Services page
-  serviceRoadworks: {
-    src: '/images/ghf9LjrVg.jpg',
-    alt: 'Site team on a post-tensioned deck ahead of a pour',
-    size: '1920 × 1280',
-  },
-  serviceArchitecturalDesign: {
-    src: '/images/Architectural-Design.jpg',
-    alt: 'Hand sketching an architectural rendering',
-    size: '2000 × 966',
-  },
-  serviceDesignAndBuild: {
-    src: '/images/Design-and-Build.jpg',
-    alt: 'Glazed extension opening onto a garden',
-    size: '1920 × 1000',
-  },
-  serviceInteriorDesign: {
-    src: '/images/Interior-Design-Service.jpg',
-    alt: 'Living room with warm natural light',
-    size: '1024 × 704',
-  },
-  serviceArchitecturalProgramming: {
-    src: '/images/Architectural-programming.webp',
-    alt: 'Team reviewing plans around a studio table',
-    size: 'webp',
-  },
-  serviceConstructionAdministration: {
-    src: '/images/Construction-Administration.jpg',
-    alt: 'Supervisor reviewing progress on an active site',
-    size: '1232 × 822',
-  },
-  serviceGeology: {
-    src: '/images/Geology-and-Mine-Engineering.jpg',
-    alt: 'Geological survey work at a mine site',
-    size: 'supplied',
-  },
-
-  // Shared inner-page hero band — every page but Contact, which uses the map.
-  pageHero: {
-    src: '/images/hero-sd1.png',
-    alt: '',
-    size: '1584 × 672',
-  },
-
-  // About page
-  aboutFeature: {
-    // AWAITING ARTWORK
-    src: '/images/about-ceo.jpg',
-    alt: 'Andreas Wojcik, Chief Executive Officer',
-    size: '760 × 900',
-  },
-  aboutStats: {
-    src: '/images/about-stats-background.jpg',
-    alt: '',
-    size: '2000 × 700',
-  },
-
-  // Corporate Responsibility
-  responsibilityCsr: {
-    src: '/images/CSR-1024x569.jpg',
-    alt: 'Corporate social responsibility',
-    size: '1024 × 569',
-  },
-  responsibilityDiversity: {
-    src: '/images/Diversity-Inclusion-1024x465.jpg',
-    alt: 'Illustration of a diverse group of people standing together',
-    size: '1024 × 465',
-  },
-  responsibilitySustainability: {
-    src: '/images/sustainability-1028x464-1.jpg',
-    alt: 'Many hands cupping soil with a seedling growing from it',
-    size: '695 × 464',
-  },
-
-  // Careers
-  careersTeam: {
-    src: '/images/careers.jpg',
-    alt: 'AtlasBridge team members from across the business',
-    size: '1000 × 417',
-  },
-
 } as const satisfies Record<string, ImageSlot>
 
 export type ImageKey = keyof typeof images
-
-/** Logo strip under "Trusted by global brands", in the reference's order. */
-export const brandLogos: ImageSlot[] = [
-  { src: '/images/11.png', alt: 'Houzz', size: '160 × 48' },
-  { src: '/images/22.png', alt: 'MyBuilder.com', size: '160 × 48' },
-  { src: '/images/logitech-2-1.svg', alt: 'Logitech', size: '160 × 48' },
-  { src: '/images/44.png', alt: 'Rated People', size: '160 × 48' },
-  { src: '/images/66.png', alt: 'Zurich', size: '160 × 48' },
-]

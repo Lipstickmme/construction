@@ -1,77 +1,32 @@
 # Image drop folder
 
-Drop artwork here using the **exact filename** a slot expects and it swaps
-itself in on reload — no code change needed. Slots are declared in
-`src/data/images.ts`; each unfilled one renders a placeholder panel printing
-the filename and target size, so you can work straight from the browser.
+Slots are declared in `src/data/images.ts`. Each unfilled one renders a
+placeholder panel naming the file it wants — drop a matching file in here and
+it appears on reload, no code change.
 
-## Wired up
+## In place
 
-These are in place and rendering.
-
-| File | Used for |
-| --- | --- |
-| `logo-2.png` | Logo — header (light theme) |
-| `logo-white.png` | Logo — footer, and header in dark theme |
-| `ghf9LjrVg.jpg` | Services — Roadworks, Tunnels, Bridges, Drainage and Concrete Structures |
-| `Architectural-Design.jpg` | Services — Architectural Design |
-| `Design-and-Build.jpg` | Services — Design and Build |
-| `Interior-Design-Service.jpg` | Services — Interior Design |
-| `Architectural-programming.webp` | Services — Architectural Programming |
-| `Construction-Administration.jpg` | Services — Construction Administration |
-| `7bzbyafVTYg-.jpg` | Home rail — Civil Engineering |
-| `3.jpg` | Home rail — First-class Interior Design and Remodelling |
-| `iconbox-2.jpeg` | Home rail — Industrial Engineering And Construction |
-| `Bridges-w7e7e.jpg` | Home rail — Concrete Structures |
-| `k5l-zbRSPds.jpg` | Home — Sustainable Infrastructure Construction |
-| `modern-city-infrastructure.jpg` | Home — Modern City Infrastructure Construction |
-| `hero-bridge-wip.png` | Hero slide 1 — "Construction Solutions" |
-| `hero-sd1.png` | Hero slide 2 — "Building your dreams." |
-| `hero-img1.png` | Hero slide 3 — "Building the future." |
-| `CSR-1024x569.jpg` | Corporate Responsibility — CSR |
-| `sustainability-1028x464-1.jpg` | Corporate Responsibility — Sustainability |
-| `careers.jpg` | Careers |
-| `Geology-and-Mine-Engineering.jpg` | Services — Geology and Mine Engineering |
-| `Diversity-Inclusion-1024x465.jpg` | Corporate Responsibility — Diversity & Inclusion |
-| `hero-sd1.png` | Shared inner-page hero band (every page but Contact) |
-| `11.png` | Trusted by global brands — Houzz |
-| `22.png` | Trusted by global brands — MyBuilder.com |
-| `logitech-2-1.svg` | Trusted by global brands — Logitech |
-| `44.png` | Trusted by global brands — Rated People |
-| `66.png` | Trusted by global brands — Zurich |
+| File | Used for | Size |
+| --- | --- | --- |
+| `axis-plant.jpg` | Projects — Process Facility Expansion | 236 × 353 |
+| `axis-offshore.jpg` | Projects — Offshore Platform Works | 236 × 354 |
+| `axis-mechanical.jpg` | Projects — Pressure Vessel Installation | 236 × 295 |
 
 ## Still needed
 
-Name the file exactly as listed and it wires itself up.
-
-### Home page
-
-Nothing outstanding — every home-page slot is filled, and the map is a live
-Google embed rather than an image.
-
-### Other pages
-
 | Filename | Used for | Target size |
 | --- | --- | --- |
-| `about-ceo.jpg` | About — leadership portrait | 760 × 900 |
-| `about-stats-background.jpg` | About — stats band background | 2000 × 700 |
+| `axis-hero-wide.jpg` | Home hero backdrop | 2400 × 1350 |
+| `axis-about-wide.jpg` | About — wide band | 1800 × 1200 |
+| `axis-cta-wide.jpg` | Home — closing call to action | 2400 × 900 |
 
-Every inner page's hero band uses `hero-sd1.png`, cropped thin. The Contact
-page is the exception — its hero is the live map.
+## A note on the supplied photography
 
-## Adding a new image slot
+The three `axis-*` files are **236px wide** — thumbnail size. They are sharp
+in the project cards, which are sized to suit, but they cannot carry a
+full-bleed band: stretched to 1440px they soften badly.
 
-1. Add an entry to `images` in `src/data/images.ts` (`src`, `alt`, `size`).
-2. Render it with `<Img slot={images.yourKey} className="aspect-4/3 w-full" />`.
-
-`<Img>` takes a `placeholder` prop controlling the missing-file state —
-`panel` (default, dashed box with filename and size), `compact` (filename
-only, for small boxes like the logo strip), or `plain` (a flat `--mist`
-surface with no text, for images sitting under a colour wash).
-
-## Map
-
-The map is a live Google Maps embed (`src/components/ui/MapEmbed.tsx`), used
-both by the home page's Find Us band and as the Contact page hero. It reads
-the office address from `src/data/site.ts` and needs no API key. Swap the URL
-for a Maps Embed API one if you want styling control or usage reporting.
+So the hero and the closing CTA use flat dark panels until wide artwork
+lands, and the three photographs are used only where they hold up. If you can
+source the originals at 2000px or wider, drop them in over the same filenames
+and the cards sharpen with no other change.

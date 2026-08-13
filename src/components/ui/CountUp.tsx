@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
 type CountUpProps = {
-  /** The finished figure, e.g. `290+` or `170k+`. */
   value: string
   durationMs?: number
   className?: string
 }
 
-/** Splits `170k+` into its leading number and whatever trails it. */
+/** Splits `1200` or `170k+` into its leading number and any trailing text. */
 function parse(value: string) {
   const match = value.match(/^([\d.,]+)(.*)$/)
   if (!match) return null
@@ -16,13 +15,10 @@ function parse(value: string) {
   return Number.isFinite(target) ? { target, suffix: match[2] } : null
 }
 
-/**
- * Counts up to `value` the first time it scrolls into view, then stays put.
- * Non-numeric values render as-is.
- */
+/** Counts up the first time it scrolls into view, then holds. */
 export function CountUp({
   value,
-  durationMs = 1800,
+  durationMs = 1900,
   className = '',
 }: CountUpProps) {
   const parsed = parse(value)
@@ -33,8 +29,7 @@ export function CountUp({
     const node = ref.current
     if (!node || !parsed) return
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setDisplay(String(parsed.target))
       return
     }
@@ -63,7 +58,6 @@ export function CountUp({
       observer.disconnect()
       cancelAnimationFrame(frame)
     }
-    // `value` is static per instance; parsed is derived from it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, durationMs])
 

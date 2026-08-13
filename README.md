@@ -1,8 +1,7 @@
-# AtlasBridge Construction
+# Axis Construction
 
-Marketing site for AtlasBridge Construction, built from the reference designs.
-Vite + React 19 + TypeScript + Tailwind CSS v4, with React Router for the page
-shell.
+Marketing site for Axis Construction — industrial and energy infrastructure.
+Vite + React 19 + TypeScript + Tailwind CSS v4, with React Router.
 
 ## Getting started
 
@@ -19,116 +18,84 @@ npm run dev      # dev server on http://localhost:5173
 | `npm run typecheck` | Types only, no emit |
 | `npm run lint` | ESLint over `src/` |
 
-## Images
+## Contact details are placeholders
 
-**No image files ship with this repo.** Every slot renders a labelled
-placeholder showing the filename it wants and the size to export at. Drop your
-artwork into `public/images/` using those exact filenames and it appears on
-reload — see [`public/images/README.md`](public/images/README.md) for the full
-table.
+There are no real addresses, phone numbers or inboxes anywhere in this site.
+Everything routes through the `contact` block in `src/data/site.ts`:
+
+```ts
+contact: {
+  email: 'hello@axis.example',
+  phone: '+00 000 0000 000',
+  address: ['000 Placeholder Way', 'City, Region 00000', 'Country'],
+  hours: 'Mon – Fri, 08:00 – 18:00',
+}
+```
+
+Replace that block and every page updates — header, drawer, footer and the
+contact page. The footer and contact page both say so on the page, so nobody
+mistakes a placeholder for a live number; remove those notes when the real
+details go in.
 
 ## Layout of the code
 
 ```
 src/
   components/
-    layout/     TopBar, Header, PageHero, Footer, CallMeBackTab,
-                ChatWidget, Layout
-    home/       Hero, SectionNav, WhatWeDo, ProjectPrompt,
-                ServicesRail, Sustainable, Infrastructure, FindUs
-    about/      ValueCards, StatsBand, BrandStrip
-    services/   ServiceSidebar
-    ui/         Img, TiltImage, CountUp, Icon, Logo, Accordion,
-                SectionHeading, MapEmbed
-  data/         All copy and content — images, services, serviceContent,
-                navigation, site details, about, responsibility
-  pages/        One file per route
+    layout/   Header, SideNav, PageHeader, Footer, Layout
+    home/     Hero, Marquee, CapabilityGrid, FeaturedWork,
+              Metrics, Process, CallToAction
+    ui/       Img, Reveal, CountUp, Logo
+  data/       site, images, capabilities, navigation
+  pages/      One file per route
 ```
 
-Content lives in `src/data/`, not inside components. Adding a service to
-`services` in `src/data/services.ts` gives it a card on the Services index, an
-entry in the SERVICES nav dropdown, a row in every service page's sidebar, and
-its own page at `/services/<id>` — with its body copy in
-`src/data/serviceContent.ts` under the same `id`; adding a Corporate Responsibility entry to
-`src/data/responsibility.ts` creates its sub-page and its card on the index.
+Content lives in `src/data/`. Adding an entry to `capabilities` in
+`src/data/capabilities.ts` gives it a card on the home grid, a row on the
+capabilities index, an entry in the drawer's sub-menu, a link in the footer
+and its own page at `/capabilities/<id>`.
 
 ## Design system
 
-Brand colours and semantic tokens are defined in `src/index.css`, taken from
-the reference site's Elementor globals:
+Defined as tokens in `src/index.css`. The palette is deliberately narrow — a
+greyscale spine, orange as the single loud accent, yellow for secondary marks.
 
 | Token | Value | Used for |
 | --- | --- | --- |
-| `navy` | `#002E42` | Headings, dark bands, primary |
-| `gold` | `#FAD55B` | Accent, buttons, highlights |
-| `blue` | `#002C5F` | Chip/eyebrow text on white |
-| `overlay` | `rgb(0 46 66 / 0.64)` | The wash over hero background images |
-| `body` | `#002E42B3` | Body copy — the navy at 70%, not a separate grey |
+| `black` | `#0C0D0E` | Dark bands, headings |
+| `charcoal` / `graphite` | `#16181A` / `#24282B` | Panels, drawer |
+| `steel` / `concrete` / `ash` / `fog` | greys | Body copy, rules, tints |
+| `orange` | `#FF5C00` | Primary accent, CTAs, active state |
+| `yellow` | `#FFC300` | Marquee, hazard banding, tags |
 
-`navy`, `gold` and `blue` are fixed; the rest (`bg`, `surface`, `ink`, `body`,
-`line`) flip for dark mode.
+Helpers:
 
-**The site is white by default, and there is no theme switcher.** The
-reference has no dark mode, so the header carries only the logo and the nav.
-The `.dark` token block in `index.css` is inert — nothing adds that class. Say
-the word if you want it stripped out entirely.
+- `.shell` — max-width page container.
+- `.kicker` — section label: short orange rule then uppercase micro-type.
+- `.index-num` — tabular `01`, `02` … numerals.
+- `.hazard` — diagonal yellow/black banding.
+- `.link-wipe` — underline that wipes in from the left on hover.
 
-The `overlay` value is exact — the reference paints one flat
-`rgba(0,46,66,.64)` shape over each hero image, with no gradient. It only
-looks right over real photography; while images are missing, `<Img>`'s `plain`
-placeholder renders `--mist` (`#A2B2C9`), roughly the average tone of a
-daylight building shot, so the band previews the blue it will actually have.
+## Navigation
 
-### Images
+All navigation lives in a slide-in drawer (`components/layout/SideNav.tsx`).
+The header only carries the wordmark, a contact link and the menu trigger, and
+turns solid once scrolled so it reads over both the dark hero and white pages.
 
-`<Img>` takes `fit="cover" | "contain"` as a **prop**, not as a class through
-`imgClassName`. The two `object-fit` utilities have equal CSS specificity, so
-passing one as an override is resolved by stylesheet order rather than by
-intent — which silently cropped the logo and the brand marks. Use the prop.
+The drawer traps focus while open, closes on Escape or scrim click, locks
+background scroll, and restores focus to the trigger on close. Links cascade
+in on a stagger behind the panel.
 
-### Service page copy
+## Motion
 
-`src/data/serviceContent.ts` holds each service page's body as a list of
-blocks: `p` (paragraph), `h` (sub-heading), `terms` (bullets leading with a
-bold term) and `list` (plain bullets). This keeps the client's copy structured
-rather than baked into markup, so a page can mix headings, prose and both list
-styles in any order.
+- `<Reveal>` fades and lifts children the first time they enter the viewport;
+  pass an increasing `delay` to stagger a list.
+- `.line-mask` wipes headline lines up from behind a mask — used in the hero.
+- `<CountUp>` counts to its figure on first view, parsing any trailing suffix.
+- `.marquee-track` runs the capability ticker; the list is rendered twice and
+  translated by exactly -50%, so the loop is seamless.
 
-### Motion
-
-- Hero lines animate in whenever the slide changes: upper lines slide in from
-  the left (`.anim-slide-in`), the paragraph rises (`.anim-slide-up`), on a
-  stagger. They replay because each node is keyed on the active slide index,
-  so React remounts them.
-- `<TiltImage>` tilts towards whichever side the pointer is on. Mouse only —
-  a coarse pointer would leave it stuck mid-rotation after a tap.
-- `<CountUp>` counts to its figure the first time it scrolls into view. It
-  parses a trailing suffix, so `170k+` counts the number and keeps the `k+`.
-
-All three respect `prefers-reduced-motion`.
-
-Helpers worth knowing:
-
-- `.shell` — the standard max-width page container.
-- `.highlight-gold` — the gold marker-pen effect, for headings on a **light**
-  background. It covers only the lower part of each glyph, so the tops rely on
-  the page behind them for contrast.
-- `.highlight-solid` — same idea for headings on a **dark** background (the
-  hero, the navy bands). Fills the whole box so no letter loses contrast.
-- `.rail` — the horizontal card rail that lines up with `.shell` on the left
-  and bleeds off the right edge.
-
-## The home page's section menu
-
-The bar under the hero (`src/components/home/SectionNav.tsx`) is a section
-navigator, not a site menu. Each entry scrolls to a section further down and
-underlines itself while that section is in view; the bar then sticks beneath
-the header as you scroll.
-
-Entries are declared in `sectionNav` in `src/data/navigation.ts`, where each
-`targetId` must match the `id` on a home-page section. Those sections also
-carry `scroll-mt-[8.5rem]` so the two sticky bars don't cover their headings —
-keep that in step with the header height if you change it.
+All of it respects `prefers-reduced-motion`.
 
 ## Routes
 
@@ -136,10 +103,9 @@ keep that in step with the header height if you change it.
 | --- | --- |
 | `/` | Home |
 | `/about` | About |
-| `/services` | Services index |
-| `/services/:slug` | One page per service — 7 of them, driven by `services` |
-| `/corporate-responsibility` | Responsibility index |
-| `/corporate-responsibility/:slug` | `csr`, `diversity-and-inclusion`, `sustainability` |
+| `/capabilities` | Capabilities index |
+| `/capabilities/:slug` | One page per capability, driven by `capabilities` |
+| `/projects` | Projects |
 | `/careers` | Careers |
 | `/contact` | Contact |
 
@@ -147,7 +113,7 @@ Any unmatched path renders the 404 page.
 
 ## Things that are stubs
 
-- The contact form, the Call Me Back tab and the chat widget all resolve
-  locally with a confirmation message. Point their `onSubmit` handlers at a
-  real endpoint when there is one.
-- The top bar has no language switcher; the reference does not show one.
+- The contact form resolves locally with a confirmation. Point its `onSubmit`
+  at a real endpoint before going live — the confirmation message says so.
+- Careers roles link to the contact page rather than an ATS.
+- Project entries carry placeholder locations pending client approval.

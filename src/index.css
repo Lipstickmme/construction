@@ -1,77 +1,57 @@
 @import 'tailwindcss';
 
-/* Dark mode is driven by a `.dark` class on <html>, toggled by ThemeToggle. */
-@custom-variant dark (&:where(.dark, .dark *));
-
 /*
- * Brand palette lifted from the AtlasBridge reference designs.
- * `navy` and `gold` are fixed brand colours — they read the same in both themes.
- * Everything else is a semantic token that flips between light and dark below.
- */
-/*
- * Palette taken from the live site's Elementor global colours:
- *   primary   #002E42   secondary #FAD55B
- *   text      #002E42B3 (primary at 70%)
- * Body copy is the navy at 70% alpha rather than a separate grey.
+ * Axis Construction — industrial & energy infrastructure.
+ *
+ * The palette is deliberately narrow: a greyscale spine from near-black to
+ * white, with orange as the single loud accent and yellow reserved for
+ * secondary marks (rules, hover states, hazard-tape motifs). Nothing else.
  */
 :root {
-  --brand-navy: #002e42;
-  --brand-navy-deep: #001d2b;
-  --brand-teal: #24444a;
-  /* Chip/eyebrow text on white, straight from the reference's hero layers. */
-  --brand-blue: #002c5f;
-  --brand-gold: #fad55b;
-  --brand-gold-soft: #fdefc2;
-  /* Hero and page-hero wash: the navy at exactly 64%, as the reference sets it. */
-  --overlay: rgb(0 46 66 / 0.64);
-  /*
-   * Stand-in behind that wash while the real photography is missing. Roughly
-   * the average tone of a daylight building shot, so the overlay renders the
-   * blue it will have once actual images land rather than a flat grey.
-   */
-  --mist: #a2b2c9;
+  --black: #0c0d0e;
+  --charcoal: #16181a;
+  --graphite: #24282b;
+  --steel: #5c6467;
+  --concrete: #9aa1a4;
+  --ash: #d8dcde;
+  --fog: #f2f4f5;
+  --white: #ffffff;
 
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --surface-muted: #f4f4f4;
-  --ink: #002e42;
-  --body: #002e42b3;
-  --border: #002e4217;
-  --shadow-color: 0 46 66;
-}
+  --orange: #ff5c00;
+  --orange-deep: #d94b00;
+  --yellow: #ffc300;
 
-.dark {
-  --bg: #001a26;
-  --surface: #002331;
-  --surface-muted: #002e42;
-  --ink: #eaf3f7;
-  --body: #a2b2c9;
-  --border: #ffffff1f;
-  --shadow-color: 0 0 0;
+  /* Semantic roles */
+  --bg: var(--white);
+  --surface: var(--white);
+  --surface-alt: var(--fog);
+  --ink: var(--black);
+  --body: var(--steel);
+  --hairline: rgb(12 13 14 / 0.1);
 }
 
 @theme inline {
-  --color-navy: var(--brand-navy);
-  --color-navy-deep: var(--brand-navy-deep);
-  --color-teal: var(--brand-teal);
-  --color-blue: var(--brand-blue);
-  --color-overlay: var(--overlay);
-  --color-mist: var(--mist);
-  --color-gold: var(--brand-gold);
-  --color-gold-soft: var(--brand-gold-soft);
+  --color-black: var(--black);
+  --color-charcoal: var(--charcoal);
+  --color-graphite: var(--graphite);
+  --color-steel: var(--steel);
+  --color-concrete: var(--concrete);
+  --color-ash: var(--ash);
+  --color-fog: var(--fog);
+
+  --color-orange: var(--orange);
+  --color-orange-deep: var(--orange-deep);
+  --color-yellow: var(--yellow);
 
   --color-bg: var(--bg);
   --color-surface: var(--surface);
-  --color-surface-muted: var(--surface-muted);
+  --color-surface-alt: var(--surface-alt);
   --color-ink: var(--ink);
   --color-body: var(--body);
-  --color-line: var(--border);
+  --color-hairline: var(--hairline);
 
-  --font-display: 'Outfit', 'Segoe UI', system-ui, sans-serif;
-  --font-sans: 'Outfit', 'Segoe UI', system-ui, sans-serif;
-
-  --shadow-card: 0 18px 40px -24px rgb(var(--shadow-color) / 0.35);
-  --shadow-float: 0 20px 45px -20px rgb(var(--shadow-color) / 0.45);
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 @layer base {
@@ -95,122 +75,145 @@
     font-family: var(--font-display);
     color: var(--ink);
     font-weight: 700;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.03em;
+    line-height: 1.03;
+  }
+
+  ::selection {
+    background: var(--orange);
+    color: var(--white);
   }
 
   :focus-visible {
-    outline: 2px solid var(--brand-gold);
-    outline-offset: 2px;
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
   }
 }
 
 @layer components {
-  /*
-   * The yellow marker-pen highlight behind the last words of a heading. Only
-   * for headings on a light background — the marker covers the lower part of
-   * each glyph, so the tops rely on the page behind them for contrast.
-   */
-  .highlight-gold {
-    background-image: linear-gradient(
-      to top,
-      var(--brand-gold) 0.62em,
-      transparent 0.62em
-    );
-    color: var(--brand-navy);
-    padding-inline: 0.12em;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
-
-  /*
-   * Same idea on a dark background (the hero, the navy bands, dark mode),
-   * where the marker's exposed glyph tops would vanish. Fills the whole box
-   * so every letter sits on gold.
-   */
-  .highlight-solid,
-  .dark .highlight-gold {
-    background-image: none;
-    background-color: var(--brand-gold);
-    color: var(--brand-navy);
-    padding-inline: 0.15em;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
-
-  .eyebrow {
-    display: inline-block;
-    background-color: var(--surface-muted);
-    color: var(--ink);
-    font-family: var(--font-display);
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    padding: 0.4rem 0.85rem;
-    border-radius: 0.3rem;
-  }
-
   .shell {
     width: 100%;
-    max-width: 76rem;
+    max-width: 82rem;
     margin-inline: auto;
-    padding-inline: 1.25rem;
-  }
-
-  /*
-   * Horizontal card rail that lines up with `.shell` on the left but bleeds
-   * off the right edge of the viewport. `scroll-padding` has to match
-   * `padding` or scroll-snap immediately scrolls the leading padding away.
-   */
-  .rail {
-    padding-inline: 1.25rem;
-    scroll-padding-inline: 1.25rem;
+    padding-inline: 1.5rem;
   }
 
   @media (min-width: 1024px) {
-    .rail {
-      padding-inline: max(1.25rem, calc((100vw - 76rem) / 2 + 1.25rem));
-      scroll-padding-inline: max(1.25rem, calc((100vw - 76rem) / 2 + 1.25rem));
+    .shell {
+      padding-inline: 2.5rem;
     }
+  }
+
+  /* Small monospaced index numerals — 01, 02 … — used across sections. */
+  .index-num {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Section label: a short orange rule then uppercase micro-type. */
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .kicker::before {
+    content: '';
+    width: 1.75rem;
+    height: 2px;
+    background: var(--orange);
+  }
+
+  /* Diagonal hazard banding, for accent strips. */
+  .hazard {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      var(--yellow) 0 12px,
+      var(--black) 12px 24px
+    );
+  }
+
+  /* Underline that draws in from the left on hover. */
+  .link-wipe {
+    position: relative;
+  }
+
+  .link-wipe::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.15em;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .link-wipe:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 }
 
 /*
- * Hero entrance animations. Upper lines slide in from the left, lower ones
- * rise up; both start invisible and are held there by `backwards` so a
- * staggered delay doesn't flash the final state first.
+ * Scroll reveal. Elements start shifted and transparent; `<Reveal>` adds
+ * `.is-visible` once they enter the viewport. Staggering is done with an
+ * inline transition-delay rather than extra classes.
  */
-@keyframes slide-in {
+.reveal {
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Headline lines that wipe up from behind a mask. */
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.line-mask > span {
+  display: block;
+  transform: translateY(110%);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.is-visible .line-mask > span,
+.line-mask.is-visible > span {
+  transform: none;
+}
+
+/* Continuous ticker used by the capability marquee. */
+@keyframes marquee {
   from {
-    opacity: 0;
-    transform: translateX(-2.5rem);
-  }
-  to {
-    opacity: 1;
     transform: translateX(0);
   }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(1.75rem);
-  }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%);
   }
 }
 
-.anim-slide-in {
-  animation: slide-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+.marquee-track {
+  animation: marquee 38s linear infinite;
 }
 
-.anim-slide-up {
-  animation: slide-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-}
-
-/* Hide the horizontal scrollbar on the services rail while keeping it scrollable. */
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -229,5 +232,12 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .line-mask > span {
+    transform: none;
   }
 }

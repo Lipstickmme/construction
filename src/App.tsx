@@ -1,14 +1,13 @@
 import { Route, Routes } from 'react-router-dom'
 import { Layout } from '@/components/layout/Layout'
 import About from '@/pages/About'
+import Capabilities from '@/pages/Capabilities'
+import CapabilityDetail from '@/pages/CapabilityDetail'
 import Careers from '@/pages/Careers'
 import Contact from '@/pages/Contact'
-import CorporateResponsibility from '@/pages/CorporateResponsibility'
 import Home from '@/pages/Home'
 import NotFound from '@/pages/NotFound'
-import ResponsibilityPage from '@/pages/responsibility/ResponsibilityPage'
-import ServiceDetail from '@/pages/ServiceDetail'
-import Services from '@/pages/Services'
+import Projects from '@/pages/Projects'
 
 export default function App() {
   return (
@@ -16,14 +15,11 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
-        <Route path="services">
-          <Route index element={<Services />} />
-          <Route path=":slug" element={<ServiceDetail />} />
+        <Route path="capabilities">
+          <Route index element={<Capabilities />} />
+          <Route path=":slug" element={<CapabilityDetail />} />
         </Route>
-        <Route path="corporate-responsibility">
-          <Route index element={<CorporateResponsibility />} />
-          <Route path=":slug" element={<ResponsibilityPage />} />
-        </Route>
+        <Route path="projects" element={<Projects />} />
         <Route path="careers" element={<Careers />} />
         <Route path="contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
