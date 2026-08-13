@@ -1,5 +1,7 @@
+import { Approach } from '@/components/home/Approach'
 import { CallToAction } from '@/components/home/CallToAction'
 import { CapabilityGrid } from '@/components/home/CapabilityGrid'
+import { Disciplines } from '@/components/home/Disciplines'
 import { FeaturedWork } from '@/components/home/FeaturedWork'
 import { Hero } from '@/components/home/Hero'
 import { Marquee } from '@/components/home/Marquee'
@@ -12,8 +14,10 @@ export default function Home() {
       <Hero />
       <Marquee />
       <CapabilityGrid />
+      <Approach />
       <FeaturedWork />
       <Metrics />
+      <Disciplines />
       <Process />
       <CallToAction />
     </>

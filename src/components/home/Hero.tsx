@@ -4,7 +4,7 @@ import { Img } from '@/components/ui/Img'
 import { images } from '@/data/images'
 import { site } from '@/data/site'
 
-const headlineLines = ['Heavy industry', 'runs on', 'precision.']
+const headlineLines = ['We build', 'where it', 'matters most.']
 
 export function Hero() {
   const [entered, setEntered] = useState(false)
@@ -17,18 +17,19 @@ export function Hero() {
 
   return (
     <section className="relative isolate flex min-h-[92svh] flex-col justify-end overflow-hidden bg-black pt-32 pb-14">
-      {/* Wide crop sits behind everything; until it exists the panel is flat
-          graphite, which the type still reads cleanly against. */}
+      {/* rig1 underlays the whole hero; the wash keeps the type legible
+          without flattening the platform out of the frame. */}
       <Img
         slot={images.heroWide}
         alt=""
         loading="eager"
         placeholder="plain"
-        className="absolute inset-0 -z-20 size-full opacity-45"
+        className="absolute inset-0 -z-20 size-full"
+        imgClassName="object-center"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/75 to-black/40"
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/80 to-black/45"
       />
 
       {/* Faint survey grid. */}

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { Img } from '@/components/ui/Img'
 import { Reveal } from '@/components/ui/Reveal'
+import { images } from '@/data/images'
 
 const roles = [
   { title: 'Pipefitter', discipline: 'Mechanical', type: 'Contract' },
@@ -20,6 +22,10 @@ export default function Careers() {
       </PageHeader>
 
       <section className="shell py-20 lg:py-28">
+        <Reveal className="mb-16">
+          <Img slot={images.careers} className="aspect-21/9 w-full" />
+        </Reveal>
+
         <Reveal>
           <p className="kicker text-ink">Open roles</p>
         </Reveal>

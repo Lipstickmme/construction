@@ -2,74 +2,95 @@ import { images, type ImageSlot } from './images'
 
 export type Capability = {
   id: string
-  /** Zero-padded index shown beside the title. */
   index: string
   title: string
   summary: string
-  /** Bullet scope list on the capability's own page. */
   scope: string[]
   body: string[]
 }
 
 /**
- * Single source of truth for capabilities: drives the home grid, the side
- * drawer's sub-menu, the index page and each detail page.
+ * Axis is a general construction contractor whose centre of gravity is oil
+ * and gas. The list leads with the energy disciplines, then carries the full
+ * civil, structural and building scope behind them.
  */
 export const capabilities: Capability[] = [
   {
-    id: 'plant-construction',
+    id: 'oil-and-gas-facilities',
     index: '01',
-    title: 'Industrial Plant Construction',
+    title: 'Oil & Gas Facilities',
     summary:
-      'Greenfield and brownfield process facilities, built to commissioning and handed over running.',
+      'Onshore process facilities, gas plants and terminals — built, tied in and commissioned.',
     scope: [
-      'Civil works and foundations',
-      'Equipment setting and alignment',
       'Process and utility pipework',
+      'Static and rotating equipment installation',
+      'Tank farms and terminals',
+      'Shutdown tie-ins and reinstatement',
       'Pre-commissioning and commissioning support',
     ],
     body: [
-      'We take process facilities from a cleared site to a running plant. That means civils and foundations, setting and aligning heavy equipment, running process and utility pipework, and staying on site through pre-commissioning until the plant is producing.',
-      'Brownfield work is a different discipline to greenfield, and we treat it as one. Tie-ins into live systems are planned around your shutdown windows, with isolation, permitting and reinstatement scheduled to the hour rather than the week.',
+      'Oil and gas is where most of our people spend most of their time. We build and extend onshore process facilities, gas plants and storage terminals — running process and utility pipework, setting static and rotating equipment, and staying on site through commissioning until the plant is producing.',
+      'Brownfield tie-ins are a different discipline to greenfield build, and we resource them as one. Isolation, permitting, execution and reinstatement are planned to the hour against your shutdown window rather than the week.',
+      'The same crews carry the certification, procedures and traceability that operating a hydrocarbon facility demands, which is why our systems get accepted first time rather than after a punch round.',
     ],
   },
   {
-    id: 'energy-infrastructure',
+    id: 'offshore-and-marine',
     index: '02',
-    title: 'Energy & Power Infrastructure',
-    summary:
-      'Generation, transmission and grid-connection works for conventional and renewable assets.',
-    scope: [
-      'Substation civils and steelwork',
-      'Turbine and generator installation',
-      'Cable routing and containment',
-      'Grid connection and energisation support',
-    ],
-    body: [
-      'Power projects live or die on the connection date. We build the civil and structural scope around that date — substation foundations and steelwork, plant installation, cable routing and containment — and sequence it so energisation is never waiting on us.',
-      'The same crews work across conventional generation and renewables. The plant differs; the disciplines of setting heavy rotating equipment and terminating high-voltage systems safely do not.',
-    ],
-  },
-  {
-    id: 'offshore-marine',
-    index: '03',
     title: 'Offshore & Marine',
     summary:
-      'Fabrication, installation and maintenance for offshore platforms and marine structures.',
+      'Fabrication, installation and maintenance for platforms and marine structures.',
     scope: [
       'Topside modules and skids',
       'Structural repair and reinforcement',
-      'Riser and caisson works',
+      'Riser, caisson and conductor works',
       'Offshore maintenance campaigns',
     ],
     body: [
-      'Offshore scope is planned onshore. We fabricate topside modules and skids in the yard, test them complete, and ship them ready to set — because the cost of an hour offshore is nothing like the cost of an hour in a workshop.',
-      'Our offshore crews hold current certification for the work they do and mobilise as a formed team, not as individuals assembled at the heliport.',
+      'Offshore scope is planned onshore. We fabricate topside modules and skids in the yard, test them complete and ship them ready to set — because an hour offshore costs nothing like an hour in a workshop.',
+      'Our offshore crews hold current certification for the work they do and mobilise as a formed team rather than as individuals assembled at the heliport.',
+    ],
+  },
+  {
+    id: 'civil-infrastructure',
+    index: '03',
+    title: 'Roadworks, Tunnels, Bridges & Drainage',
+    summary:
+      'Transport and civil infrastructure, from site preparation through to surfacing.',
+    scope: [
+      'Site preparation, grading and earthworks',
+      'Pavement construction and road marking',
+      'Tunnel excavation, lining and ventilation',
+      'Bridge foundations, piers and decks',
+      'Stormwater and subsurface drainage',
+    ],
+    body: [
+      'We design and construct roads and highways end to end — site preparation, grading, pavement construction, signage and road marking — across projects from small local roads to large-scale highway schemes.',
+      'Tunnelling work covers geotechnical investigation, excavation, lining and ventilation, planned around the ground conditions actually on site so surface disruption and settlement stay within agreed limits.',
+      'Bridges run from footbridges to multi-span highway crossings: foundations, piers, decks and bearings, with load paths and construction sequencing modelled up front so staging, lifting and traffic management are settled before work begins. Drainage is designed around the catchment it serves, keeping pavements sound through the wet season.',
+    ],
+  },
+  {
+    id: 'structural-steel-concrete',
+    index: '04',
+    title: 'Structural Steel & Concrete Structures',
+    summary:
+      'In-house fabrication and erection of steelwork, plus reinforced and post-tensioned concrete.',
+    scope: [
+      'Detailing and shop drawings',
+      'Workshop fabrication and finishing',
+      'Site erection and bolting',
+      'Reinforced and post-tensioned concrete',
+      'Access platforms, walkways and handrail',
+    ],
+    body: [
+      'We detail, fabricate and erect our own steel. Keeping that under one roof removes the interface where most steel programmes lose time — between the detailer, the shop and the erection crew.',
+      'On the concrete side we deliver foundations, retaining walls, culverts, reservoirs and frames in both reinforced and post-tensioned form. Mix design, formwork and curing are controlled on site with testing at every pour, so the specified strength and finish are what actually gets built.',
     ],
   },
   {
     id: 'mechanical-piping',
-    index: '04',
+    index: '05',
     title: 'Mechanical & Piping',
     summary:
       'Rotating equipment, pressure systems and pipework, installed and tested to spec.',
@@ -80,42 +101,62 @@ export const capabilities: Capability[] = [
       'Hydrotesting and system reinstatement',
     ],
     body: [
-      'Mechanical and piping is the core trade the rest of the business is built around. We install rotating equipment to alignment tolerances, set and dress pressure vessels, fabricate spools, weld on site, and test complete systems before handing them back.',
-      'Every weld is traceable to a procedure and a welder. Test packs are assembled as the work proceeds rather than reconstructed afterwards, which is why our systems get accepted first time.',
+      'Mechanical and piping is the trade the rest of the business grew around. We install rotating equipment to alignment tolerance, set and dress pressure vessels, fabricate spools, weld on site and test complete systems before handing them back.',
+      'Every weld is traceable to a procedure and a welder. Test packs are assembled as the work proceeds rather than reconstructed afterwards.',
     ],
   },
   {
-    id: 'structural-steel',
-    index: '05',
-    title: 'Structural Steel & Fabrication',
-    summary:
-      'In-house fabrication and site erection of primary and secondary steelwork.',
-    scope: [
-      'Detailing and shop drawings',
-      'Workshop fabrication and finishing',
-      'Site erection and bolting',
-      'Access platforms, walkways and handrail',
-    ],
-    body: [
-      'We detail, fabricate and erect our own steel. Keeping that in one place removes the interface where most steel programmes lose time — between the detailer, the shop and the erection crew.',
-      'The workshop handles primary frames through to access platforms, walkways and handrail, finished and marked ready for erection in sequence.',
-    ],
-  },
-  {
-    id: 'maintenance-turnaround',
+    id: 'design-and-build',
     index: '06',
-    title: 'Maintenance & Turnaround',
+    title: 'Architectural Design & Build',
     summary:
-      'Planned shutdowns and continuous maintenance, scoped and resourced to the window.',
+      'Concept through completion for buildings, from first sketch to handover.',
     scope: [
-      'Turnaround planning and work packs',
-      'Multi-discipline shutdown execution',
-      'Inspection and repair scope',
-      'Routine and call-out maintenance',
+      'Concept design and 3D modelling',
+      'Planning applications and approvals',
+      'Building regulation and structural drawings',
+      'Single-point design and build delivery',
     ],
     body: [
-      'A turnaround is a scheduling problem wearing overalls. We plan the scope into work packs, resource each one to the critical path, and execute with multi-discipline crews so a task never waits for a trade to arrive.',
-      'Between shutdowns we hold routine and call-out maintenance contracts, which means the team that arrives for the turnaround already knows the asset.',
+      'From initial concept drawings that sketch out an impression of the finished building, through to three-dimensional modelling that adds precision and clarity, we take building projects from idea to something that can actually be priced and built.',
+      'Scaled plans and elevations for planning applications, building regulation drawings, structural drawings for the construction team and detailed finishes and fittings drawings all come from the same team that will build the job — so what gets drawn is what can be built.',
+      'Where clients want a single point of accountability we deliver design and build together, with one project manager across the whole programme.',
+    ],
+  },
+  {
+    id: 'construction-administration',
+    index: '07',
+    title: 'Construction Administration',
+    summary:
+      'Oversight once drawings are approved and construction begins.',
+    scope: [
+      'Submittal and shop drawing review',
+      'Periodic site inspection and reporting',
+      'Request for information handling',
+      'Payment certification and punch lists',
+    ],
+    body: [
+      'Construction administration begins after the design is complete and approved, and construction starts. We act as overseer of the project, making sure what gets built matches the design documents.',
+      'That means periodic site visits, reviewing samples and submittals against specification, handling requests for information in writing, documenting any change, and running the punch list at completion so final handover is a formality rather than a negotiation.',
+    ],
+  },
+  {
+    id: 'geology-mine-engineering',
+    index: '08',
+    title: 'Geology & Mine Engineering',
+    summary:
+      'Ground investigation, resource assessment and the geotechnical case for what can be built.',
+    scope: [
+      'Geological assessment and site characterisation',
+      'Mining feasibility studies',
+      'Geotechnical engineering and foundation design',
+      'Slope stability and risk assessment',
+      'Environmental compliance and permitting support',
+    ],
+    body: [
+      'Every structure ultimately rests on ground, and the ground is the one variable that cannot be specified — only discovered. Our geologists assess the conditions at your site: rock formations, soil composition, groundwater and the hazards that bear on stability.',
+      'For mining clients we run feasibility studies covering mineral resource, extraction method and environmental impact, alongside pit and slope design and rehabilitation planning.',
+      'Where conditions turn out worse than assumed, we would rather tell you at investigation stage than at excavation stage. That is the entire point of the discipline.',
     ],
   },
 ]
@@ -129,31 +170,55 @@ export type Project = {
   image: ImageSlot
 }
 
-/** Featured work on the home page and the Projects index. */
+/** Featured work — all drawn from the full-resolution photography. */
 export const projects: Project[] = [
-  {
-    id: 'process-facility',
-    title: 'Process Facility Expansion',
-    sector: 'Industrial Plant',
-    location: 'Placeholder Region',
-    year: '2024',
-    image: images.plant,
-  },
   {
     id: 'offshore-platform',
     title: 'Offshore Platform Works',
-    sector: 'Offshore & Marine',
+    sector: 'Oil & Gas',
     location: 'Placeholder Field',
-    year: '2023',
-    image: images.offshore,
+    year: '2024',
+    image: images.offshorePlatform,
   },
   {
-    id: 'vessel-installation',
-    title: 'Pressure Vessel Installation',
-    sector: 'Mechanical & Piping',
+    id: 'gas-facility',
+    title: 'Gas Facility Walkdown',
+    sector: 'Energy',
+    location: 'Placeholder Region',
+    year: '2024',
+    image: images.powerPlant,
+  },
+  {
+    id: 'post-tensioned-deck',
+    title: 'Post-Tensioned Deck Pour',
+    sector: 'Concrete Structures',
     location: 'Placeholder Site',
     year: '2023',
-    image: images.mechanical,
+    image: images.concreteDeck,
+  },
+  {
+    id: 'earthworks',
+    title: 'Bulk Earthworks & Access Roads',
+    sector: 'Civil Infrastructure',
+    location: 'Placeholder Region',
+    year: '2023',
+    image: images.earthworks,
+  },
+  {
+    id: 'structural-frame',
+    title: 'Reinforced Structural Frame',
+    sector: 'Structural Steel',
+    location: 'Placeholder Site',
+    year: '2022',
+    image: images.civilAerial,
+  },
+  {
+    id: 'high-rise',
+    title: 'High-Rise Frame Erection',
+    sector: 'Design & Build',
+    location: 'Placeholder City',
+    year: '2022',
+    image: images.towerCranes,
   },
 ]
 
@@ -198,14 +263,58 @@ export const processSteps: ProcessStep[] = [
   },
 ]
 
+/** Checklist beside the approach image. */
+export const approachPoints: string[] = [
+  'Pre-construction services',
+  'Single-point design and build',
+  'Infrastructure and civil works',
+  'Energy and process facilities',
+  'Commercial and industrial engineering',
+]
+
+export type Discipline = {
+  id: string
+  title: string
+  body: string
+}
+
+/** Accordion detailing the civil scope in plain terms. */
+export const disciplines: Discipline[] = [
+  {
+    id: 'roadworks',
+    title: 'Roadworks',
+    body: 'Design and construction of roads and highways — site preparation, grading, pavement construction, signage installation and road marking, across projects from small local roads through to large-scale highways.',
+  },
+  {
+    id: 'tunnels',
+    title: 'Tunnels',
+    body: 'Excavation, structural design, reinforcement, ventilation and safety systems for transport, utility and mining tunnels. Each drive is planned around the ground conditions actually encountered rather than the ones assumed.',
+  },
+  {
+    id: 'bridges',
+    title: 'Bridges',
+    body: 'Beam, arch, suspension and cable-stayed crossings. Structural analysis, foundation design, support piers and deck installation, sequenced so staging and traffic management are settled before anyone mobilises.',
+  },
+  {
+    id: 'drainage',
+    title: 'Drainage',
+    body: 'Stormwater and subsurface systems that manage runoff and prevent flooding and erosion — pipes, culverts, catch basins and retention, sized to the catchment they serve.',
+  },
+  {
+    id: 'concrete',
+    title: 'Concrete Structures',
+    body: 'Foundations, retaining walls, culverts and reservoirs in reinforced and post-tensioned concrete, with mix design, formwork and curing controlled on site and testing at every pour.',
+  },
+]
+
 /** Short claims that scroll in the marquee band. */
 export const marqueeItems: string[] = [
-  'Plant Construction',
-  'Mechanical & Piping',
-  'Structural Steel',
+  'Oil & Gas',
   'Offshore & Marine',
-  'Turnaround',
-  'Power Infrastructure',
-  'Fabrication',
-  'Commissioning',
+  'Roadworks',
+  'Bridges & Tunnels',
+  'Structural Steel',
+  'Mechanical & Piping',
+  'Design & Build',
+  'Geology',
 ]

@@ -1,0 +1,56 @@
+import { Img } from '@/components/ui/Img'
+import { Reveal } from '@/components/ui/Reveal'
+import { approachPoints } from '@/data/capabilities'
+import { images } from '@/data/images'
+
+export function Approach() {
+  return (
+    <section className="shell py-24 lg:py-32">
+      <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        <Reveal>
+          <p className="kicker text-ink">Our approach</p>
+          <h2 className="mt-6 text-[clamp(2rem,4.5vw,3.5rem)]">
+            One contractor,
+            <br />
+            the whole scope.
+          </h2>
+          <p className="mt-6 max-w-md text-base leading-relaxed">
+            Energy work sets our standard — the certification, traceability and
+            shutdown discipline a hydrocarbon facility demands. We bring the
+            same standard to civil, structural and building projects, which is
+            why clients keep handing us the rest of the site.
+          </p>
+
+          <ul className="mt-10 space-y-px border-y border-hairline">
+            {approachPoints.map((point, index) => (
+              <li
+                key={point}
+                className="group flex items-center gap-5 py-4 transition-colors duration-500 hover:bg-fog"
+              >
+                <span className="index-num text-orange">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="font-display text-base font-medium text-ink transition-transform duration-500 group-hover:translate-x-1">
+                  {point}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+
+        <Reveal delay={140} className="relative">
+          {/* Offset yellow block, echoing the hazard motif. */}
+          <div
+            aria-hidden="true"
+            className="absolute -top-5 -right-5 h-full w-full bg-yellow"
+          />
+          <Img
+            slot={images.approach}
+            className="relative aspect-4/3 w-full"
+            imgClassName="transition-transform duration-[1200ms] ease-out hover:scale-105"
+          />
+        </Reveal>
+      </div>
+    </section>
+  )
+}

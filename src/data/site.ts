@@ -9,9 +9,9 @@ export const site = {
   name: 'Axis',
   suffix: 'Construction',
   /** One line, used in the drawer and the footer. */
-  positioning: 'Industrial & energy infrastructure',
+  positioning: 'Construction & engineering · Oil and gas',
   descriptor:
-    'We build, commission and maintain the plant that keeps industry running — onshore process facilities, power infrastructure and offshore assets.',
+    'A general construction contractor with its centre of gravity in oil and gas. Energy facilities, offshore assets, civil infrastructure, structures and buildings — delivered by one accountable team.',
   founded: '1998',
 
   contact: {

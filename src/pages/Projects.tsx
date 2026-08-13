@@ -19,7 +19,7 @@ export default function Projects() {
                 <div className="overflow-hidden bg-fog">
                   <Img
                     slot={project.image}
-                    className="aspect-3/4 w-full"
+                    className="aspect-4/3 w-full"
                     imgClassName="transition-transform duration-[900ms] ease-out group-hover:scale-105"
                   />
                 </div>

@@ -27,17 +27,13 @@ export function FeaturedWork() {
         </div>
 
         <ul className="mt-16 grid gap-8 md:grid-cols-3">
-          {projects.map((project, index) => (
+          {projects.slice(0, 3).map((project, index) => (
             <Reveal as="li" key={project.id} delay={index * 110}>
               <Link to="/projects" className="group block">
-                {/*
-                  The supplied photography is 236px wide, so these cards are
-                  kept portrait and modest rather than stretched wide.
-                */}
                 <div className="relative overflow-hidden bg-black">
                   <Img
                     slot={project.image}
-                    className="aspect-3/4 w-full"
+                    className="aspect-4/3 w-full"
                     imgClassName="transition-transform duration-[900ms] ease-out group-hover:scale-105"
                   />
                   <span className="absolute top-4 left-4 bg-yellow px-3 py-1 font-display text-[0.65rem] font-semibold tracking-widest text-black uppercase">

@@ -7,10 +7,10 @@ export function CallToAction() {
   return (
     <section className="relative isolate overflow-hidden bg-black">
       <Img
-        slot={images.ctaWide}
+        slot={images.earthworks}
         alt=""
         placeholder="plain"
-        className="absolute inset-0 -z-10 size-full opacity-35"
+        className="absolute inset-0 -z-10 size-full opacity-30"
       />
 
       <div className="shell py-24 text-center lg:py-32">
