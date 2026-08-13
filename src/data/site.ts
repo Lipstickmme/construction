@@ -26,11 +26,6 @@ export const site = {
     { label: 'Twitter', href: 'https://twitter.com', icon: 'Twitter' },
     { label: 'LinkedIn', href: 'https://linkedin.com', icon: 'LinkedIn' },
   ] satisfies { label: string; href: string; icon: SocialName }[],
-  /** Language switcher in the utility bar. */
-  languages: [
-    { code: 'en', label: 'English', flag: '🇺🇸' },
-    { code: 'es', label: 'Spanish', flag: '🇪🇸' },
-  ],
   /** Text links in the footer's Quick Links column. */
   socialLinks: [
     { label: 'Twitter', href: 'https://twitter.com' },
@@ -39,8 +34,6 @@ export const site = {
     { label: 'Medium', href: 'https://medium.com' },
   ],
 } as const
-
-export type Language = (typeof site.languages)[number]
 
 /** `tel:` links need the punctuation stripped. */
 export const telHref = (phone: string) => `tel:${phone.replace(/[^+\d]/g, '')}`

@@ -108,10 +108,9 @@ export const images = {
     size: '1232 × 822',
   },
   serviceGeology: {
-    // AWAITING ARTWORK
-    src: '/images/service-geology-mine-engineering.jpg',
-    alt: 'Geologist logging core samples at a mine site',
-    size: '800 × 560',
+    src: '/images/Geology-and-Mine-Engineering.jpg',
+    alt: 'Geological survey work at a mine site',
+    size: 'supplied',
   },
 
   // Shared inner-page hero band — every page but Contact, which uses the map.

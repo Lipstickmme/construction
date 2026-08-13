@@ -136,5 +136,4 @@ Any unmatched path renders the 404 page.
 - The contact form, the Call Me Back tab and the chat widget all resolve
   locally with a confirmation message. Point their `onSubmit` handlers at a
   real endpoint when there is one.
-- The language switcher in the top bar changes its own label and nothing else.
-  Wire it to an i18n setup when you have one.
+- The top bar has no language switcher; the reference does not show one.

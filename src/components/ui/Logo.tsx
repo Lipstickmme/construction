@@ -25,7 +25,7 @@ export function Logo({ variant = 'dark', className = '' }: LogoProps) {
         placeholder="compact"
         // Sized by height, with the box wide enough for the mark's 3.47:1
         // ratio so `contain` never has to shrink it to fit the width.
-        className="h-14 w-56"
+        className="h-12 w-48"
         fit="contain"
         imgClassName="object-left"
       />

@@ -40,8 +40,8 @@ export function Header() {
   }, [openMenu])
 
   return (
-    <header className="sticky top-0 z-50 bg-surface/95 shadow-sm backdrop-blur">
-      <div className="shell flex h-[88px] items-center justify-between gap-6">
+    <header className="sticky top-0 z-50 border-b border-line bg-surface">
+      <div className="shell flex h-[76px] items-center justify-between gap-6">
         <Logo />
 
         <nav
@@ -130,7 +130,7 @@ export function Header() {
       {mobileOpen && (
         <div
           id="mobile-menu"
-          className="max-h-[calc(100vh-88px)] overflow-y-auto border-t border-line bg-surface px-5 pb-8 lg:hidden"
+          className="max-h-[calc(100vh-76px)] overflow-y-auto border-t border-line bg-surface px-5 pb-8 lg:hidden"
         >
           <nav aria-label="Main (mobile)">
             <ul className="divide-y divide-line">

@@ -31,6 +31,7 @@ These are in place and rendering.
 | `CSR-1024x569.jpg` | Corporate Responsibility — CSR |
 | `sustainability-1028x464-1.jpg` | Corporate Responsibility — Sustainability |
 | `careers.jpg` | Careers |
+| `Geology-and-Mine-Engineering.jpg` | Services — Geology and Mine Engineering |
 | `hero-sd1.png` | Shared inner-page hero band (every page but Contact) |
 | `11.png` | Trusted by global brands — Houzz |
 | `22.png` | Trusted by global brands — MyBuilder.com |
@@ -51,11 +52,9 @@ Google embed rather than an image.
 
 | Filename | Used for | Target size |
 | --- | --- | --- |
-| `service-geology-mine-engineering.jpg` | Services — Geology and Mine Engineering | 800 × 560 |
 | `responsibility-diversity.jpg` | Corporate Responsibility — Diversity & Inclusion | 1200 × 700 |
 | `about-ceo.jpg` | About — leadership portrait | 760 × 900 |
 | `about-stats-background.jpg` | About — stats band background | 2000 × 700 |
-| `brand-1.svg` … `brand-5.svg` | About — "Trusted by global brands" strip | 160 × 48 each |
 
 Every inner page's hero band uses `hero-sd1.png`, cropped thin. The Contact
 page is the exception — its hero is the live map.
