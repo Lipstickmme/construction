@@ -62,7 +62,7 @@ export default function About() {
       <section className="shell pb-20 lg:pb-28">
         <Reveal>
           <Tilt max={4}>
-            <Img slot={images.renovation} className="aspect-21/9 w-full" />
+            <Img slot={images.approach} className="aspect-21/9 w-full" />
           </Tilt>
         </Reveal>
       </section>

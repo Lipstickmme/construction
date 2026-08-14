@@ -214,11 +214,11 @@ export const projects: Project[] = [
   },
   {
     id: 'high-rise',
-    title: 'Commercial Building Delivery',
+    title: 'Commercial Interior Fit-out',
     sector: 'Design & Build',
     location: 'Placeholder City',
     year: '2022',
-    image: images.commercialBuilding,
+    image: images.interiorFitout,
   },
 ]
 

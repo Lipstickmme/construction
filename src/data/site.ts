@@ -9,7 +9,7 @@ export const site = {
   name: 'Axis',
   suffix: 'Construction',
   /** One line, used in the drawer and the footer. */
-  positioning: 'Construction & engineering · Oil and gas',
+  positioning: 'Construction & engineering for oil and gas',
   descriptor:
     'A general construction contractor with its centre of gravity in oil and gas. Energy facilities, offshore assets, civil infrastructure, structures and buildings — delivered by one accountable team.',
   founded: '1998',
@@ -17,6 +17,15 @@ export const site = {
   contact: {
     email: 'hello@axis.example',
     phone: '+00 000 0000 000',
+  },
+
+  /** Leadership note on the home page. Name is a placeholder. */
+  leader: {
+    name: 'Name Placeholder',
+    role: 'Chief Executive Officer',
+    quote:
+      'Every project we take on is somebody else\u2019s critical path. That is the standard we hold ourselves to.',
+    bio: 'Twenty-five years across oil and gas, civil infrastructure and structures — starting on the tools, and still on site more weeks than not.',
   },
 
   socials: [
@@ -28,3 +37,6 @@ export const site = {
 
 /** Marks a value as intentionally unset, so it can be styled as such. */
 export const isPlaceholder = true
+
+/** Convenience re-export — leadership block used by the home page. */
+export const leader = site.leader

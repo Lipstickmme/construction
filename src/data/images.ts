@@ -1,19 +1,18 @@
 /**
  * Image manifest. Everything in `public/images/`.
  *
- * None of the first-iteration (AtlasBridge) photography is referenced any
- * more — every slot points either at the Axis rig set or at the newer
- * `new*`/`construction*` renders. Unfilled slots render a labelled
- * placeholder naming the file they want.
+ * The supplied renders arrived as 1920² PNGs of 7–9MB each, ~38MB in total,
+ * which would have made the site unusable on anything but a fast connection.
+ * They are re-encoded as progressive JPEG at quality 82 — visually identical
+ * at these sizes, ~90% smaller — and renamed off filenames that carried
+ * typos (`mewconstruction…`, `constructionmercial…`).
  *
  * The logos arrived as solid 1024² squares, which read as a filled box over
- * photography. Both were re-cut to transparent PNGs trimmed to the wordmark,
- * alpha taken from luminance so the antialiased edges survive.
+ * photography; both were re-cut to transparent PNGs trimmed to the wordmark.
  */
 export type ImageSlot = {
   src: string
   alt: string
-  /** Actual size where artwork exists, target size where it does not. */
   size: string
 }
 
@@ -29,43 +28,43 @@ export const images = {
     size: '728 × 305',
   },
 
-  // Home hero — the widest asset available.
+  // Home hero
   heroWide: {
     src: '/images/rig1.png',
     alt: 'Offshore production platform and walkway over open sea',
     size: '1344 × 576',
   },
 
-  // Page underlays, one per route so no two mastheads share a frame.
+  // Page-hero underlays — one per route, so no two mastheads share a frame.
   underlayAbout: {
-    src: '/images/newconstructionrenovation.png',
+    src: '/images/ceo-site.jpg',
     alt: '',
-    size: 'supplied',
+    size: '1280 × 956',
   },
   underlayCapabilities: {
-    src: '/images/mewconstructionsteelstructure.png',
+    src: '/images/steel-structure.jpg',
     alt: '',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
   underlayProjects: {
-    src: '/images/newcivilconstruction.png',
+    src: '/images/civil-construction.jpg',
     alt: '',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
   underlayCareers: {
-    src: '/images/newcareerimage.png',
+    src: '/images/careers.jpg',
     alt: '',
-    size: 'supplied',
+    size: '1344 × 576',
   },
   underlayContact: {
-    src: '/images/newconstructioninterior_fitout.png',
+    src: '/images/interior-fitout.jpg',
     alt: '',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
   underlayCapability: {
-    src: '/images/newconstructionproject.png',
+    src: '/images/rig-maintenance.jpg',
     alt: '',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
 
   // Projects
@@ -75,61 +74,63 @@ export const images = {
     size: '1024 × 1024',
   },
   rigMaintenance: {
-    src: '/images/newconstructionrigmaintenance.png',
+    src: '/images/rig-maintenance.jpg',
     alt: 'Maintenance crew working on rig equipment',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
   civilWorks: {
-    src: '/images/newcivilconstruction.png',
+    src: '/images/civil-construction.jpg',
     alt: 'Civil construction works in progress',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
   steelStructure: {
-    src: '/images/mewconstructionsteelstructure.png',
+    src: '/images/steel-structure.jpg',
     alt: 'Structural steel frame under erection',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
   roadwork: {
-    src: '/images/construction_realistic_roadwork.png',
+    src: '/images/roadwork.jpg',
     alt: 'Roadworks under construction',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
-  commercialBuilding: {
-    src: '/images/constructionmercialbuilding.png',
-    alt: 'Commercial building nearing completion',
-    size: 'supplied',
+  interiorFitout: {
+    src: '/images/interior-fitout.jpg',
+    alt: 'Interior fit-out nearing completion',
+    size: '1920 × 1920',
   },
 
   // Sections
   approach: {
-    src: '/images/newconstructionproject.png',
-    alt: 'Construction project under way',
-    size: 'supplied',
+    src: '/images/site-review.jpg',
+    alt: 'Site team reviewing drawings on a build',
+    size: '1280 × 930',
   },
   disciplines: {
-    src: '/images/construction_realistic_roadwork.png',
+    src: '/images/roadwork.jpg',
     alt: 'Roadworks and civil infrastructure',
-    size: 'supplied',
-  },
-  interiorFitout: {
-    src: '/images/newconstructioninterior_fitout.png',
-    alt: 'Interior fit-out in progress',
-    size: 'supplied',
-  },
-  renovation: {
-    src: '/images/newconstructionrenovation.png',
-    alt: 'Renovation works on an existing structure',
-    size: 'supplied',
+    size: '1920 × 1920',
   },
   careers: {
-    src: '/images/newcareerimage.png',
+    src: '/images/careers.jpg',
     alt: 'Axis people from across the business',
-    size: 'supplied',
+    size: '1344 × 576',
   },
   gasFacility: {
     src: '/images/rig3.png',
     alt: 'Site walkdown at a gas-fired facility',
     size: '1024 × 1024',
+  },
+
+  // Leadership
+  ceo: {
+    src: '/images/ceo.jpg',
+    alt: 'Chief Executive Officer of Axis Construction',
+    size: '1280 × 966',
+  },
+  ceoSite: {
+    src: '/images/ceo-site.jpg',
+    alt: 'Chief Executive Officer on site with drawings',
+    size: '1280 × 956',
   },
 } as const satisfies Record<string, ImageSlot>
 
