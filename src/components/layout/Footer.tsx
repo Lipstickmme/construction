@@ -53,28 +53,14 @@ export function Footer() {
 
         <div>
           <p className={columnLabel}>Contact</p>
-          <address className="mt-5 space-y-4 text-sm not-italic">
+          <address className="mt-5 text-sm not-italic">
             <a
               href={`mailto:${site.contact.email}`}
-              className="link-wipe block text-white/80 transition-colors hover:text-orange"
+              className="link-wipe block break-all text-white/80 transition-colors hover:text-orange"
             >
               {site.contact.email}
             </a>
-            <p>{site.contact.phone}</p>
           </address>
-
-          <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
-            {site.socials.map((social) => (
-              <li key={social.label}>
-                <a
-                  href={social.href}
-                  className="index-num uppercase transition-colors hover:text-orange"
-                >
-                  {social.label}
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
 
@@ -84,7 +70,15 @@ export function Footer() {
             © {new Date().getFullYear()} {site.name} {site.suffix}. All rights
             reserved.
           </p>
-          <p className="text-concrete/70">{site.positioning}</p>
+          <div className="flex items-center gap-5">
+            <p className="text-concrete/70">{site.positioning}</p>
+            <Link
+              to="/admin"
+              className="index-num text-concrete/70 uppercase transition-colors hover:text-orange"
+            >
+              Admin
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -1,0 +1,223 @@
+-- Axis Construction — backend schema.
+--
+-- Four tables: two form inboxes (enquiries, applications) and a two-table
+-- live chat. Everything is behind row level security; the only writes the
+-- browser can make directly are a visitor creating their own chat session
+-- and posting into it. Form submissions never touch the database from the
+-- browser at all — they go through the `submit-form` edge function, which
+-- holds the service role key and also sends the notification email.
+
+-- ---------------------------------------------------------------------------
+-- Admins
+-- ---------------------------------------------------------------------------
+
+create table if not exists public.admins (
+  user_id    uuid primary key references auth.users (id) on delete cascade,
+  email      text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.admins enable row level security;
+
+-- SECURITY DEFINER so the check itself is not subject to RLS on `admins`,
+-- which would otherwise recurse when used inside the policies below.
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (select 1 from public.admins where user_id = auth.uid());
+$$;
+
+create policy "admins read own row"
+  on public.admins for select
+  to authenticated
+  using (user_id = auth.uid());
+
+-- ---------------------------------------------------------------------------
+-- Shared status
+-- ---------------------------------------------------------------------------
+
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'item_status') then
+    create type public.item_status as enum ('new', 'in_progress', 'closed');
+  end if;
+end
+$$;
+
+-- ---------------------------------------------------------------------------
+-- Contact enquiries
+-- ---------------------------------------------------------------------------
+
+create table if not exists public.enquiries (
+  id         uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name       text not null,
+  company    text,
+  email      text not null,
+  phone      text,
+  discipline text,
+  scope      text not null,
+  status     public.item_status not null default 'new',
+  notes      text
+);
+
+create index if not exists enquiries_created_at_idx
+  on public.enquiries (created_at desc);
+
+alter table public.enquiries enable row level security;
+
+-- No anon policy at all: inserts arrive via the edge function's service role,
+-- which bypasses RLS. Only signed-in admins can read or triage.
+create policy "admins read enquiries"
+  on public.enquiries for select to authenticated using (public.is_admin());
+
+create policy "admins update enquiries"
+  on public.enquiries for update to authenticated
+  using (public.is_admin()) with check (public.is_admin());
+
+-- ---------------------------------------------------------------------------
+-- Job applications
+-- ---------------------------------------------------------------------------
+
+create table if not exists public.applications (
+  id         uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  role_title text not null,
+  name       text not null,
+  email      text not null,
+  experience text not null,
+  status     public.item_status not null default 'new',
+  notes      text
+);
+
+create index if not exists applications_created_at_idx
+  on public.applications (created_at desc);
+
+alter table public.applications enable row level security;
+
+create policy "admins read applications"
+  on public.applications for select to authenticated using (public.is_admin());
+
+create policy "admins update applications"
+  on public.applications for update to authenticated
+  using (public.is_admin()) with check (public.is_admin());
+
+-- ---------------------------------------------------------------------------
+-- Live chat
+-- ---------------------------------------------------------------------------
+
+-- `visitor_id` is the anonymous auth uid the widget signs in with, so a
+-- visitor can read their own thread and nobody else's without us inventing a
+-- token scheme of our own.
+create table if not exists public.chat_sessions (
+  id              uuid primary key default gen_random_uuid(),
+  created_at      timestamptz not null default now(),
+  visitor_id      uuid not null default auth.uid(),
+  visitor_name    text,
+  visitor_email   text,
+  last_message_at timestamptz not null default now(),
+  status          public.item_status not null default 'new'
+);
+
+create index if not exists chat_sessions_last_message_idx
+  on public.chat_sessions (last_message_at desc);
+
+create table if not exists public.chat_messages (
+  id         uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  session_id uuid not null references public.chat_sessions (id) on delete cascade,
+  sender     text not null check (sender in ('visitor', 'agent')),
+  body       text not null check (length(body) between 1 and 4000)
+);
+
+create index if not exists chat_messages_session_idx
+  on public.chat_messages (session_id, created_at);
+
+alter table public.chat_sessions enable row level security;
+alter table public.chat_messages enable row level security;
+
+create policy "visitor creates own session"
+  on public.chat_sessions for insert to authenticated
+  with check (visitor_id = auth.uid());
+
+create policy "visitor or admin reads session"
+  on public.chat_sessions for select to authenticated
+  using (visitor_id = auth.uid() or public.is_admin());
+
+create policy "visitor names own session"
+  on public.chat_sessions for update to authenticated
+  using (visitor_id = auth.uid()) with check (visitor_id = auth.uid());
+
+create policy "admin triages session"
+  on public.chat_sessions for update to authenticated
+  using (public.is_admin()) with check (public.is_admin());
+
+create policy "visitor posts to own session"
+  on public.chat_messages for insert to authenticated
+  with check (
+    sender = 'visitor'
+    and exists (
+      select 1 from public.chat_sessions s
+      where s.id = session_id and s.visitor_id = auth.uid()
+    )
+  );
+
+create policy "admin posts as agent"
+  on public.chat_messages for insert to authenticated
+  with check (sender = 'agent' and public.is_admin());
+
+create policy "visitor or admin reads messages"
+  on public.chat_messages for select to authenticated
+  using (
+    public.is_admin()
+    or exists (
+      select 1 from public.chat_sessions s
+      where s.id = session_id and s.visitor_id = auth.uid()
+    )
+  );
+
+-- Keep the inbox ordered by activity without the client having to maintain it.
+create or replace function public.touch_chat_session()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update public.chat_sessions
+     set last_message_at = new.created_at,
+         status = case when status = 'closed' then 'new' else status end
+   where id = new.session_id;
+  return new;
+end;
+$$;
+
+drop trigger if exists chat_messages_touch_session on public.chat_messages;
+create trigger chat_messages_touch_session
+  after insert on public.chat_messages
+  for each row execute function public.touch_chat_session();
+
+-- Realtime: both sides of the conversation stream over these two tables.
+-- Realtime honours the policies above, so a visitor only ever receives rows
+-- from their own session.
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and tablename = 'chat_messages'
+  ) then
+    alter publication supabase_realtime add table public.chat_messages;
+  end if;
+
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and tablename = 'chat_sessions'
+  ) then
+    alter publication supabase_realtime add table public.chat_sessions;
+  end if;
+end
+$$;

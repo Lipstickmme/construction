@@ -19,10 +19,9 @@ export function FeaturedWork() {
           <Reveal delay={120}>
             <Link
               to="/projects"
-              className="group inline-flex items-center gap-3 font-display text-sm font-semibold tracking-widest text-white uppercase"
+              className="link-wipe font-display text-sm font-semibold tracking-widest text-white uppercase transition-colors hover:text-orange"
             >
               All projects
-              <span className="h-px w-8 bg-orange transition-all duration-500 group-hover:w-12" />
             </Link>
           </Reveal>
         </div>
@@ -45,9 +44,6 @@ export function FeaturedWork() {
                     <h3 className="font-display text-lg font-bold text-white transition-colors group-hover:text-orange">
                       {project.title}
                     </h3>
-                    <p className="mt-1 text-sm text-concrete">
-                      {project.location}
-                    </p>
                   </div>
                   <span className="index-num shrink-0 text-concrete">
                     {project.year}

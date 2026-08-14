@@ -197,24 +197,10 @@ export function SideNav({ open, onClose }: SideNavProps) {
           <p className="index-num text-concrete uppercase">Get in touch</p>
           <a
             href={`mailto:${site.contact.email}`}
-            className="link-wipe mt-3 inline-block font-display text-lg font-medium text-white"
+            className="link-wipe mt-3 inline-block font-display text-base font-medium break-all text-white"
           >
             {site.contact.email}
           </a>
-          <p className="mt-1 text-sm text-concrete">{site.contact.phone}</p>
-
-          <ul className="mt-6 flex gap-5">
-            {site.socials.map((social) => (
-              <li key={social.label}>
-                <a
-                  href={social.href}
-                  className="index-num text-concrete uppercase transition-colors hover:text-orange"
-                >
-                  {social.label}
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </>

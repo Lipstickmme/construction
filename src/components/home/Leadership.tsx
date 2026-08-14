@@ -52,10 +52,9 @@ export function Leadership() {
 
             <Link
               to="/about"
-              className="group mt-10 inline-flex items-center gap-3 font-display text-sm font-semibold tracking-widest text-white uppercase"
+              className="link-wipe mt-10 inline-block font-display text-sm font-semibold tracking-widest text-white uppercase transition-colors hover:text-orange"
             >
               About the company
-              <span className="h-px w-8 bg-orange transition-all duration-500 group-hover:w-12" />
             </Link>
           </Reveal>
         </div>

@@ -48,3 +48,30 @@ export function FormSuccess({
     </div>
   )
 }
+
+/** Inline failure notice, shown above the submit button. */
+export function FormError({ message }: { message: string }) {
+  return (
+    <p
+      role="alert"
+      className="border-l-2 border-orange bg-fog px-4 py-3 text-sm text-ink"
+    >
+      {message}
+    </p>
+  )
+}
+
+/**
+ * Off-screen input. Bots fill every field they find; people cannot see this
+ * one, so anything arriving with it set is discarded server side.
+ */
+export function Honeypot() {
+  return (
+    <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0">
+      <label>
+        Website
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+      </label>
+    </div>
+  )
+}

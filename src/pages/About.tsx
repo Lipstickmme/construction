@@ -48,7 +48,7 @@ export default function About() {
           <p className="text-base leading-relaxed">
             Axis Construction began as a mechanical and piping contractor and
             grew by adding the trades our clients kept having to source
-            elsewhere — steel fabrication, civils, commissioning support.
+            elsewhere: steel fabrication, civils, commissioning support.
             Today those sit under one roof and one programme.
           </p>
           <p className="mt-6 text-base leading-relaxed">

@@ -1,8 +1,16 @@
-import { useCallback, useEffect, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { isBackendConfigured } from '@/lib/backend'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { SideNav } from './SideNav'
+
+// Lazy so the Supabase SDK loads after the page paints, not before it.
+const ChatWidget = lazy(() =>
+  import('@/components/chat/ChatWidget').then((module) => ({
+    default: module.ChatWidget,
+  })),
+)
 
 export function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -33,6 +41,12 @@ export function Layout() {
       </main>
 
       <Footer />
+
+      {isBackendConfigured && (
+        <Suspense fallback={null}>
+          <ChatWidget />
+        </Suspense>
+      )}
     </div>
   )
 }

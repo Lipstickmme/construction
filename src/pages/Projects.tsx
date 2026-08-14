@@ -31,9 +31,7 @@ export default function Projects() {
                   <h2 className="mt-3 font-display text-lg font-bold text-ink">
                     {project.title}
                   </h2>
-                  <p className="mt-1 text-sm">
-                    {project.location} · {project.year}
-                  </p>
+                  <p className="mt-1 text-sm">{project.year}</p>
                 </div>
               </article>
             </Reveal>

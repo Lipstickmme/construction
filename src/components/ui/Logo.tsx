@@ -16,7 +16,7 @@ export function Logo({ variant = 'dark', className = '' }: LogoProps) {
     <Link
       to="/"
       className={`block shrink-0 ${className}`}
-      aria-label={`${label} — home`}
+      aria-label={`${label}, home`}
     >
       <img
         src={slot.src}

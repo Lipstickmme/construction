@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { PageHeader } from '@/components/layout/PageHeader'
-import { FormSuccess } from '@/components/ui/FormStatus'
-import { useSimulatedSubmit } from '@/hooks/useSimulatedSubmit'
+import { FormError, FormSuccess, Honeypot } from '@/components/ui/FormStatus'
+import { useFormSubmit } from '@/hooks/useFormSubmit'
 import { Img } from '@/components/ui/Img'
 import { Reveal } from '@/components/ui/Reveal'
 import { Tilt } from '@/components/ui/Tilt'
@@ -22,7 +22,10 @@ const roles = [
 
 export default function Careers() {
   const [selected, setSelected] = useState<string | null>(null)
-  const { state, submit, reset } = useSimulatedSubmit()
+  const { state, error, submit, reset } = useFormSubmit({
+    kind: 'application',
+    extra: { role_title: selected ?? '' },
+  })
 
   const openRole = (title: string) => {
     setSelected(title)
@@ -80,7 +83,7 @@ export default function Careers() {
           {state === 'sent' ? (
             <FormSuccess
               title="Application received"
-              body={`Thanks — your application for ${selected ?? 'the role'} is with our team. We review every application and come back within five working days.`}
+              body={`Thanks, your application for ${selected ?? 'the role'} is with our team. We review every application and come back within five working days.`}
               onReset={() => {
                 reset()
                 setSelected(null)
@@ -94,7 +97,9 @@ export default function Careers() {
                 {selected}
               </h2>
 
-              <form onSubmit={submit} className="mt-8 max-w-xl space-y-5">
+              <form onSubmit={submit} className="relative mt-8 max-w-xl space-y-5">
+                <Honeypot />
+
                 <div className="grid gap-5 sm:grid-cols-2">
                   <label className="block">
                     <span className={labelClass}>Name</span>
@@ -110,6 +115,8 @@ export default function Careers() {
                   <span className={labelClass}>Experience</span>
                   <textarea name="experience" rows={5} required className={fieldClass} />
                 </label>
+
+                {error && <FormError message={error} />}
 
                 <button
                   type="submit"

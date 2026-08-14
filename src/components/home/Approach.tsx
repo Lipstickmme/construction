@@ -16,7 +16,7 @@ export function Approach() {
             the whole scope.
           </h2>
           <p className="mt-6 max-w-md text-base leading-relaxed">
-            Energy work sets our standard — the certification, traceability and
+            Energy work sets our standard: the certification, traceability and
             shutdown discipline a hydrocarbon facility demands. We bring the
             same standard to civil, structural and building projects, which is
             why clients keep handing us the rest of the site.
