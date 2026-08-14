@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Reveal } from '@/components/ui/Reveal'
 import { capabilities } from '@/data/capabilities'
+import { images } from '@/data/images'
 
 export default function CapabilityDetail() {
   const { slug } = useParams()
@@ -13,7 +14,7 @@ export default function CapabilityDetail() {
 
   return (
     <>
-      <PageHeader index={capability.index} title={capability.title}>
+      <PageHeader underlay={images.underlayCapability} index={capability.index} title={capability.title}>
         {capability.summary}
       </PageHeader>
 

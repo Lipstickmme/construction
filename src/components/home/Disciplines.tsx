@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Img } from '@/components/ui/Img'
 import { Reveal } from '@/components/ui/Reveal'
+import { Tilt } from '@/components/ui/Tilt'
 import { disciplines } from '@/data/capabilities'
 import { images } from '@/data/images'
 
@@ -11,11 +12,13 @@ export function Disciplines() {
     <section className="bg-fog py-24 lg:py-32">
       <div className="shell grid items-start gap-14 lg:grid-cols-2 lg:gap-20">
         <Reveal className="relative lg:sticky lg:top-28">
-          <Img
-            slot={images.disciplines}
-            className="aspect-4/5 w-full"
-            imgClassName="grayscale transition-all duration-[1200ms] ease-out hover:grayscale-0"
-          />
+          <Tilt max={6}>
+            <Img
+              slot={images.disciplines}
+              className="aspect-4/5 w-full"
+              imgClassName="grayscale transition-all duration-[1200ms] ease-out hover:grayscale-0"
+            />
+          </Tilt>
           <div className="hazard absolute right-0 bottom-0 h-1.5 w-2/3" />
         </Reveal>
 

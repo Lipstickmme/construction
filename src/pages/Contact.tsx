@@ -1,43 +1,40 @@
-import { useState, type FormEvent } from 'react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { FormSuccess } from '@/components/ui/FormStatus'
+import { useSimulatedSubmit } from '@/hooks/useSimulatedSubmit'
 import { Reveal } from '@/components/ui/Reveal'
 import { capabilities } from '@/data/capabilities'
+import { images } from '@/data/images'
 import { site } from '@/data/site'
 
 const fieldClass =
   'w-full border border-hairline bg-surface px-4 py-3.5 text-sm text-ink transition-colors focus:border-orange focus:outline-none'
-const labelClass =
-  'index-num mb-2 block text-concrete uppercase'
+const labelClass = 'index-num mb-2 block text-concrete uppercase'
 
 export default function Contact() {
-  const [sent, setSent] = useState(false)
-
-  // Stub handler — point this at a real endpoint when one exists.
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setSent(true)
-  }
+  const { state, submit, reset } = useSimulatedSubmit()
 
   return (
     <>
-      <PageHeader index="06" title="Start a conversation.">
-        Tell us the scope, the site and the window. We will come back with
-        what it actually takes.
+      <PageHeader
+        underlay={images.underlayContact}
+        index="06"
+        title="Start a conversation."
+      >
+        Tell us the scope, the site and the window. We will come back with what
+        it actually takes.
       </PageHeader>
 
       <section className="shell grid gap-16 py-20 lg:grid-cols-[1.3fr_1fr] lg:gap-24 lg:py-28">
         <Reveal>
-          {sent ? (
-            <div className="border border-hairline bg-fog p-10">
-              <span className="index-num text-orange">Received</span>
-              <p className="mt-4 text-base leading-relaxed">
-                Thanks — your enquiry is with us. This form is a front-end stub,
-                so nothing has actually been sent yet; wire it to an endpoint
-                before going live.
-              </p>
-            </div>
+          {state === 'sent' ? (
+            <FormSuccess
+              title="Enquiry sent"
+              body="Thanks — your enquiry is with our team. We reply to project enquiries within one business day."
+              onReset={reset}
+              resetLabel="Send another enquiry"
+            />
           ) : (
-            <form onSubmit={onSubmit} className="space-y-6">
+            <form onSubmit={submit} className="space-y-6">
               <div className="grid gap-6 sm:grid-cols-2">
                 <label className="block">
                   <span className={labelClass}>Name</span>
@@ -49,10 +46,16 @@ export default function Contact() {
                 </label>
               </div>
 
-              <label className="block">
-                <span className={labelClass}>Email</span>
-                <input type="email" name="email" required className={fieldClass} />
-              </label>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <label className="block">
+                  <span className={labelClass}>Email</span>
+                  <input type="email" name="email" required className={fieldClass} />
+                </label>
+                <label className="block">
+                  <span className={labelClass}>Phone</span>
+                  <input type="tel" name="phone" className={fieldClass} />
+                </label>
+              </div>
 
               <label className="block">
                 <span className={labelClass}>Discipline</span>
@@ -73,9 +76,10 @@ export default function Contact() {
 
               <button
                 type="submit"
-                className="group inline-flex items-center gap-4 bg-black px-9 py-5 font-display text-sm font-semibold tracking-widest text-white uppercase transition-colors hover:bg-orange"
+                disabled={state === 'sending'}
+                className="group inline-flex items-center gap-4 bg-black px-9 py-5 font-display text-sm font-semibold tracking-widest text-white uppercase transition-colors hover:bg-orange disabled:opacity-70"
               >
-                Send enquiry
+                {state === 'sending' ? 'Sending…' : 'Send enquiry'}
                 <span className="transition-transform duration-300 group-hover:translate-x-1.5">
                   →
                 </span>
@@ -98,32 +102,19 @@ export default function Contact() {
 
           <div className="mt-10 border-t border-hairline pt-8">
             <p className="index-num text-concrete uppercase">Telephone</p>
-            <p className="mt-2 font-display text-lg font-medium text-ink">
+            <a
+              href={`tel:${site.contact.phone.replace(/[^+\d]/g, '')}`}
+              className="link-wipe mt-2 inline-block font-display text-lg font-medium text-ink"
+            >
               {site.contact.phone}
-            </p>
-          </div>
-
-          <div className="mt-10 border-t border-hairline pt-8">
-            <p className="index-num text-concrete uppercase">Office</p>
-            <address className="mt-2 text-base leading-relaxed not-italic">
-              {site.contact.address.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
-            </address>
-          </div>
-
-          <div className="mt-10 border-t border-hairline pt-8">
-            <p className="index-num text-concrete uppercase">Hours</p>
-            <p className="mt-2 text-base">{site.contact.hours}</p>
+            </a>
           </div>
 
           <p className="mt-10 bg-fog p-5 text-xs leading-relaxed text-body">
             These contact details are placeholders. Replace the{' '}
             <code className="text-ink">contact</code> block in{' '}
-            <code className="text-ink">src/data/site.ts</code> with the real
-            ones and every page updates.
+            <code className="text-ink">src/data/site.ts</code> and every page
+            updates.
           </p>
         </Reveal>
       </section>

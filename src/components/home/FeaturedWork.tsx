@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Img } from '@/components/ui/Img'
 import { Reveal } from '@/components/ui/Reveal'
+import { Tilt } from '@/components/ui/Tilt'
 import { projects } from '@/data/capabilities'
 
 export function FeaturedWork() {
@@ -31,11 +32,9 @@ export function FeaturedWork() {
             <Reveal as="li" key={project.id} delay={index * 110}>
               <Link to="/projects" className="group block">
                 <div className="relative overflow-hidden bg-black">
-                  <Img
-                    slot={project.image}
-                    className="aspect-4/3 w-full"
-                    imgClassName="transition-transform duration-[900ms] ease-out group-hover:scale-105"
-                  />
+                  <Tilt max={6}>
+                    <Img slot={project.image} className="aspect-4/3 w-full" />
+                  </Tilt>
                   <span className="absolute top-4 left-4 bg-yellow px-3 py-1 font-display text-[0.65rem] font-semibold tracking-widest text-black uppercase">
                     {project.sector}
                   </span>

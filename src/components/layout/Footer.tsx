@@ -62,13 +62,6 @@ export function Footer() {
               {site.contact.email}
             </a>
             <p>{site.contact.phone}</p>
-            <p className="leading-relaxed">
-              {site.contact.address.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
-            </p>
           </address>
 
           <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2">

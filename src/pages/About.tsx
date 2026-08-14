@@ -1,6 +1,7 @@
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Img } from '@/components/ui/Img'
 import { Reveal } from '@/components/ui/Reveal'
+import { Tilt } from '@/components/ui/Tilt'
 import { Metrics } from '@/components/home/Metrics'
 import { images } from '@/data/images'
 import { site } from '@/data/site'
@@ -31,7 +32,7 @@ const principles = [
 export default function About() {
   return (
     <>
-      <PageHeader index="02" title="We build the difficult half.">
+      <PageHeader underlay={images.underlayAbout} index="02" title="We build the difficult half.">
         {site.descriptor}
       </PageHeader>
 
@@ -60,10 +61,9 @@ export default function About() {
 
       <section className="shell pb-20 lg:pb-28">
         <Reveal>
-          <Img
-            slot={images.designBuild}
-            className="aspect-21/9 w-full"
-          />
+          <Tilt max={4}>
+            <Img slot={images.renovation} className="aspect-21/9 w-full" />
+          </Tilt>
         </Reveal>
       </section>
 

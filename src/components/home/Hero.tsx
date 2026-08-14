@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Img } from '@/components/ui/Img'
+import { Tilt } from '@/components/ui/Tilt'
 import { images } from '@/data/images'
 import { site } from '@/data/site'
 
@@ -54,7 +55,8 @@ export function Hero() {
           {site.positioning}
         </p>
 
-        <h1 className="mt-8 font-display text-[clamp(2.75rem,9vw,7.5rem)] font-bold text-white">
+        <Tilt max={3} scale={1} className="mt-8 inline-block">
+        <h1 className="font-display text-[clamp(2.75rem,9vw,7.5rem)] font-bold text-white">
           {headlineLines.map((line, index) => (
             <span key={line} className="line-mask">
               <span
@@ -69,6 +71,7 @@ export function Hero() {
             </span>
           ))}
         </h1>
+        </Tilt>
 
         <div
           className="mt-12 flex flex-col gap-10 border-t border-white/15 pt-8 transition-all duration-700 lg:flex-row lg:items-end lg:justify-between"

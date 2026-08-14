@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Reveal } from '@/components/ui/Reveal'
+import { images } from '@/data/images'
 import { capabilities } from '@/data/capabilities'
 
 export default function Capabilities() {
   return (
     <>
-      <PageHeader index="03" title="Capabilities">
+      <PageHeader underlay={images.underlayCapabilities} index="03" title="Capabilities">
         Every trade a heavy industrial project needs, held in-house and
         answerable to one programme.
       </PageHeader>

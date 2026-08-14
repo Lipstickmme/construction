@@ -1,5 +1,6 @@
 import { Img } from '@/components/ui/Img'
 import { Reveal } from '@/components/ui/Reveal'
+import { Tilt } from '@/components/ui/Tilt'
 import { approachPoints } from '@/data/capabilities'
 import { images } from '@/data/images'
 
@@ -44,11 +45,9 @@ export function Approach() {
             aria-hidden="true"
             className="absolute -top-5 -right-5 h-full w-full bg-yellow"
           />
-          <Img
-            slot={images.approach}
-            className="relative aspect-4/3 w-full"
-            imgClassName="transition-transform duration-[1200ms] ease-out hover:scale-105"
-          />
+          <Tilt max={7}>
+            <Img slot={images.approach} className="relative aspect-4/3 w-full" />
+          </Tilt>
         </Reveal>
       </div>
     </section>

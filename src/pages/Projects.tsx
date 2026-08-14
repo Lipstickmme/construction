@@ -1,12 +1,14 @@
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Img } from '@/components/ui/Img'
 import { Reveal } from '@/components/ui/Reveal'
+import { Tilt } from '@/components/ui/Tilt'
+import { images } from '@/data/images'
 import { projects } from '@/data/capabilities'
 
 export default function Projects() {
   return (
     <>
-      <PageHeader index="04" title="Projects">
+      <PageHeader underlay={images.underlayProjects} index="04" title="Projects">
         A selection of recent work. Client names and figures are withheld
         pending approval.
       </PageHeader>
@@ -17,11 +19,9 @@ export default function Projects() {
             <Reveal as="li" key={project.id} delay={index * 110}>
               <article className="group">
                 <div className="overflow-hidden bg-fog">
-                  <Img
-                    slot={project.image}
-                    className="aspect-4/3 w-full"
-                    imgClassName="transition-transform duration-[900ms] ease-out group-hover:scale-105"
-                  />
+                  <Tilt max={6}>
+                    <Img slot={project.image} className="aspect-4/3 w-full" />
+                  </Tilt>
                 </div>
 
                 <div className="mt-5 border-t border-hairline pt-5">

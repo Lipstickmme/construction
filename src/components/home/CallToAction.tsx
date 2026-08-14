@@ -7,7 +7,7 @@ export function CallToAction() {
   return (
     <section className="relative isolate overflow-hidden bg-black">
       <Img
-        slot={images.earthworks}
+        slot={images.gasFacility}
         alt=""
         placeholder="plain"
         className="absolute inset-0 -z-10 size-full opacity-30"

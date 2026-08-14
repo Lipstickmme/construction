@@ -1,9 +1,9 @@
 /**
  * Company details.
  *
- * Every contact value here is a deliberate placeholder — no real address,
- * phone number or inbox. Replace the whole `contact` block when the real
- * details exist; nothing else needs to change.
+ * Contact is an email and a phone number only — no address anywhere on the
+ * site. Both values are deliberate placeholders; replace the `contact` block
+ * when the real ones exist and every page follows.
  */
 export const site = {
   name: 'Axis',
@@ -17,8 +17,6 @@ export const site = {
   contact: {
     email: 'hello@axis.example',
     phone: '+00 000 0000 000',
-    address: ['000 Placeholder Way', 'City, Region 00000', 'Country'],
-    hours: 'Mon – Fri, 08:00 – 18:00',
   },
 
   socials: [
