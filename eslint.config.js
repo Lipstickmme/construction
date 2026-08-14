@@ -5,9 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  // `supabase/functions` is Deno, not browser TypeScript — it has its own
-  // globals and module resolution, and is type-checked by the Supabase CLI.
-  { ignores: ['dist', 'supabase/functions'] },
+  { ignores: ['dist'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -26,5 +24,11 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
     },
+  },
+  {
+    // Server code: Node/edge globals, no React, no browser DOM lifecycle.
+    files: ['api/**/*.ts'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    rules: { 'react-refresh/only-export-components': 'off' },
   },
 )

@@ -1,46 +1,30 @@
-// Supabase Edge Function (Deno) — the only path from the public site into the
-// database for form submissions, and the only place the Resend key exists.
-//
-// The browser can never write to `enquiries` or `applications` directly: RLS
-// grants those tables to admins only, and this function writes with the
-// service role key. That way a leaked anon key cannot be used to stuff the
-// inbox, and the Resend key never reaches the client at all.
-//
-// Deploy:  supabase functions deploy submit-form
-// Secrets: supabase secrets set RESEND_API_KEY=... FORM_FROM=... FORM_TO=...
+import { createClient } from '@supabase/supabase-js'
 
-import { createClient } from 'npm:@supabase/supabase-js@2'
+/**
+ * Vercel Function — the only path from the public site into the form tables,
+ * and the only place the Resend key exists.
+ *
+ * The browser can never write to `enquiries` or `applications` directly: row
+ * level security grants those tables to admins only, and this function writes
+ * with the service role key. A leaked anon key therefore cannot be used to
+ * stuff the inbox, and the Resend key never reaches the client at all.
+ *
+ * Runs on the edge runtime, so it is same-origin with the site (no CORS) and
+ * deploys with it — no separate CLI, no separate secrets store.
+ */
+export const config = { runtime: 'edge' }
 
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') ?? ''
-const FORM_TO = Deno.env.get('FORM_TO') ?? 'Contact@axisconstructionltd.com'
+const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
+const FORM_TO = process.env.FORM_TO ?? 'Contact@axisconstructionltd.com'
 const FORM_FROM =
-  Deno.env.get('FORM_FROM') ?? 'Axis Website <website@axisconstructionltd.com>'
-// Comma-separated list, or "*" while you are still setting things up.
-const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGINS') ?? '*')
-  .split(',')
-  .map((value) => value.trim())
-  .filter(Boolean)
+  process.env.FORM_FROM ?? 'Axis Website <website@axisconstructionltd.com>'
 
-const admin = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-  { auth: { persistSession: false } },
-)
-
-function corsHeaders(origin: string | null): Record<string, string> {
-  const allow =
-    ALLOWED_ORIGINS.includes('*') || (origin && ALLOWED_ORIGINS.includes(origin))
-      ? (origin ?? '*')
-      : ALLOWED_ORIGINS[0]
-
-  return {
-    'Access-Control-Allow-Origin': allow,
-    'Access-Control-Allow-Headers':
-      'authorization, x-client-info, apikey, content-type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    Vary: 'Origin',
-  }
-}
+// The Supabase marketplace integration injects the unprefixed names; the
+// VITE_ ones are what the browser build uses. Accept either so the project
+// works whichever way it was connected.
+const SUPABASE_URL =
+  process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? ''
+const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
 
 /** Trim, cap and reject anything that is not a usable string. */
 function text(value: unknown, max: number): string {
@@ -98,30 +82,31 @@ async function sendEmail(subject: string, html: string, replyTo?: string) {
 
   if (!response.ok) {
     // The submission is already stored, so a mail failure must not fail the
-    // request — the admin dashboard is the source of truth, email is a nudge.
+    // request — the dashboard is the source of truth, email is a nudge.
     console.error('Resend rejected the message:', await response.text())
   }
 }
 
-Deno.serve(async (request) => {
-  const cors = corsHeaders(request.headers.get('origin'))
+function json(status: number, payload: unknown): Response {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  })
+}
 
-  if (request.method === 'OPTIONS') {
-    return new Response('ok', { headers: cors })
-  }
-
+export default async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { ...cors, 'Content-Type': 'application/json' },
-    })
+    return json(405, { error: 'Method not allowed' })
   }
 
-  const json = (status: number, payload: unknown) =>
-    new Response(JSON.stringify(payload), {
-      status,
-      headers: { ...cors, 'Content-Type': 'application/json' },
-    })
+  if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
+    console.error('Supabase server credentials are missing')
+    return json(500, { error: 'The form is not available right now.' })
+  }
+
+  const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+    auth: { persistSession: false },
+  })
 
   try {
     const input = await request.json()
@@ -150,7 +135,7 @@ Deno.serve(async (request) => {
       if (error) throw error
 
       await sendEmail(
-        `New enquiry — ${record.name}${record.company ? ` (${record.company})` : ''}`,
+        `New enquiry: ${record.name}${record.company ? ` (${record.company})` : ''}`,
         emailBody([
           ['Name', record.name],
           ['Company', record.company ?? ''],
@@ -181,7 +166,7 @@ Deno.serve(async (request) => {
       if (error) throw error
 
       await sendEmail(
-        `Application — ${record.role_title} — ${record.name}`,
+        `Application: ${record.role_title}, ${record.name}`,
         emailBody([
           ['Role', record.role_title],
           ['Name', record.name],
@@ -195,7 +180,7 @@ Deno.serve(async (request) => {
     }
 
     // Chat rows are written by the widget itself (the visitor has to own them
-    // for RLS), so this branch only raises the flag by email.
+    // for row level security), so this branch only raises the flag by email.
     if (kind === 'chat') {
       const name = text(payload.name, 120) || 'Website visitor'
       const email = text(payload.email, 254)
@@ -203,13 +188,13 @@ Deno.serve(async (request) => {
       const sessionId = text(payload.session_id, 64)
 
       await sendEmail(
-        `Live chat started — ${name}`,
+        `Live chat started: ${name}`,
         emailBody([
           ['Name', name],
           ['Email', email],
           ['First message', message],
           ['Session', sessionId],
-          ['Reply in', 'Admin dashboard → Chat'],
+          ['Reply in', 'Admin dashboard, Chat tab'],
         ]),
         isEmail(email) ? email : undefined,
       )
@@ -222,4 +207,4 @@ Deno.serve(async (request) => {
     console.error(error)
     return json(500, { error: 'Something went wrong. Please try again.' })
   }
-})
+}

@@ -155,19 +155,19 @@ export function useVisitorChat() {
 
         // Raise the flag by email. A failure here must not break the chat, so
         // it is deliberately not awaited into the error path.
-        client.functions
-          .invoke('submit-form', {
-            body: {
-              kind: 'chat',
-              payload: {
-                session_id: session.id,
-                name: visitor.name,
-                email: visitor.email,
-                message: visitor.message,
-              },
+        fetch('/api/submit-form', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            kind: 'chat',
+            payload: {
+              session_id: session.id,
+              name: visitor.name,
+              email: visitor.email,
+              message: visitor.message,
             },
-          })
-          .catch(() => {})
+          }),
+        }).catch(() => {})
       } catch (caught) {
         setError(
           caught instanceof Error

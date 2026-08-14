@@ -10,10 +10,12 @@ type Options = {
 }
 
 /**
- * Posts a form to the `submit-form` edge function, which stores it and emails
- * the team. With no backend configured it falls back to reporting success
- * without sending anything, so the site is never broken by missing config —
- * check `isBackendConfigured` if you need to say so in the UI.
+ * Posts a form to `/api/submit-form`, the Vercel function that stores it and
+ * emails the team. Same origin, so no SDK and no credentials are involved on
+ * this path at all.
+ *
+ * With no backend configured it falls back to reporting success without
+ * sending anything, so the site is never broken by missing config.
  */
 export function useFormSubmit({ kind, extra }: Options) {
   const [state, setState] = useState<SubmitState>('idle')
@@ -43,13 +45,15 @@ export function useFormSubmit({ kind, extra }: Options) {
     })
 
     try {
-      // Dynamic: keeps the SDK out of the bundle until someone submits.
-      const { requireSupabase } = await import('@/lib/supabase')
+      const response = await fetch('/api/submit-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind, payload }),
+      })
 
-      const { data, error: invokeError } = await requireSupabase()
-        .functions.invoke('submit-form', { body: { kind, payload } })
+      const data = await response.json().catch(() => null)
 
-      if (invokeError || !data?.ok) {
+      if (!response.ok || !data?.ok) {
         throw new Error(data?.error ?? 'We could not send that just now.')
       }
 

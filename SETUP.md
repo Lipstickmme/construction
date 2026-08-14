@@ -1,20 +1,25 @@
-# Backend setup
+# Setup
 
-The site is a static build with no server of its own. Everything behind the
-forms, the admin dashboard and the live chat runs on two free services:
+Everything runs through Vercel. The site, the API route behind the forms, and
+the two services it talks to are all provisioned from and billed through the
+Vercel dashboard, on free tiers.
 
-| Service | Free tier | What it does here |
+| Piece | Where | Free tier |
 | --- | --- | --- |
-| **Supabase** | 500MB Postgres, 50k monthly users, 2M edge function calls, realtime included | Stores enquiries, applications and chat. Signs staff in. Streams chat both ways. Runs the one server-side function. |
-| **Resend** | 3,000 emails/month, 100/day | Emails you when a form or a chat comes in. |
+| Site + `/api/submit-form` | Vercel | Hobby plan |
+| Database, staff auth, chat realtime | Supabase, added via Vercel Marketplace | 500MB Postgres, 50k monthly users |
+| Notification email | Resend, added via Vercel Marketplace | 3,000/month, 100/day |
 
-Supabase was the right pick over the alternatives because the four things
-needed here — a database, an admin login, realtime for chat, and one piece of
-server-side code to hold the Resend key — are all on the same free tier. A
-separate Node server would mean paying for hosting and writing auth by hand.
+## Why not put the database on Vercel too
 
-Work through the three parts in order. Part 1 takes about ten minutes, part 2
-depends on DNS propagation, part 3 is a few commands.
+Vercel's own Postgres (Neon) would host the tables fine, but it gives you a
+database and nothing else — no login system and no realtime. The staff
+dashboard would need auth written and maintained by hand, and the live chat
+would have to poll the server on a timer instead of messages simply arriving.
+Supabase provides both on the same free tier, and going through the Vercel
+Marketplace means one dashboard, one bill, and the connection variables pushed
+into the project automatically. That is the practical version of "everything
+through Vercel"; the alternative is more code doing a worse job.
 
 ---
 
@@ -24,160 +29,162 @@ depends on DNS propagation, part 3 is a few commands.
 
 For `Contact@axisconstructionltd.com` to actually receive the notifications,
 that address needs a real mailbox somewhere — Google Workspace, Microsoft 365,
-Zoho Mail (free for one domain), or whatever your domain registrar bundles. If
-that mailbox does not exist yet, set it up first, or point `FORM_TO` at an
-address that does exist. Otherwise Resend will report the message as sent and
-it will go nowhere.
+Zoho Mail (free for one domain), or whatever your registrar bundles. If that
+mailbox does not exist yet, set it up first or point `FORM_TO` at an address
+that does. Otherwise Resend reports the message as sent and it goes nowhere.
 
 ---
 
-## Part 1 — Supabase
+## 1. Deploy the site
 
-1. **Create the project.** [supabase.com](https://supabase.com) → New project.
-   Free plan, region closest to your users. Save the database password.
+1. [vercel.com](https://vercel.com) → Add New → Project → import
+   `Lipstickmme/construction`.
+2. Framework preset is detected as Vite; build command `npm run build` and
+   output directory `dist` are correct as offered.
+3. Deploy. It will build and go live straight away — the forms report success
+   without storing anything until the rest is connected, which is deliberate,
+   and the chat widget stays hidden.
 
-2. **Create the schema.** SQL Editor → New query → paste the whole of
-   `supabase/migrations/0001_init.sql` → Run. This creates four tables
-   (`enquiries`, `applications`, `chat_sessions`, `chat_messages`), an
-   `admins` table, and the row level security policies that make the whole
-   thing safe to talk to from a browser.
+`vercel.json` in the repo handles the single-page-app rewrite, so deep links
+like `/capabilities/oil-and-gas-facilities` resolve instead of 404ing, and sets
+cache headers for the hashed assets and the photography.
 
-3. **Turn on anonymous sign-ins.** Authentication → Sign In / Providers →
-   enable **Anonymous sign-ins**. The chat widget uses this so each visitor
-   gets a real identity and can be granted their own conversation and nobody
-   else's. Without it the chat cannot open a session.
+## 2. Add Supabase from the Vercel Marketplace
 
-4. **Create your staff login.** Authentication → Users → Add user → enter an
-   email and password, and tick *Auto Confirm User*. Copy the new user's UUID
-   from the list.
+1. In the project: **Storage** (or Integrations) → **Marketplace** →
+   **Supabase** → Add. Pick the free plan and the region closest to your users.
+2. Vercel creates the Supabase project and pushes its connection variables into
+   this Vercel project automatically, including `SUPABASE_URL` and
+   `SUPABASE_SERVICE_ROLE_KEY`, which is what the API route needs.
+3. **Add two more variables by hand**, under Settings → Environment Variables.
+   The integration only injects unprefixed names, and Vite only exposes
+   variables beginning with `VITE_` to the browser:
 
-5. **Make that user an admin.** SQL Editor:
+   | Name | Value |
+   | --- | --- |
+   | `VITE_SUPABASE_URL` | same as the injected `SUPABASE_URL` |
+   | `VITE_SUPABASE_ANON_KEY` | the **anon public** key, from Supabase → Project Settings → API |
+
+   Set both for Production, Preview and Development.
+
+The anon key is *meant* to be public — row level security is what protects the
+data, not key secrecy. The service role key is the opposite: it bypasses every
+policy. Never give it a `VITE_` prefix, and never put it in this repo.
+
+## 3. Set up the database
+
+Open the Supabase project from the Vercel integration panel.
+
+1. **Schema.** SQL Editor → New query → paste the whole of
+   `supabase/migrations/0001_init.sql` → Run. This creates `enquiries`,
+   `applications`, `chat_sessions`, `chat_messages` and `admins`, plus the row
+   level security policies that make the whole thing safe to reach from a
+   browser.
+
+2. **Anonymous sign-ins.** Authentication → Sign In / Providers → enable
+   **Anonymous sign-ins**. The chat widget uses this so each visitor gets a
+   real identity and can be granted their own conversation and nobody else's.
+   Without it the chat cannot open a session.
+
+3. **Your staff login.** Authentication → Users → Add user → email and
+   password, tick *Auto Confirm User*. Copy the new user's UUID.
+
+4. **Make that user an admin.** SQL Editor:
 
    ```sql
    insert into public.admins (user_id, email)
    values ('paste-the-uuid-here', 'you@axisconstructionltd.com');
    ```
 
-   Repeat steps 4–5 for anyone else who needs the dashboard. Removing someone
-   is a single `delete from public.admins where user_id = '…';` — it takes
-   effect immediately, no redeploy.
+   Repeat 3–4 for anyone else who needs the dashboard. Removing someone is
+   `delete from public.admins where user_id = '…';` and takes effect
+   immediately, no redeploy.
 
-6. **Copy the keys.** Project Settings → API. Copy the **Project URL** and the
-   **anon public** key into a `.env` file at the repo root:
+## 4. Add Resend
 
-   ```
-   VITE_SUPABASE_URL=https://your-ref.supabase.co
-   VITE_SUPABASE_ANON_KEY=eyJ...
-   ```
+1. In Vercel: **Integrations** → **Marketplace** → **Resend** → Add. That
+   provisions the account and injects `RESEND_API_KEY` into the project. (If
+   you would rather sign up at [resend.com](https://resend.com) directly, do
+   that and add `RESEND_API_KEY` to Vercel's environment variables yourself —
+   the result is the same.)
 
-   `.env.example` has the template. The anon key is *meant* to be public — row
-   level security is what protects the data, not key secrecy. The **service
-   role** key is different: it bypasses every policy, so it must never appear
-   in a `VITE_` variable or anywhere in this repo.
-
----
-
-## Part 2 — Resend
-
-1. **Sign up** at [resend.com](https://resend.com).
-
-2. **Verify the domain.** Domains → Add Domain → `axisconstructionltd.com`.
-   Resend gives you DNS records (a DKIM `TXT`, an SPF `TXT`, usually a
-   `MX` for the return path). Add them at whoever hosts your DNS and wait for
-   the status to go green. This usually takes minutes but can take hours.
+2. **Verify the domain**, in the Resend dashboard: Domains → Add Domain →
+   `axisconstructionltd.com`. Resend gives you DNS records (a DKIM `TXT`, an
+   SPF `TXT`, usually an `MX` for the return path). Add them wherever your DNS
+   lives and wait for the status to go green — usually minutes, occasionally
+   hours.
 
    This step is not optional. Until the domain is verified, Resend only lets
    you send from `onboarding@resend.dev`, and only *to* the address that owns
-   the Resend account — which is why the sample code you sent has a gmail
-   address hard-coded in it. Verified domain means you can send from your own
+   the Resend account — which is why the sample code has a gmail address
+   hard-coded in it. A verified domain is what lets you send from your own
    address to your own inbox.
 
-3. **Create an API key.** API Keys → Create → *Sending access* is enough.
-   Copy the `re_...` value now; it is not shown again.
+3. **Add two more variables** in Vercel → Settings → Environment Variables:
 
-4. **Decide the from address.** It has to be at the verified domain. Something
-   like `Axis Website <website@axisconstructionltd.com>` is conventional — a
-   send-only address, distinct from the mailbox receiving the notifications.
+   | Name | Value |
+   | --- | --- |
+   | `FORM_TO` | `Contact@axisconstructionltd.com` |
+   | `FORM_FROM` | `Axis Website <website@axisconstructionltd.com>` |
 
----
+   `FORM_FROM` must be at the verified domain. Using a send-only address
+   distinct from the receiving mailbox is the usual convention.
 
-## Part 3 — Deploy the edge function
+## 5. Redeploy
 
-The function is the only place the Resend key exists, and the only path from
-the public site into the `enquiries` and `applications` tables. The browser
-cannot write to those tables at all.
-
-```bash
-npm install -g supabase          # or use npx supabase for each command
-supabase login
-supabase link --project-ref your-ref
-
-supabase secrets set \
-  RESEND_API_KEY=re_your_key_here \
-  FORM_TO=Contact@axisconstructionltd.com \
-  FORM_FROM="Axis Website <website@axisconstructionltd.com>" \
-  ALLOWED_ORIGINS=https://axisconstructionltd.com
-
-supabase functions deploy submit-form
-```
-
-`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically —
-you do not set those.
-
-While testing locally, set `ALLOWED_ORIGINS=http://localhost:5173` as well
-(comma-separated), or `*` to allow anything.
-
-If you would rather not install the CLI: Edge Functions → Deploy a new
-function in the Supabase dashboard, name it `submit-form`, and paste the
-contents of `supabase/functions/submit-form/index.ts`. Set the same secrets
-under Edge Functions → Secrets.
-
----
-
-## Part 4 — Ship it
-
-Set the two `VITE_` variables in your host's environment settings (Netlify:
-Site configuration → Environment variables; Vercel: Project → Settings →
-Environment variables), then redeploy. Vite bakes them in at build time, so a
-rebuild is required after any change.
+Vite bakes `VITE_` variables in at build time, so the site needs one more
+deploy to pick them up: Deployments → the latest one → Redeploy.
 
 ---
 
 ## Using it
 
-- **Dashboard:** `/admin`, also linked at the bottom right of the footer.
-  Sign in with the staff account from step 4.
+- **Dashboard:** `/admin`, also linked at the bottom right of the footer. Sign
+  in with the account from step 3.
 - **Enquiries / Applications:** list on the left, full record on the right,
   three status buttons (New → In progress → Closed) and a reply-by-email link.
-- **Chat:** conversations sort by most recent, an orange square marks ones
+- **Chat:** conversations sort by most recent, an orange square marks the ones
   nobody has answered. Replies appear in the visitor's widget instantly, and
-  answering moves the conversation to In progress on its own.
+  answering moves a conversation to In progress by itself.
 
 ## Checking it works
 
 1. Submit the contact form on the live site.
 2. It should appear in `/admin` within a second or two.
 3. An email should reach `Contact@axisconstructionltd.com`. If the row is
-   there but no email arrives, the problem is Resend, not Supabase — check
-   Edge Functions → Logs for the response Resend gave, and confirm the domain
-   is verified and `FORM_FROM` is at that domain.
+   there but no email arrives, the problem is Resend and not Supabase — check
+   the function logs in Vercel (Deployments → Functions → `submit-form`) for
+   the response Resend gave, and confirm the domain is verified and
+   `FORM_FROM` is at that domain.
 4. Open the chat widget in a private window, send a message, and answer it
    from `/admin` → Chat in your normal window.
 
-## What happens before any of this is configured
+## Local development
 
-The site is deliberately fine without it. With `VITE_SUPABASE_URL` unset,
-forms report success without sending anything (the behaviour the site shipped
-with), the chat widget does not render, and `/admin` explains what is missing.
-Nothing half-configured is ever shown to a visitor.
+`npm run dev` runs the site but not the API route, so forms fall back to
+reporting success without sending. To exercise the real path locally:
+
+```bash
+npm install -g vercel
+vercel link
+vercel env pull .env.local   # pulls every variable above
+vercel dev
+```
+
+`.env.local` is gitignored.
+
+---
 
 ## Notes
 
-- **Free projects pause after 7 days with no activity.** A live site with
-  traffic will not hit this, but a project you set up and leave alone for a
-  fortnight will need waking from the dashboard.
+- **Free Supabase projects pause after 7 days with no activity.** A live site
+  with traffic will not hit this; a project set up and left alone for a
+  fortnight needs waking from the dashboard.
 - **Spam.** Both forms carry a hidden honeypot field, and every submission is
-  validated and length-capped server side. If you start getting hit properly,
-  Supabase edge functions can sit behind Cloudflare Turnstile.
-- **Attachments.** Applications are text only. CV uploads would need Supabase
-  Storage, which is on the same free tier — say the word.
+  validated and length-capped server side. If it gets hit properly, the
+  function can sit behind Cloudflare Turnstile.
+- **Attachments.** Applications are text only. CV uploads would use Supabase
+  Storage, on the same free tier — say the word.
+- **Before any of this is configured** the site is deliberately fine: forms
+  report success without sending, the chat widget does not render, and
+  `/admin` explains what is missing. Nothing half-configured reaches a visitor.

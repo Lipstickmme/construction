@@ -63,8 +63,10 @@ export default function Contact() {
                 <span className={labelClass}>Discipline</span>
                 <select name="discipline" className={fieldClass}>
                   <option value="">Select a capability</option>
+                  {/* Value is the title, not the slug: it goes straight into
+                      the notification email and the dashboard. */}
                   {capabilities.map((capability) => (
-                    <option key={capability.id} value={capability.id}>
+                    <option key={capability.id} value={capability.title}>
                       {capability.title}
                     </option>
                   ))}

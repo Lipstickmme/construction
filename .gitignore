@@ -25,6 +25,9 @@ pnpm-debug.log*
 .env.*
 !.env.example
 
+# Vercel
+.vercel
+
 # Supabase CLI
 supabase/.temp
 supabase/.branches

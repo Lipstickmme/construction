@@ -2,9 +2,8 @@
  * Company details.
  *
  * Contact is the enquiry mailbox only, no address and no phone number. Form
- * submissions are delivered to the same address by the `submit-form` edge
- * function, so this constant and `FORM_TO` in that function should stay in
- * step.
+ * submissions are delivered to the same address by `api/submit-form.ts`, so
+ * this constant and the `FORM_TO` environment variable should stay in step.
  */
 export const site = {
   name: 'Axis',
