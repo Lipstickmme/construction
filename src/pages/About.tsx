@@ -32,7 +32,7 @@ const principles = [
 export default function About() {
   return (
     <>
-      <PageHeader underlay={images.underlayAbout} index="02" title="We build the difficult half.">
+      <PageHeader underlay={images.ceoSite} index="02" title="We build the difficult half.">
         {site.descriptor}
       </PageHeader>
 
@@ -62,7 +62,7 @@ export default function About() {
       <section className="shell pb-20 lg:pb-28">
         <Reveal>
           <Tilt max={4}>
-            <Img slot={images.approach} className="aspect-21/9 w-full" />
+            <Img slot={images.civilWorks} className="aspect-21/9 w-full" />
           </Tilt>
         </Reveal>
       </section>

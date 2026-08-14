@@ -46,7 +46,7 @@ export function Approach() {
             className="absolute -top-5 -right-5 h-full w-full bg-yellow"
           />
           <Tilt max={7}>
-            <Img slot={images.approach} className="relative aspect-4/3 w-full" />
+            <Img slot={images.siteReview} className="relative aspect-4/3 w-full" />
           </Tilt>
         </Reveal>
       </div>

@@ -16,7 +16,7 @@ export default function Contact() {
   return (
     <>
       <PageHeader
-        underlay={images.underlayContact}
+        underlay={images.interiorFitout}
         index="06"
         title="Start a conversation."
       >
@@ -89,7 +89,6 @@ export default function Contact() {
         </Reveal>
 
         <Reveal delay={140}>
-          {/* Placeholder details — replace the `contact` block in data/site.ts. */}
           <div className="border-t border-hairline pt-8">
             <p className="index-num text-concrete uppercase">Email</p>
             <a
@@ -110,12 +109,14 @@ export default function Contact() {
             </a>
           </div>
 
-          <p className="mt-10 bg-fog p-5 text-xs leading-relaxed text-body">
-            These contact details are placeholders. Replace the{' '}
-            <code className="text-ink">contact</code> block in{' '}
-            <code className="text-ink">src/data/site.ts</code> and every page
-            updates.
-          </p>
+          <div className="mt-10 border-t border-hairline pt-8">
+            <p className="index-num text-concrete uppercase">Enquiries</p>
+            <p className="mt-3 max-w-sm text-sm leading-relaxed">
+              Project enquiries are answered within one business day. For
+              anything time-critical, call rather than email — someone from the
+              relevant discipline will come back to you the same day.
+            </p>
+          </div>
         </Reveal>
       </section>
     </>

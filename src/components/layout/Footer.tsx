@@ -53,7 +53,6 @@ export function Footer() {
 
         <div>
           <p className={columnLabel}>Contact</p>
-          {/* Placeholder details — swap the `contact` block in data/site.ts. */}
           <address className="mt-5 space-y-4 text-sm not-italic">
             <a
               href={`mailto:${site.contact.email}`}
@@ -85,9 +84,7 @@ export function Footer() {
             © {new Date().getFullYear()} {site.name} {site.suffix}. All rights
             reserved.
           </p>
-          <p className="text-concrete/70">
-            Contact details on this site are placeholders.
-          </p>
+          <p className="text-concrete/70">{site.positioning}</p>
         </div>
       </div>
     </footer>

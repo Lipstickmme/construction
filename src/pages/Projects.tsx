@@ -8,7 +8,7 @@ import { projects } from '@/data/capabilities'
 export default function Projects() {
   return (
     <>
-      <PageHeader underlay={images.underlayProjects} index="04" title="Projects">
+      <PageHeader underlay={images.gasFacility} index="04" title="Projects">
         A selection of recent work. Client names and figures are withheld
         pending approval.
       </PageHeader>

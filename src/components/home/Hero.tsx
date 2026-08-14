@@ -21,7 +21,7 @@ export function Hero() {
       {/* rig1 underlays the whole hero; the wash keeps the type legible
           without flattening the platform out of the frame. */}
       <Img
-        slot={images.heroWide}
+        slot={images.rigHero}
         alt=""
         loading="eager"
         placeholder="plain"
@@ -55,22 +55,27 @@ export function Hero() {
           {site.positioning}
         </p>
 
-        <Tilt max={3} scale={1} className="mt-8 inline-block">
-        <h1 className="font-display text-[clamp(2.75rem,9vw,7.5rem)] font-bold text-white">
-          {headlineLines.map((line, index) => (
-            <span key={line} className="line-mask">
-              <span
-                style={{
-                  transform: entered ? 'none' : 'translateY(110%)',
-                  transitionDelay: `${120 + index * 110}ms`,
-                }}
-                className={index === 2 ? 'text-orange' : undefined}
-              >
-                {line}
+        {/*
+          `block w-fit` rather than `inline-block`: the kicker above is an
+          inline-flex box, so an inline-level wrapper here lets the two share
+          a line box and drops the label down beside the last headline line.
+        */}
+        <Tilt max={3} scale={1} className="mt-8 block w-fit">
+          <h1 className="font-display text-[clamp(2.75rem,9vw,7.5rem)] font-bold text-white">
+            {headlineLines.map((line, index) => (
+              <span key={line} className="line-mask">
+                <span
+                  style={{
+                    transform: entered ? 'none' : 'translateY(110%)',
+                    transitionDelay: `${120 + index * 110}ms`,
+                  }}
+                  className={index === 2 ? 'text-orange' : undefined}
+                >
+                  {line}
+                </span>
               </span>
-            </span>
-          ))}
-        </h1>
+            ))}
+          </h1>
         </Tilt>
 
         <div

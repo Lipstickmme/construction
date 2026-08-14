@@ -13,18 +13,15 @@
   --graphite: #24282b;
   --steel: #5c6467;
   --concrete: #9aa1a4;
-  --ash: #d8dcde;
   --fog: #f2f4f5;
   --white: #ffffff;
 
   --orange: #ff5c00;
-  --orange-deep: #d94b00;
   --yellow: #ffc300;
 
   /* Semantic roles */
   --bg: var(--white);
   --surface: var(--white);
-  --surface-alt: var(--fog);
   --ink: var(--black);
   --body: var(--steel);
   --hairline: rgb(12 13 14 / 0.1);
@@ -36,16 +33,13 @@
   --color-graphite: var(--graphite);
   --color-steel: var(--steel);
   --color-concrete: var(--concrete);
-  --color-ash: var(--ash);
   --color-fog: var(--fog);
 
   --color-orange: var(--orange);
-  --color-orange-deep: var(--orange-deep);
   --color-yellow: var(--yellow);
 
   --color-bg: var(--bg);
   --color-surface: var(--surface);
-  --color-surface-alt: var(--surface-alt);
   --color-ink: var(--ink);
   --color-body: var(--body);
   --color-hairline: var(--hairline);

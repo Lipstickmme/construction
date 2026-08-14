@@ -14,7 +14,7 @@ export function Disciplines() {
         <Reveal className="relative lg:sticky lg:top-28">
           <Tilt max={6}>
             <Img
-              slot={images.disciplines}
+              slot={images.roadwork}
               className="aspect-4/5 w-full"
               imgClassName="grayscale transition-all duration-[1200ms] ease-out hover:grayscale-0"
             />

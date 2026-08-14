@@ -1,7 +1,8 @@
 # Image folder
 
-Slots are declared in `src/data/images.ts`. Every slot currently points at real
-artwork — nothing is outstanding.
+Slots are declared in `src/data/images.ts` — one slot per file, no aliases.
+Every slot is referenced by at least one component, and every file here has a
+slot. Nothing is outstanding and nothing is orphaned.
 
 ## Optimisation
 
@@ -25,24 +26,29 @@ typos (`mewconstructionsteelstructure`, `constructionmercialbuilding`).
 | `newconstruct.jpg` | `site-review.jpg` | team reviewing drawings |
 | `newconstructwe.jpg` | `ceo-site.jpg` | CEO on site |
 
+The three rig renders (`rig1`–`rig3`) predate this pass and are still PNG.
+
 ## Where each one is used
 
-| File | Used for |
-| --- | --- |
-| `rig1.png` | Home hero underlay |
-| `rig2.png` | Projects — Offshore Platform Works |
-| `rig3.png` | Home — closing call to action |
-| `ceo.jpg` | Home — leadership section |
-| `ceo-site.jpg` | About page underlay |
-| `site-review.jpg` | Home — approach block; About band |
-| `roadwork.jpg` | Home — civil scope; Projects — Roadworks |
-| `steel-structure.jpg` | Capabilities underlay; Structural Steel Erection |
-| `civil-construction.jpg` | Projects underlay; Civil Infrastructure Works |
-| `rig-maintenance.jpg` | Capability page underlay; Rig Maintenance |
-| `interior-fitout.jpg` | Contact underlay; Commercial Interior Fit-out |
-| `careers.jpg` | Careers underlay and band |
-| `axis-logo-light.png` | Logo on dark backgrounds |
-| `axis-logo-dark.png` | Logo on light backgrounds |
+Each of the eight capability pages takes the same photograph as its matching
+project card, so a discipline reads the same wherever it appears.
+
+| File | Slot | Used for |
+| --- | --- | --- |
+| `rig1.png` | `rigHero` | Home hero underlay |
+| `rig2.png` | `offshorePlatform` | Offshore & Marine masthead; Offshore Platform Works |
+| `rig3.png` | `gasFacility` | Projects masthead; Oil & Gas Facilities masthead; home call to action |
+| `rig-maintenance.jpg` | `rigMaintenance` | Mechanical & Piping masthead; Rig Maintenance Campaign |
+| `steel-structure.jpg` | `steelStructure` | Capabilities masthead; Structural Steel & Concrete masthead; Structural Steel Erection |
+| `civil-construction.jpg` | `civilWorks` | Geology & Mine Engineering masthead; About band; Civil Infrastructure Works |
+| `roadwork.jpg` | `roadwork` | Roadworks/Tunnels/Bridges masthead; home civil scope; Highway & Access Roadworks |
+| `interior-fitout.jpg` | `interiorFitout` | Contact masthead; Architectural Design & Build masthead; Commercial Interior Fit-out |
+| `site-review.jpg` | `siteReview` | Careers masthead; Construction Administration masthead; home approach block |
+| `careers.jpg` | `careers` | Careers band |
+| `ceo.jpg` | `ceo` | Home leadership section |
+| `ceo-site.jpg` | `ceoSite` | About masthead |
+| `axis-logo-light.png` | `logoLight` | Logo on dark backgrounds |
+| `axis-logo-dark.png` | `logoDark` | Logo on light backgrounds |
 
 Three files named in an earlier list never arrived — `newconstructionproject`,
 `constructionmercialbuilding` and `newconstructionrenovation`. Their slots were

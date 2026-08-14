@@ -35,7 +35,7 @@ export default function Careers() {
 
   return (
     <>
-      <PageHeader underlay={images.underlayCareers} index="05" title="Work on plant that matters.">
+      <PageHeader underlay={images.siteReview} index="05" title="Work on plant that matters.">
         We hire tradespeople, supervisors and engineers who would rather do it
         properly than do it twice.
       </PageHeader>

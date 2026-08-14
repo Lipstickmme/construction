@@ -42,7 +42,7 @@ export function PageHeader({
       />
 
       <div className="shell relative">
-        <Tilt max={4} scale={1} className="inline-block">
+        <Tilt max={4} scale={1} className="block w-fit">
           <span className="index-num text-orange">{index}</span>
           <h1 className="mt-6 max-w-4xl text-[clamp(2.5rem,7vw,5.5rem)] text-white">
             {title}

@@ -2,8 +2,8 @@
  * Company details.
  *
  * Contact is an email and a phone number only — no address anywhere on the
- * site. Both values are deliberate placeholders; replace the `contact` block
- * when the real ones exist and every page follows.
+ * site. Both values are stand-ins; replace the `contact` block when the real
+ * ones exist and every page follows.
  */
 export const site = {
   name: 'Axis',
@@ -19,9 +19,9 @@ export const site = {
     phone: '+00 000 0000 000',
   },
 
-  /** Leadership note on the home page. Name is a placeholder. */
+  /** Leadership note on the home page. */
   leader: {
-    name: 'Name Placeholder',
+    name: 'Christopher Wojcik',
     role: 'Chief Executive Officer',
     quote:
       'Every project we take on is somebody else\u2019s critical path. That is the standard we hold ourselves to.',
@@ -34,9 +34,6 @@ export const site = {
     { label: 'YouTube', href: '#' },
   ],
 } as const
-
-/** Marks a value as intentionally unset, so it can be styled as such. */
-export const isPlaceholder = true
 
 /** Convenience re-export — leadership block used by the home page. */
 export const leader = site.leader

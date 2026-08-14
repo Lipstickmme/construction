@@ -7,7 +7,7 @@ import { capabilities } from '@/data/capabilities'
 export default function Capabilities() {
   return (
     <>
-      <PageHeader underlay={images.underlayCapabilities} index="03" title="Capabilities">
+      <PageHeader underlay={images.steelStructure} index="03" title="Capabilities">
         Every trade a heavy industrial project needs, held in-house and
         answerable to one programme.
       </PageHeader>
