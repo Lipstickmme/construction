@@ -4,6 +4,7 @@ import {
   RESEND_API_KEY,
   RESEND_WEBHOOK_SECRET,
   adminClient,
+  errorMessage,
   escapeHtml,
   json,
   normaliseSubject,
@@ -98,8 +99,24 @@ export default async function handler(request: Request): Promise<Response> {
     )
 
     if (!response.ok) {
-      console.error('Could not fetch received email:', await response.text())
-      return json(502, { error: 'Could not retrieve the message body.' })
+      const detail = (await response.text()).slice(0, 300)
+      console.error(
+        `Could not fetch received email ${emailId}: HTTP ${response.status} ${detail}`,
+      )
+
+      // Past the signature check the caller is proven to be Resend, so the
+      // reason is safe to return — and Resend's event view is where whoever
+      // is debugging this is already looking.
+      return json(502, {
+        error: 'Could not retrieve the message body.',
+        stage: 'fetch-received-email',
+        upstreamStatus: response.status,
+        upstreamBody: detail,
+        hint:
+          response.status === 401 || response.status === 403
+            ? 'RESEND_API_KEY cannot read received emails. A sending-only key is not enough; issue one with full access.'
+            : 'Check the email id still exists in Resend.',
+      })
     }
 
     const email = (await response.json()) as ReceivedEmail
@@ -201,7 +218,18 @@ export default async function handler(request: Request): Promise<Response> {
 
     return json(200, { ok: true, thread_id: threadId })
   } catch (error) {
-    console.error(error)
-    return json(500, { error: 'Could not file that message.' })
+    console.error('Failed to file inbound message:', error)
+
+    // Same reasoning as the 502 above: the caller is authenticated, and this
+    // is the one place the failure is visible without digging through logs.
+    const message = errorMessage(error)
+    return json(500, {
+      error: 'Could not file that message.',
+      stage: 'store',
+      detail: message.slice(0, 300),
+      hint: /relation .* does not exist/i.test(message)
+        ? 'The email tables are missing — run supabase/migrations/0002_email.sql.'
+        : 'Check the Supabase service role key and that 0002_email.sql has run.',
+    })
   }
 }

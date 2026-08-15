@@ -296,6 +296,30 @@ export function ownAddresses(): Set<string> {
   )
 }
 
+/**
+ * Readable text out of anything thrown.
+ *
+ * Supabase rejects with a plain `{ message, code, details, hint }` object
+ * rather than an Error, so `String(error)` on one yields "[object Object]" —
+ * losing the detail at exactly the moment it is needed.
+ */
+export function errorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message
+  if (error && typeof error === 'object') {
+    const shaped = error as { message?: unknown; code?: unknown; details?: unknown }
+    const parts = [shaped.code, shaped.message, shaped.details]
+      .filter((part) => typeof part === 'string' && part)
+      .join(' — ')
+    if (parts) return parts
+    try {
+      return JSON.stringify(error)
+    } catch {
+      return 'unserialisable error'
+    }
+  }
+  return String(error)
+}
+
 /** "Re: Re: Fwd: Site visit" → "Site visit", for matching replies to threads. */
 export function normaliseSubject(subject: string): string {
   return subject.replace(/^((re|fw|fwd)\s*:\s*)+/i, '').trim() || '(no subject)'
