@@ -7,6 +7,7 @@ import {
   escapeHtml,
   json,
   normaliseSubject,
+  ownAddresses,
   parseAddress,
   sendEmail,
   text,
@@ -165,7 +166,19 @@ export default async function handler(request: Request): Promise<Response> {
 
     // Safety copy to a real mailbox, so the dashboard is never the only place
     // a message exists. Failure here must not fail the webhook.
-    if (FORWARD_TO) {
+    //
+    // Refused if the target is one of our own addresses, or if the message
+    // came from one: either would forward the copy straight back into this
+    // webhook and loop until the sending quota is gone.
+    const ours = ownAddresses()
+    const forwardTarget = parseAddress(FORWARD_TO).email
+
+    if (FORWARD_TO && (ours.has(forwardTarget) || ours.has(from.email))) {
+      console.warn(
+        `Refusing to forward ${from.email} to ${forwardTarget}: that is a mail loop. ` +
+          'FORWARD_TO must be a mailbox on another domain.',
+      )
+    } else if (FORWARD_TO) {
       const body = email.text?.trim() || 'See the dashboard for the full message.'
       sendEmail({
         to: FORWARD_TO,

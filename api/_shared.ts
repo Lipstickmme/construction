@@ -231,6 +231,22 @@ export function emailBody(rows: Array<[string, string]>): string {
   return `<table style="border-collapse:collapse">${cells}</table>`
 }
 
+/**
+ * Every address that belongs to us.
+ *
+ * Forwarding an inbound message to one of these would loop: the copy arrives
+ * back at the same mailbox, fires the webhook again, and is forwarded again.
+ * Each hop is a fresh Resend id, so nothing dedupes it — it runs until the
+ * sending quota is gone.
+ */
+export function ownAddresses(): Set<string> {
+  return new Set(
+    [MAILBOX, FORM_FROM, FORM_TO]
+      .map((value) => parseAddress(value).email)
+      .filter(Boolean),
+  )
+}
+
 /** "Re: Re: Fwd: Site visit" → "Site visit", for matching replies to threads. */
 export function normaliseSubject(subject: string): string {
   return subject.replace(/^((re|fw|fwd)\s*:\s*)+/i, '').trim() || '(no subject)'

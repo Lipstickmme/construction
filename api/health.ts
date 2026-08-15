@@ -60,6 +60,18 @@ export default function handler(): Response {
   // is reported rather than counted as not ready.
   const inboundReady = Boolean(webhookSecret)
 
+  // Forwarding inbound mail to our own address loops it back into the webhook.
+  // Catching that here is cheaper than noticing when the quota is gone.
+  const forwardLoops =
+    Boolean(forwardTo) &&
+    [mailbox, formTo, formFrom].some(
+      (value) =>
+        (value.match(/@([^\s>]+)/)?.[0] ?? '').toLowerCase() ===
+        (forwardTo.match(/@([^\s>]+)/)?.[0] ?? 'x').toLowerCase() &&
+        (value.match(/([^\s<>]+@[^\s>]+)/)?.[1] ?? '').toLowerCase() ===
+          (forwardTo.match(/([^\s<>]+@[^\s>]+)/)?.[1] ?? 'x').toLowerCase(),
+    )
+
   // The from address has to be at a domain verified in Resend. Catching the
   // obvious mismatch here saves a round of "it says sent but nothing arrives".
   const fromDomain = formFrom.match(/@([^\s>]+)/)?.[1] ?? null
@@ -79,6 +91,9 @@ export default function handler(): Response {
         mailbox,
         formTo,
         formFrom,
+        warning: forwardLoops
+          ? 'FORWARD_TO is one of this site\'s own addresses. Forwarding would loop mail back into the inbound webhook — set it to a mailbox on another domain, or leave it unset.'
+          : null,
         note:
           fromDomain && toDomain && fromDomain !== toDomain
             ? `Sending from ${fromDomain} to ${toDomain}. ${fromDomain} is the domain that must be verified in Resend.`

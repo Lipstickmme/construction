@@ -83,11 +83,23 @@ Vercel → Settings → Environment Variables:
 | --- | --- |
 | `RESEND_WEBHOOK_SECRET` | the `whsec_…` value from step 3 |
 | `MAILBOX_ADDRESS` | `Axis Construction <Contact@axisconstructionltd.com>` |
-| `FORWARD_TO` | your normal inbox, e.g. a Gmail address (optional but recommended) |
+| `FORWARD_TO` | a mailbox **on another domain**, e.g. your Gmail (optional) |
 
-`MAILBOX_ADDRESS` is what dashboard replies are sent as, and must be at the
-domain verified in Resend. `FORWARD_TO` gets a copy of everything that arrives,
-so the dashboard is never the only place a message exists.
+`MAILBOX_ADDRESS` is what dashboard replies are sent as. It must be at the
+domain verified in Resend, so `Contact@axisconstructionltd.com` is right — and
+it is already the default, so setting it is optional.
+
+⚠️ **`FORWARD_TO` must not be an address on your own domain.** Setting it to
+`Contact@axisconstructionltd.com` creates a mail loop: the copy is delivered
+back to the same mailbox, fires the webhook again, and is forwarded again.
+Every hop has a fresh Resend id so nothing dedupes it, and it runs until the
+day's sending quota is gone.
+
+The code refuses to forward to any address it recognises as its own, and
+`/api/health` reports a `warning` if it is set that way — but the value should
+be a mailbox you actually read somewhere else, or left unset entirely. Leaving
+it unset is fine: Resend keeps its own copy of everything received, and the
+dashboard has the rest.
 
 Redeploy afterwards.
 
