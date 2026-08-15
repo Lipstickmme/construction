@@ -61,6 +61,30 @@ export default async function handler(request: Request): Promise<Response> {
   // is reported rather than counted as not ready.
   const inboundReady = Boolean(webhookSecret)
 
+  // A signing secret pasted with a stray space or a missing tail decodes to
+  // nothing usable, which shows up only as a webhook that never succeeds.
+  // Checking it here turns that into one request.
+  let webhookSecretUsable: string | null = null
+  if (webhookSecret) {
+    const trimmed = webhookSecret.trim()
+    try {
+      const decoded = atob(trimmed.replace(/^whsec_/, ''))
+      webhookSecretUsable =
+        decoded.length >= 16
+          ? 'yes'
+          : `no — decodes to only ${decoded.length} bytes, looks truncated`
+      if (trimmed !== webhookSecret) {
+        webhookSecretUsable += ' (had surrounding whitespace, which is trimmed)'
+      }
+      if (!/^whsec_/.test(trimmed)) {
+        webhookSecretUsable += ' (no whsec_ prefix — check it was copied whole)'
+      }
+    } catch {
+      webhookSecretUsable =
+        'no — not valid base64 after the whsec_ prefix. Re-copy it from Resend.'
+    }
+  }
+
   // Forwarding inbound mail to our own address loops it back into the webhook.
   // Catching that here is cheaper than noticing when the quota is gone.
   const forwardLoops =
@@ -109,6 +133,7 @@ export default async function handler(request: Request): Promise<Response> {
         resendKeyCanReadInbound:
           resendKeyCanRead ?? 'not checked — add ?probe=1 to test it',
         inboundEmail: inboundReady ? 'configured' : 'not configured (optional)',
+        webhookSecretUsable: webhookSecretUsable ?? 'no secret set',
         inboundForwardCopyTo: forwardTo || null,
         mailbox,
         formTo,

@@ -59,10 +59,15 @@ export default async function handler(request: Request): Promise<Response> {
   // parsing first and re-serialising would break verification.
   const rawBody = await request.text()
 
+  // Belt and braces: verification is not inside the try below, so anything it
+  // throws would escape as a bare 500 with no explanation.
+  const verified = await verifyResendWebhook(rawBody, request.headers).catch(
+    (error) => ({ ok: false as const, reason: `verifier threw: ${errorMessage(error)}` }),
+  )
+
   // The response stays deliberately vague — an attacker probing this endpoint
   // learns nothing — but the reason is logged, so Vercel's function log says
   // exactly which check failed.
-  const verified = await verifyResendWebhook(rawBody, request.headers)
   if (!verified.ok) {
     console.error(`Rejected inbound webhook: ${verified.reason}`)
     return json(401, { error: 'Unauthorised' })

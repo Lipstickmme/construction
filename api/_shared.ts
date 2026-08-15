@@ -152,21 +152,35 @@ export async function verifyResendWebhook(
     )
   }
 
-  const secret = RESEND_WEBHOOK_SECRET.replace(/^whsec_/, '')
-  const key = await crypto.subtle.importKey(
-    'raw',
-    Uint8Array.from(atob(secret), (character) => character.charCodeAt(0)),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  )
+  // Trim first: a value pasted into a dashboard field very often carries a
+  // trailing space or newline, and atob throws on it rather than ignoring it.
+  const secret = RESEND_WEBHOOK_SECRET.trim().replace(/^whsec_/, '')
 
-  const signed = await crypto.subtle.sign(
-    'HMAC',
-    key,
-    new TextEncoder().encode(`${id}.${timestamp}.${rawBody}`),
-  )
-  const expected = btoa(String.fromCharCode(...new Uint8Array(signed)))
+  let expected: string
+  try {
+    const key = await crypto.subtle.importKey(
+      'raw',
+      Uint8Array.from(atob(secret), (character) => character.charCodeAt(0)),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign'],
+    )
+
+    const signed = await crypto.subtle.sign(
+      'HMAC',
+      key,
+      new TextEncoder().encode(`${id}.${timestamp}.${rawBody}`),
+    )
+    expected = btoa(String.fromCharCode(...new Uint8Array(signed)))
+  } catch (error) {
+    // Without this the throw escapes the handler entirely: Vercel returns a
+    // bare 500, Resend retries forever, and nothing says the secret is the
+    // problem. A malformed paste is the usual cause.
+    return fail(
+      `RESEND_WEBHOOK_SECRET is not usable as a signing key — ${errorMessage(error)}. ` +
+        'Re-copy it whole from Resend, including the whsec_ prefix and nothing else.',
+    )
+  }
 
   // The header carries a space-delimited list of `v1,<base64>` entries, so a
   // secret can be rotated without dropping deliveries mid-flight.
