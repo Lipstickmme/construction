@@ -5,7 +5,7 @@ import { isBackendConfigured } from './backend'
  * The Supabase client.
  *
  * Import this module dynamically (`await import('@/lib/supabase')`) from
- * anything on the marketing side — a static import would put the SDK in the
+ * anything on the marketing side. A static import would put the SDK in the
  * bundle every visitor downloads. Check `isBackendConfigured` from
  * `./backend` first; that module is SDK-free and safe to import statically.
  */

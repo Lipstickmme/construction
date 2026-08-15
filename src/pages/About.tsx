@@ -10,29 +10,29 @@ const principles = [
   {
     index: '01',
     title: 'Say the number early',
-    body: 'An honest estimate given at week two is worth more than an optimistic one defended until week twenty. We would rather lose the bid than win it on a figure we do not believe.',
+    body: 'We would rather give you an honest figure in week two than defend an optimistic one until week twenty. If that loses us the bid, so be it. Winning on a number we do not believe helps nobody.',
   },
   {
     index: '02',
-    title: 'Own the interfaces',
-    body: 'Most industrial programmes fail between contracts, not inside them. Holding every discipline in-house puts those seams under our management rather than in a meeting.',
+    title: 'Own the joins',
+    body: 'Industrial programmes tend to come unstuck between contracts, not inside them. Keeping every discipline in-house means those joins are ours to manage instead of something that gets argued about in a meeting.',
   },
   {
     index: '03',
-    title: 'Document as you build',
-    body: 'Test packs assembled while the work goes in, not reconstructed from memory at handover. It is why our systems get accepted first time.',
+    title: 'Write it down as you build',
+    body: 'Test packs get put together while the work is going in. Nobody enjoys reconstructing them from memory at handover, and it shows in how long acceptance takes.',
   },
   {
     index: '04',
     title: 'Everyone goes home',
-    body: 'Safety is not a value on a poster. It is the reason a job takes the time it takes, and the one variable we will not compress to hit a date.',
+    body: 'Safety is the reason a job takes as long as it takes. It is the one thing on the programme we will not squeeze to hit a date, and our supervisors know they will be backed for stopping work.',
   },
 ]
 
 export default function About() {
   return (
     <>
-      <PageHeader underlay={images.ceoSite} index="02" title="We build the difficult half.">
+      <PageHeader underlay={images.ceoSite} index="02" title="Who we are.">
         {site.descriptor}
       </PageHeader>
 
@@ -40,21 +40,21 @@ export default function About() {
         <Reveal>
           <p className="kicker text-ink">Who we are</p>
           <h2 className="mt-6 text-[clamp(1.75rem,3.5vw,2.75rem)]">
-            Founded {site.founded}. Still run by people who have worn the boots.
+            Founded {site.founded}, and still run by people who have worn the boots.
           </h2>
         </Reveal>
 
         <Reveal delay={120}>
           <p className="text-base leading-relaxed">
-            Axis Construction began as a mechanical and piping contractor and
-            grew by adding the trades our clients kept having to source
-            elsewhere: steel fabrication, civils, commissioning support.
-            Today those sit under one roof and one programme.
+            Axis started out as a mechanical and piping contractor. We grew by
+            picking up the trades our clients kept having to go elsewhere for.
+            Steel fabrication, civils, commissioning support. These days they
+            all sit under one roof and one programme.
           </p>
           <p className="mt-6 text-base leading-relaxed">
             We work across process industry, power generation and offshore
-            energy. The plant differs; the discipline of setting heavy
-            equipment safely, to tolerance, inside a fixed window does not.
+            energy. The plant changes from job to job. Setting heavy equipment
+            safely, to tolerance, inside a window that will not move does not.
           </p>
         </Reveal>
       </section>
@@ -73,7 +73,7 @@ export default function About() {
         <Reveal>
           <p className="kicker text-ink">How we operate</p>
           <h2 className="mt-6 max-w-2xl text-[clamp(2rem,4.5vw,3.25rem)]">
-            Four commitments we are willing to be held to.
+            Four things we will happily be held to.
           </h2>
         </Reveal>
 

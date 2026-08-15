@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /*
- * Axis Construction — industrial & energy infrastructure.
+ * Axis Construction. Industrial and energy infrastructure.
  *
  * The palette is deliberately narrow: a greyscale spine from near-black to
  * white, with orange as the single loud accent and yellow reserved for
@@ -98,7 +98,7 @@
     }
   }
 
-  /* Small monospaced index numerals — 01, 02 … — used across sections. */
+  /* Small monospaced index numerals (01, 02 and so on), used across sections. */
   .index-num {
     font-family: var(--font-display);
     font-size: 0.7rem;

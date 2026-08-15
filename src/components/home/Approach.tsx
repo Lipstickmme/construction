@@ -11,15 +11,15 @@ export function Approach() {
         <Reveal>
           <p className="kicker text-ink">Our approach</p>
           <h2 className="mt-6 text-[clamp(2rem,4.5vw,3.5rem)]">
-            One contractor,
+            One contractor
             <br />
-            the whole scope.
+            for the whole job.
           </h2>
           <p className="mt-6 max-w-md text-base leading-relaxed">
-            Energy work sets our standard: the certification, traceability and
-            shutdown discipline a hydrocarbon facility demands. We bring the
-            same standard to civil, structural and building projects, which is
-            why clients keep handing us the rest of the site.
+            Energy work sets the bar. The certification, the traceability, the
+            shutdown discipline a hydrocarbon plant demands. We work to the same
+            bar on civils, structures and buildings, which is usually why
+            clients end up handing us the rest of the site as well.
           </p>
 
           <ul className="mt-10 space-y-px border-y border-hairline">

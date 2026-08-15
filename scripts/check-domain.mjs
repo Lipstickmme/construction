@@ -1,7 +1,7 @@
 /**
  * Fails the build if the site's email domain is spelled more than one way.
  *
- * The address lives in two places by necessity — `src/data/site.ts` is what
+ * The address lives in two places by necessity. `src/data/site.ts` is what
  * the browser displays and is baked in at build time, `api/_shared.ts` is what
  * the server sends from and must match the domain verified in Resend. When
  * those drifted apart, Resend answered 403 "Domain not verified" and the site

@@ -5,12 +5,12 @@ import { Tilt } from '@/components/ui/Tilt'
 import { images } from '@/data/images'
 import { site } from '@/data/site'
 
-const headlineLines = ['We build', 'where it', 'matters most.']
+const headlineLines = ['We build', 'the difficult', 'half.']
 
 export function Hero() {
   const [entered, setEntered] = useState(false)
 
-  // Kick the entrance on mount rather than on scroll — this is above the fold.
+  // Kick the entrance on mount rather than on scroll. This is above the fold.
   useEffect(() => {
     const raf = requestAnimationFrame(() => setEntered(true))
     return () => cancelAnimationFrame(raf)

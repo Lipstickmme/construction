@@ -1,4 +1,4 @@
--- Axis Construction — email inbox for the admin dashboard.
+-- Axis Construction email inbox for the admin dashboard.
 --
 -- Mail addressed to contact@axisconstructionsltd.com arrives through Resend
 -- Inbound, which holds the MX records and posts an `email.received` webhook

@@ -15,7 +15,7 @@ const STORAGE_KEY = 'axis-chat-session'
  *
  * Visitors are signed in anonymously, so every row they create carries a real
  * `auth.uid()` and row level security can grant them their own thread and
- * nothing else — no bearer token of our own invention, no service role in the
+ * nothing else. No bearer token of our own invention, no service role in the
  * browser. The session id is kept in localStorage so a reload lands back in
  * the same conversation.
  */
@@ -140,7 +140,7 @@ export function useVisitorChat() {
         if (sessionError) throw sessionError
 
         // Select the row back and show it immediately rather than waiting for
-        // the realtime echo — a slow or blocked websocket would otherwise
+        // the realtime echo, because a slow or blocked websocket would otherwise
         // leave the visitor staring at an empty thread. The subscription
         // dedupes by id when its copy arrives.
         const { data: first, error: messageError } = await client

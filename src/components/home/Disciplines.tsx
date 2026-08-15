@@ -26,9 +26,9 @@ export function Disciplines() {
           <Reveal>
             <p className="kicker text-ink">Civil scope</p>
             <h2 className="mt-6 text-[clamp(2rem,4.5vw,3.25rem)]">
-              The infrastructure
+              The civil side
               <br />
-              underneath it all.
+              of the business.
             </h2>
           </Reveal>
 

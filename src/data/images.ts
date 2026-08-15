@@ -1,14 +1,14 @@
 /**
  * Image manifest. Everything in `public/images/`.
  *
- * One slot per file — page mastheads point straight at the photograph they
+ * One slot per file. Page mastheads point straight at the photograph they
  * want rather than at a parallel set of `underlay*` aliases, so there is no
  * second place to keep in sync when a picture changes.
  *
- * The supplied renders arrived as 1920² PNGs of 7–9MB each, ~38MB in total,
+ * The supplied renders arrived as 1920² PNGs of 7 to 9MB each, ~38MB in total,
  * which would have made the site unusable on anything but a fast connection.
- * They are re-encoded as progressive JPEG at quality 82 — visually identical
- * at these sizes, ~90% smaller — and renamed off filenames that carried
+ * They are re-encoded as progressive JPEG at quality 82, which is visually
+ * identical at these sizes and ~90% smaller, and renamed off filenames that carried
  * typos (`mewconstruction…`, `constructionmercial…`).
  *
  * The logos arrived as solid 1024² squares, which read as a filled box over

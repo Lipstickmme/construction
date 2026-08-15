@@ -8,12 +8,12 @@ export function Process() {
         <Reveal>
           <p className="kicker text-ink">How we work</p>
           <h2 className="mt-6 text-[clamp(2rem,4.5vw,3.5rem)]">
-            Fewer surprises, earlier.
+            How a job actually runs.
           </h2>
           <p className="mt-6 max-w-sm text-base leading-relaxed">
-            Most cost overruns on industrial work are decisions taken too late.
-            Our sequence front-loads the awkward questions, while they are
-            still cheap to answer.
+            Most overruns on industrial work come down to decisions nobody
+            made early enough. We get the awkward questions asked while they
+            are still cheap to answer.
           </p>
         </Reveal>
 

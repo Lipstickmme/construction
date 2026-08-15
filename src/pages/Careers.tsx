@@ -38,9 +38,9 @@ export default function Careers() {
 
   return (
     <>
-      <PageHeader underlay={images.siteReview} index="05" title="Work on plant that matters.">
-        We hire tradespeople, supervisors and engineers who would rather do it
-        properly than do it twice.
+      <PageHeader underlay={images.siteReview} index="05" title="Come and work here.">
+        We take on tradespeople, supervisors and engineers who would sooner do
+        a thing properly than do it twice.
       </PageHeader>
 
       <section className="shell py-20 lg:py-28">
@@ -83,7 +83,7 @@ export default function Careers() {
           {state === 'sent' ? (
             <FormSuccess
               title="Application received"
-              body={`Thanks, your application for ${selected ?? 'the role'} is with our team. We review every application and come back within five working days.`}
+              body={`Thanks. Your application for ${selected ?? 'the role'} has landed with us. Somebody reads every one, and you will hear back inside five working days.`}
               onReset={() => {
                 reset()
                 setSelected(null)
@@ -132,8 +132,9 @@ export default function Careers() {
             </div>
           ) : (
             <p className="max-w-xl text-sm leading-relaxed">
-              Pick a role above to apply. Nothing listed that fits? We keep a
-              live register and call people first when a project mobilises.
+              Pick a role above to apply. Nothing here that suits? Send us
+              something anyway. We keep a register and go through it first
+              whenever a project mobilises.
             </p>
           )}
         </div>

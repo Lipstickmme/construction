@@ -19,8 +19,8 @@ import {
  * Receives mail through Resend Inbound.
  *
  * Resend holds the MX records for the domain, accepts the message, and posts
- * an `email.received` webhook here. That payload is metadata only — sender,
- * recipient, subject, attachment list — so the body is fetched separately
+ * an `email.received` webhook here. That payload is metadata only (sender,
+ * recipient, subject, attachment list) so the body is fetched separately
  * from `GET /emails/receiving/{id}`. Resend keeps its own copy either way, so
  * a failure in this route loses nothing.
  */
@@ -65,8 +65,8 @@ export default async function handler(request: Request): Promise<Response> {
     (error) => ({ ok: false as const, reason: `verifier threw: ${errorMessage(error)}` }),
   )
 
-  // The response stays deliberately vague — an attacker probing this endpoint
-  // learns nothing — but the reason is logged, so Vercel's function log says
+  // The response stays deliberately vague so an attacker probing this endpoint
+  // learns nothing, but the reason is logged, so Vercel's function log says
   // exactly which check failed.
   if (!verified.ok) {
     console.error(`Rejected inbound webhook: ${verified.reason}`)
@@ -110,7 +110,7 @@ export default async function handler(request: Request): Promise<Response> {
       )
 
       // Past the signature check the caller is proven to be Resend, so the
-      // reason is safe to return — and Resend's event view is where whoever
+      // reason is safe to return, and Resend's event view is where whoever
       // is debugging this is already looking.
       return json(502, {
         error: 'Could not retrieve the message body.',
@@ -233,7 +233,7 @@ export default async function handler(request: Request): Promise<Response> {
       stage: 'store',
       detail: message.slice(0, 300),
       hint: /relation .* does not exist/i.test(message)
-        ? 'The email tables are missing — run supabase/migrations/0002_email.sql.'
+        ? 'The email tables are missing. Run supabase/migrations/0002_email.sql.'
         : 'Check the Supabase service role key and that 0002_email.sql has run.',
     })
   }

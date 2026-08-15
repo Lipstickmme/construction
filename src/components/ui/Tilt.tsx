@@ -10,8 +10,8 @@ type TiltProps = {
 }
 
 /**
- * Tilts its children towards whichever side the pointer is on — hovering the
- * left edge dips the left edge in. Mouse only: a coarse pointer would leave
+ * Tilts its children towards whichever side the pointer is on, so hovering
+ * the left edge dips the left edge in. Mouse only: a coarse pointer would leave
  * the element stuck at an angle after a tap.
  */
 export function Tilt({

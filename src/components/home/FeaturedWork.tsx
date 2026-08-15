@@ -12,7 +12,7 @@ export function FeaturedWork() {
           <Reveal>
             <p className="kicker text-white">Selected work</p>
             <h2 className="mt-6 max-w-lg text-[clamp(2rem,4.5vw,3.5rem)] text-white">
-              Built where the tolerances are tight.
+              Some of what we have been building.
             </h2>
           </Reveal>
 

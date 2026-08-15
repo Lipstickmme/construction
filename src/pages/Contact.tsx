@@ -18,10 +18,10 @@ export default function Contact() {
       <PageHeader
         underlay={images.interiorFitout}
         index="06"
-        title="Start a conversation."
+        title="Get in touch."
       >
-        Tell us the scope, the site and the window. We will come back with what
-        it actually takes.
+        Tell us the scope, the site and the window you are working to, and we
+        will come back with what the job really takes.
       </PageHeader>
 
       <section className="shell grid gap-16 py-20 lg:grid-cols-[1.3fr_1fr] lg:gap-24 lg:py-28">
@@ -29,7 +29,7 @@ export default function Contact() {
           {state === 'sent' ? (
             <FormSuccess
               title="Enquiry sent"
-              body="Thanks, your enquiry is with our team. We reply to project enquiries within one business day."
+              body="Thanks, that has reached us. We answer project enquiries inside one working day."
               onReset={reset}
               resetLabel="Send another enquiry"
             />
@@ -108,10 +108,9 @@ export default function Contact() {
           <div className="mt-10 border-t border-hairline pt-8">
             <p className="index-num text-concrete uppercase">Enquiries</p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed">
-              Project enquiries are answered within one business day. Use the
-              form and someone from the relevant discipline will come back to
-              you, or open the chat at the corner of the page if you would
-              rather ask something quickly.
+              We answer project enquiries inside one working day, and whoever
+              comes back to you will be from the discipline you need. If it is
+              a quick question, the chat box in the corner is faster.
             </p>
           </div>
         </Reveal>

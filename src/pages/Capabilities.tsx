@@ -8,8 +8,8 @@ export default function Capabilities() {
   return (
     <>
       <PageHeader underlay={images.steelStructure} index="03" title="Capabilities">
-        Every trade a heavy industrial project needs, held in-house and
-        answerable to one programme.
+        Every trade a heavy industrial job needs, kept in-house and answerable
+        to one programme.
       </PageHeader>
 
       <section className="shell py-20 lg:py-28">

@@ -6,7 +6,7 @@
  * from a silently failing form.
  *
  * Secrets are reported as booleans only. The Supabase URL and the two form
- * addresses are echoed in full because none of them are secret — the URL is
+ * addresses are echoed in full because none of them are secret. The URL is
  * already in the browser bundle and the addresses are already on the site.
  */
 export const config = { runtime: 'edge' }
@@ -72,16 +72,16 @@ export default async function handler(request: Request): Promise<Response> {
       webhookSecretUsable =
         decoded.length >= 16
           ? 'yes'
-          : `no — decodes to only ${decoded.length} bytes, looks truncated`
+          : `no, decodes to only ${decoded.length} bytes, looks truncated`
       if (trimmed !== webhookSecret) {
         webhookSecretUsable += ' (had surrounding whitespace, which is trimmed)'
       }
       if (!/^whsec_/.test(trimmed)) {
-        webhookSecretUsable += ' (no whsec_ prefix — check it was copied whole)'
+        webhookSecretUsable += ' (no whsec_ prefix, check it was copied whole)'
       }
     } catch {
       webhookSecretUsable =
-        'no — not valid base64 after the whsec_ prefix. Re-copy it from Resend.'
+        'no, not valid base64 after the whsec_ prefix. Re-copy it from Resend.'
     }
   }
 
@@ -115,7 +115,7 @@ export default async function handler(request: Request): Promise<Response> {
       )
       resendKeyCanRead = probe.ok
         ? 'yes'
-        : `no — HTTP ${probe.status}: ${(await probe.text()).slice(0, 160)}`
+        : `no, HTTP ${probe.status}: ${(await probe.text()).slice(0, 160)}`
     } catch (error) {
       resendKeyCanRead = `could not reach Resend: ${String(error).slice(0, 120)}`
     }
@@ -130,7 +130,7 @@ export default async function handler(request: Request): Promise<Response> {
         deployedCommit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
         deployedBranch: process.env.VERCEL_GIT_COMMIT_REF ?? null,
         // The host this request actually landed on. If it differs from the
-        // host you typed, a redirect is in play — and webhook senders do not
+        // host you typed, a redirect is in play, and webhook senders do not
         // follow redirects, so the URL registered with Resend must be this
         // one, not the one that bounces to it.
         servedFrom: request.headers.get('host') ?? null,
@@ -140,7 +140,7 @@ export default async function handler(request: Request): Promise<Response> {
         supabaseServiceRoleKey: Boolean(serviceRoleKey),
         resendApiKey: Boolean(resendKey),
         resendKeyCanReadInbound:
-          resendKeyCanRead ?? 'not checked — add ?probe=1 to test it',
+          resendKeyCanRead ?? 'not checked. Add ?probe=1 to test it',
         inboundEmail: inboundReady ? 'configured' : 'not configured (optional)',
         webhookSecretUsable: webhookSecretUsable ?? 'no secret set',
         inboundForwardCopyTo: forwardTo || null,
@@ -148,7 +148,7 @@ export default async function handler(request: Request): Promise<Response> {
         formTo,
         formFrom,
         warning: forwardLoops
-          ? 'FORWARD_TO is one of this site\'s own addresses. Forwarding would loop mail back into the inbound webhook — set it to a mailbox on another domain, or leave it unset.'
+          ? 'FORWARD_TO is one of this site\'s own addresses. Forwarding would loop mail back into the inbound webhook. Set it to a mailbox on another domain, or leave it unset.'
           : null,
         note:
           fromDomain && toDomain && fromDomain !== toDomain

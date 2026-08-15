@@ -9,15 +9,15 @@ export function CapabilityGrid() {
         <Reveal>
           <p className="kicker text-ink">What we do</p>
           <h2 className="mt-6 max-w-xl text-[clamp(2rem,4.5vw,3.5rem)]">
-            Six disciplines, one accountable team.
+            Every trade under one roof.
           </h2>
         </Reveal>
 
         <Reveal delay={120}>
           <p className="max-w-md text-base leading-relaxed lg:pb-3">
-            We hold every trade a heavy industrial project needs in-house, so
-            the interfaces where programmes usually slip sit inside our
-            organisation rather than between contracts.
+            We keep every trade a heavy industrial job needs in-house. The
+            joins where programmes normally slip are inside our own company, so
+            they are ours to sort out rather than yours to chase.
           </p>
         </Reveal>
       </div>

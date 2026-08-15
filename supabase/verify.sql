@@ -3,7 +3,7 @@
 
 select 'tables' as check, case
          when count(*) = 5 then 'OK'
-         else 'MISSING — expected 5, found ' || count(*)
+         else 'MISSING, expected 5, found ' || count(*)
        end as result
 from information_schema.tables
 where table_schema = 'public'
@@ -23,7 +23,7 @@ where relnamespace = 'public'::regnamespace
 union all
 select 'email tables (0002)', case
          when count(*) = 2 then 'OK'
-         else 'MISSING — run supabase/migrations/0002_email.sql'
+         else 'MISSING, run supabase/migrations/0002_email.sql'
        end
 from information_schema.tables
 where table_schema = 'public'
@@ -33,8 +33,8 @@ union all
 -- 12 from 0001, plus 3 more once 0002 has run.
 select 'policies', case
          when count(*) >= 15 then 'OK (' || count(*) || ', both migrations)'
-         when count(*) >= 12 then 'OK (' || count(*) || ', 0001 only — 0002 not run)'
-         else 'INCOMPLETE — expected 12, found ' || count(*)
+         when count(*) >= 12 then 'OK (' || count(*) || ', 0001 only, 0002 not run)'
+         else 'INCOMPLETE, expected 12, found ' || count(*)
        end
 from pg_policies where schemaname = 'public'
 
@@ -48,8 +48,8 @@ where proname = 'is_admin' and pronamespace = 'public'::regnamespace
 union all
 select 'realtime on chat + email', case
          when count(*) = 4 then 'OK'
-         when count(*) = 2 then 'chat only — 0002 not run'
-         else 'INCOMPLETE — found ' || count(*) || ' of 4'
+         when count(*) = 2 then 'chat only, 0002 not run'
+         else 'INCOMPLETE, found ' || count(*) || ' of 4'
        end
 from pg_publication_tables
 where pubname = 'supabase_realtime'
@@ -58,15 +58,15 @@ where pubname = 'supabase_realtime'
 
 union all
 select 'anonymous sign-ins', case
-         when count(*) > 0 then 'OK — ' || count(*) || ' anonymous visitor(s) so far'
-         else 'NONE YET — expected until someone opens the chat'
+         when count(*) > 0 then 'OK, ' || count(*) || ' anonymous visitor(s) so far'
+         else 'NONE YET, expected until someone opens the chat'
        end
 from auth.users where is_anonymous
 
 union all
 select 'admin accounts', case
          when count(*) > 0 then 'OK (' || count(*) || ')'
-         else 'NONE YET — run grant-admin.sql'
+         else 'NONE YET, run grant-admin.sql'
        end
 from public.admins;
 

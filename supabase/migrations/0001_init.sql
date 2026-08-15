@@ -1,4 +1,4 @@
--- Axis Construction — backend schema.
+-- Axis Construction backend schema.
 --
 -- Safe to run more than once: every statement is guarded, so re-running the
 -- file after an edit updates what changed rather than erroring half way.
@@ -7,7 +7,7 @@
 -- live chat. Everything is behind row level security; the only writes the
 -- browser can make directly are a visitor creating their own chat session
 -- and posting into it. Form submissions never touch the database from the
--- browser at all — they go through the `submit-form` edge function, which
+-- browser at all. They go through the `submit-form` edge function, which
 -- holds the service role key and also sends the notification email.
 
 -- ---------------------------------------------------------------------------

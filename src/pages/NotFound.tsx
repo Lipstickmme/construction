@@ -6,11 +6,11 @@ export default function NotFound() {
       <div className="shell text-center">
         <span className="index-num text-orange">Error 404</span>
         <h1 className="mt-6 text-[clamp(2.5rem,8vw,6rem)] text-white">
-          Off the grid.
+          Nothing here.
         </h1>
         <p className="mx-auto mt-6 max-w-sm text-base leading-relaxed text-white/70">
           That page is not on the drawings. Head back and we will point you
-          somewhere useful.
+          somewhere that is.
         </p>
         <Link
           to="/"

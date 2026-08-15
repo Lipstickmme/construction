@@ -20,8 +20,8 @@ export function CallToAction() {
             Tell us what needs building.
           </h2>
           <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-white/70">
-            Send the scope, the site and the window you have to work in. We
-            will tell you what it really takes.
+            Send us the scope, the site and the window you have to work in
+            and we will tell you what it really takes.
           </p>
 
           <Link

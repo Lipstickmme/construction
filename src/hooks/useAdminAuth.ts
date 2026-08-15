@@ -13,7 +13,7 @@ type AdminAuth = {
  *
  * The membership check is a real query, not a claim read out of the token, so
  * revoking someone is a row delete and takes effect on their next load. RLS
- * enforces the same rule server side either way — this only decides what the
+ * enforces the same rule server side either way. This only decides what the
  * dashboard bothers to render.
  */
 export function useAdminAuth(): AdminAuth {

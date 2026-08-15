@@ -1,7 +1,7 @@
 -- Grant dashboard access.
 --
 -- This is NOT part of 0001_init.sql. That migration creates the `admins`
--- table empty, because it cannot know your address — so this is the one-off
+-- table empty, because it cannot know your address, so this is the one-off
 -- you run yourself, and again for each new staff member.
 --
 -- Order matters: create the login first, under

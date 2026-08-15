@@ -7,14 +7,14 @@ export type Capability = {
   summary: string
   scope: string[]
   body: string[]
-  /** Underlays the capability's masthead — the same frame as its project. */
+  /** Underlays the capability's masthead, the same frame as its project. */
   image: ImageSlot
 }
 
 /**
- * Axis is a general construction contractor whose centre of gravity is oil
- * and gas. The list leads with the energy disciplines, then carries the full
- * civil, structural and building scope behind them.
+ * Axis is a general contractor whose centre of gravity is oil and gas. The
+ * list leads with the energy disciplines and carries the full civil,
+ * structural and building scope behind them.
  */
 export const capabilities: Capability[] = [
   {
@@ -22,7 +22,7 @@ export const capabilities: Capability[] = [
     index: '01',
     title: 'Oil & Gas Facilities',
     summary:
-      'Onshore process facilities, gas plants and terminals: built, tied in and commissioned.',
+      'Onshore process plants, gas facilities and tank farms. Built, tied in and commissioned.',
     scope: [
       'Process and utility pipework',
       'Static and rotating equipment installation',
@@ -31,11 +31,11 @@ export const capabilities: Capability[] = [
       'Pre-commissioning and commissioning support',
     ],
     body: [
-      'Oil and gas is where most of our people spend most of their time. We build and extend onshore process facilities, gas plants and storage terminals: running process and utility pipework, setting static and rotating equipment, and staying on site through commissioning until the plant is producing.',
-      'A facility is really a set of systems that have to be handed over one at a time, so that is how we plan the work. Scope is broken down by system rather than by trade, each with its own test pack, punch register and acceptance date. It means a client can take receipt of the utilities while the process side is still being welded, and it means nobody discovers at the end that a line was never pressure-tested because it fell between two subcontractors.',
-      'Brownfield tie-ins are a different discipline to greenfield build, and we resource them as one. Isolation, permitting, execution and reinstatement are planned to the hour against your shutdown window rather than the week. Spools are pre-fabricated and trial-fitted before the plant comes down, so the critical path inside the outage is measured in welds rather than in decisions.',
-      'Working inside a live hydrocarbon envelope sets the standard for everything else we do: hot work control, gas testing, isolation registers, and a permit discipline that does not soften because a programme is tight. Our supervisors have the authority to stop work and are expected to use it.',
-      'The same crews carry the certification, procedures and traceability that operating a hydrocarbon facility demands. Welder qualifications are current and mapped to procedure, material certificates are retained, and NDE results are filed as the work goes in. That is why our systems get accepted first time rather than after a punch round.',
+      'Most of our people spend most of the year on oil and gas work. We build and extend onshore process plants, gas facilities and storage terminals. That covers the process and utility pipework, setting the static and rotating equipment, and staying on through commissioning until the plant is actually producing something.',
+      'A plant is really a stack of systems that get handed over one at a time, so that is how we plan it. Scope is broken down by system instead of by trade, and each one gets its own test pack, punch register and acceptance date. You can take the utilities while we are still welding on the process side. And nobody finds out at the end that a line never got pressure-tested because it fell between two subcontractors.',
+      'Brownfield tie-ins are a different job to greenfield and we crew them differently. Isolation, permits, execution, reinstatement, all planned to the hour against your shutdown window and not the week. Spools get pre-fabricated and trial-fitted before the plant comes down, so the outage gets spent welding instead of deciding things.',
+      'Working inside a live hydrocarbon envelope sets the bar for everything else we do. Hot work control, gas testing, isolation registers, permits that do not get relaxed because someone is behind on programme. Our supervisors can stop the job and they are expected to.',
+      'The same crews carry the paperwork the job demands. Welder qualifications current and mapped to procedure, material certificates kept, NDE filed as the work goes in. It is dull, and it is why our systems get accepted first time instead of after a punch round.',
     ],
     image: images.gasFacility,
   },
@@ -44,7 +44,7 @@ export const capabilities: Capability[] = [
     index: '02',
     title: 'Offshore & Marine',
     summary:
-      'Fabrication, installation and maintenance for platforms and marine structures.',
+      'Modules built and tested in the yard, then set, hooked up and maintained offshore.',
     scope: [
       'Topside modules and skids',
       'Structural repair and reinforcement',
@@ -52,11 +52,11 @@ export const capabilities: Capability[] = [
       'Offshore maintenance campaigns',
     ],
     body: [
-      'Offshore scope is planned onshore. We fabricate topside modules and skids in the yard, test them complete and ship them ready to set, because an hour offshore costs nothing like an hour in a workshop, and because weather takes the decision out of your hands more often than any programme admits.',
-      'That principle runs through every campaign we plan. Lift studies, sea-fastening and set-down sequencing are settled before anything leaves the quay. Modules are trial-assembled and pre-commissioned on the ground, with as much of the wiring, instrumentation and pipework terminated as the lift envelope allows, so offshore work reduces to setting, connecting and testing.',
-      'Structural repair and reinforcement is the other half of the work: splash-zone corrosion, fatigue cracking at nodes, deck plating, caissons, conductors and riser guides. We survey, engineer the repair and carry it out with the asset producing wherever it is safe to do so, staging from the platform or from a vessel depending on access and sea state.',
-      'Our offshore crews hold current certification for the work they do (survival, medical, working at height, confined space and trade tickets) and mobilise as a formed team rather than as individuals assembled at the heliport. The supervisor who plans the campaign flies out with it.',
-      'Every campaign carries a weather contingency and a back-loading plan. If a window closes, we know which scope is safe to leave part-complete and which has to be run to a natural break, and that decision is made before mobilisation rather than in the middle of a shift.',
+      'Offshore work gets planned onshore. We build topside modules and skids in the yard, test them complete and ship them ready to set. An hour offshore costs nothing like an hour in a workshop, and the weather makes decisions for you more often than most programmes admit.',
+      'That shapes every campaign. Lift studies, sea-fastening and set-down order are settled before anything leaves the quay. Modules get trial-assembled and pre-commissioned on the ground, with as much of the wiring, instrumentation and pipework terminated as the lift envelope allows. By the time it goes out, offshore work is mostly setting it down and hooking it up.',
+      'The other half of what we do is repair. Splash-zone corrosion, fatigue cracking at the nodes, deck plating, caissons, conductors, riser guides. We survey it, engineer the fix and carry it out with the asset producing where that is safe, working off the platform or off a vessel depending on access and sea state.',
+      'Our offshore crews hold current tickets for what they do, survival and medical through to trade quals, and they mobilise as a team that already works together instead of strangers meeting at the heliport. The supervisor who planned the campaign flies out with it.',
+      'Every campaign has a weather contingency and a back-loading plan. If a window shuts we already know which scope can sit part-finished and which has to be run to a natural break. That gets decided before mobilisation, not halfway through a shift.',
     ],
     image: images.offshorePlatform,
   },
@@ -65,7 +65,7 @@ export const capabilities: Capability[] = [
     index: '03',
     title: 'Roadworks, Tunnels, Bridges & Drainage',
     summary:
-      'Transport and civil infrastructure, from site preparation through to surfacing.',
+      'Roads, tunnels, bridges, and the drainage that keeps them standing.',
     scope: [
       'Site preparation, grading and earthworks',
       'Pavement construction and road marking',
@@ -74,11 +74,11 @@ export const capabilities: Capability[] = [
       'Stormwater and subsurface drainage',
     ],
     body: [
-      'We design and construct roads and highways end to end, from site preparation and grading through pavement construction, signage and road marking, across projects from small local roads to large-scale highway schemes.',
-      'Tunnelling work covers geotechnical investigation, excavation, lining and ventilation, planned around the ground conditions actually on site so surface disruption and settlement stay within agreed limits.',
-      'Bridges run from footbridges to multi-span highway crossings: foundations, piers, decks and bearings, with load paths and construction sequencing modelled up front so staging, lifting and traffic management are settled before work begins. Beam, arch, suspension and cable-stayed forms are all within scope, and the form is chosen for the span and the ground rather than for the crew that happens to be available.',
-      'Drainage is designed around the catchment it serves rather than the trench it sits in: pipes, culverts, catch basins, attenuation and outfalls sized for the runoff the road will actually see. It is the least visible part of a highway scheme and the part that decides whether the pavement survives its second wet season.',
-      'Almost all of this is built next to traffic, services and people who did not ask for a construction site outside their door. Temporary traffic management, diversion routes, service searches and public liaison are planned as part of the works rather than bolted on, and night and weekend possessions are used where they buy back more than they cost.',
+      'We build roads and highways from the ground up. Site prep, grading, pavement, signage, road marking. Jobs run from a few hundred metres of estate road through to full highway schemes.',
+      'Tunnelling covers the geotechnical investigation, the excavation, the lining and the ventilation. Every drive gets planned around what the ground is actually doing, not what the desk study hoped for, which is how settlement and surface disruption stay inside the limits everyone agreed to.',
+      'Bridges run from footbridges up to multi-span highway crossings. Foundations, piers, decks, bearings. We model the load paths and the build sequence up front so staging, lifting and traffic management are sorted before anyone turns up. Beam, arch, suspension or cable-stayed, whatever suits the span and the ground it is landing on.',
+      'Drainage gets sized for the catchment, not for the trench it sits in. Pipes, culverts, catch basins, attenuation, outfalls, all worked out around the runoff the road will really see. It is the part nobody looks at, and it decides whether the pavement survives its second wet winter.',
+      'Nearly all of this happens next to live traffic, buried services and people who never asked for a site outside their front door. Traffic management, diversions, service searches and talking to residents are part of the job from day one. We will take night and weekend possessions where they buy back more than they cost.',
     ],
     image: images.roadwork,
   },
@@ -87,7 +87,7 @@ export const capabilities: Capability[] = [
     index: '04',
     title: 'Structural Steel & Concrete Structures',
     summary:
-      'In-house fabrication and erection of steelwork, plus reinforced and post-tensioned concrete.',
+      'Steel we detail, fabricate and erect ourselves, plus reinforced and post-tensioned concrete.',
     scope: [
       'Detailing and shop drawings',
       'Workshop fabrication and finishing',
@@ -96,11 +96,11 @@ export const capabilities: Capability[] = [
       'Access platforms, walkways and handrail',
     ],
     body: [
-      'We detail, fabricate and erect our own steel. Keeping that under one roof removes the interface where most steel programmes lose time: the one between the detailer, the shop and the erection crew.',
-      'Detailing is where a steel job is won or lost. Connections are modelled and checked against the erection sequence before a single plate is cut, so the crew on site is never asked to make a bolted connection that cannot physically be reached with a spanner. Shop drawings are issued from the same model the fabricator works to.',
-      'In the workshop we cut, drill, fit and weld to procedure, with dimensional checks at fit-up and again before finishing. Surface preparation and protective coating are specified for the environment the steel will live in (a coastal terminal and a covered warehouse do not get the same system) and applied under controlled conditions rather than in the rain on site.',
-      'Erection is planned around lifts. Crane positions, ground bearing pressure, temporary bracing and the order in which the frame becomes self-supporting are all worked out in advance, so stability never depends on the next piece arriving on time.',
-      'On the concrete side we deliver foundations, retaining walls, culverts, reservoirs and frames in both reinforced and post-tensioned form. Mix design, formwork and curing are controlled on site with testing at every pour, so the specified strength and finish are what actually gets built. Post-tensioning is stressed and grouted by our own crew to a recorded sequence, with elongations checked against calculation before the jack is released.',
+      'We detail, fabricate and erect our own steel. Keeping it in one place gets rid of the seam where steel jobs usually lose time, which is between the detailer, the shop and the erection crew.',
+      'Detailing decides how the rest of it goes. Connections get modelled and checked against the erection sequence before a plate is cut, so nobody on site is asked to bolt up something you cannot physically get a spanner to. Shop drawings come off the same model the fabricator works from.',
+      'In the shop we cut, drill, fit and weld to procedure, with dimensional checks at fit-up and again before finishing. Coatings are specified for wherever the steel is going to live. A coastal terminal and a covered warehouse do not get the same system. And it goes on under cover, not in the rain on site.',
+      'Erection is planned around the lifts. Crane positions, ground bearing pressure, temporary bracing, the order the frame becomes self-supporting in. Stability never depends on the next piece turning up on time.',
+      'On the concrete side we do foundations, retaining walls, culverts, reservoirs and frames, reinforced or post-tensioned. Mix design, formwork and curing are controlled on site with testing at every pour. Post-tensioning is stressed and grouted by our own crew to a recorded sequence, with elongations checked against the calculation before the jack comes off.',
     ],
     image: images.steelStructure,
   },
@@ -109,7 +109,7 @@ export const capabilities: Capability[] = [
     index: '05',
     title: 'Mechanical & Piping',
     summary:
-      'Rotating equipment, pressure systems and pipework, installed and tested to spec.',
+      'Rotating equipment, pressure systems and pipework, installed and tested.',
     scope: [
       'Pump, compressor and turbine installation',
       'Pressure vessel setting and dressing',
@@ -117,11 +117,11 @@ export const capabilities: Capability[] = [
       'Hydrotesting and system reinstatement',
     ],
     body: [
-      'Mechanical and piping is the trade the rest of the business grew around. We install rotating equipment to alignment tolerance, set and dress pressure vessels, fabricate spools, weld on site and test complete systems before handing them back.',
-      'Rotating equipment is set to alignment tolerance and left there. Baseplates are grouted properly, soft foot is dialled out, cold alignment is set with thermal growth allowed for, and every reading is recorded. Pipework is fitted to the machine rather than pulled onto it. If a flange has to be strained to meet a nozzle, the spool is wrong and gets remade.',
-      'Spool fabrication happens in the shop wherever the drawing allows, because a weld made on a bench beats a weld made overhead in a pipe rack on every measure that matters: quality, speed and the safety of the person making it. Site welding is positional, coded and inspected to the same procedures as shop work.',
-      'Systems are hydrotested, drained, dried and reinstated by the crew that built them, so the person signing the pack is the person who knows what is inside the line. Where a system cannot be filled, we agree the alternative (pneumatic, service or vacuum testing) with the client and the inspector before the pressure goes anywhere near it.',
-      'Every weld is traceable to a procedure and a welder. Test packs are assembled as the work proceeds rather than reconstructed afterwards, which is the difference between handing over a system and negotiating over one.',
+      'Mechanical and piping is the trade the rest of the business grew out of. We install rotating equipment, set and dress pressure vessels, fabricate spools, weld on site and test whole systems before handing them back.',
+      'Rotating kit gets set to alignment tolerance and left there. Baseplates grouted properly, soft foot dialled out, cold alignment set with thermal growth allowed for, every reading written down. Pipework is fitted to the machine, not pulled onto it. If a flange has to be strained to reach a nozzle then the spool is wrong and we make another one.',
+      'Spools get fabricated in the shop wherever the drawing allows. A weld made on a bench beats one made overhead in a pipe rack on quality, on speed, and on the back of whoever is making it. Site welding is positional, coded and inspected to the same procedures as shop work.',
+      'Systems are hydrotested, drained, dried and reinstated by the crew that built them, so whoever signs the pack knows what is inside the line. If a system cannot be filled we agree the alternative with you and the inspector before any pressure goes near it.',
+      'Every weld traces back to a procedure and a welder. Test packs get built up as the work goes in. Reconstructing them afterwards is how handovers turn into arguments.',
     ],
     image: images.rigMaintenance,
   },
@@ -130,7 +130,7 @@ export const capabilities: Capability[] = [
     index: '06',
     title: 'Architectural Design & Build',
     summary:
-      'Concept through completion for buildings, from first sketch to handover.',
+      'Buildings from first sketch to handover, drawn and built by the same team.',
     scope: [
       'Concept design and 3D modelling',
       'Planning applications and approvals',
@@ -138,12 +138,12 @@ export const capabilities: Capability[] = [
       'Single-point design and build delivery',
     ],
     body: [
-      'From initial concept drawings that sketch out an impression of the finished building, through to three-dimensional modelling that adds precision and clarity, we take building projects from idea to something that can actually be priced and built.',
-      'Scaled plans and elevations for planning applications, building regulation drawings, structural drawings for the construction team and detailed finishes and fittings drawings all come from the same team that will build the job, so what gets drawn is what can be built.',
-      'Design is where cost is decided, so we price as we draw. A concept that cannot be built for the budget is not a concept, it is a delay, and we would rather have that conversation over a sketch than over a tender return.',
-      'Approvals are part of the job, not a hand-off. Scaled plans and elevations for planning, drainage and structural calculations, fire strategy and building regulation submissions are prepared and tracked by us, with the authority correspondence kept in one place so nobody is guessing which revision was approved.',
-      'On site the same team runs the build, which removes the most expensive conversation in construction, the one where the designer and the contractor disagree about what a drawing meant. Queries are resolved by the person who drew it, usually the same day.',
-      'Where clients want a single point of accountability we deliver design and build together, with one project manager across the whole programme, one contract and one number to hold us to.',
+      'We take buildings from a first sketch through to something that can actually be priced and built. Concept drawings to begin with, then three-dimensional models once there is enough settled to be precise about.',
+      'Scaled plans and elevations for planning, building regulation drawings, structural drawings, finishes and fittings. They all come from the team that is going to build the job, so what gets drawn is buildable.',
+      'Design is where the money gets committed, so we price as we draw. There is no point producing something lovely that cannot be built for the budget, and we would far rather find that out over a sketch than over a tender return.',
+      'Approvals are our job too, not something we hand back to you. Planning drawings, drainage and structural calculations, fire strategy, building regs submissions. We prepare them, track them and keep the correspondence in one place so nobody is guessing which revision got approved.',
+      'The same team runs the build, which cuts out the most expensive conversation in construction. That is the one where the designer and the contractor disagree about what a drawing meant. Queries go to whoever drew it and usually come back the same day.',
+      'If you want a single point of accountability we will do design and build together. One project manager, one contract, one number to hold us to.',
     ],
     image: images.interiorFitout,
   },
@@ -151,8 +151,7 @@ export const capabilities: Capability[] = [
     id: 'construction-administration',
     index: '07',
     title: 'Construction Administration',
-    summary:
-      'Oversight once drawings are approved and construction begins.',
+    summary: 'Keeping an eye on the build once the drawings are approved.',
     scope: [
       'Submittal and shop drawing review',
       'Periodic site inspection and reporting',
@@ -160,12 +159,12 @@ export const capabilities: Capability[] = [
       'Payment certification and punch lists',
     ],
     body: [
-      'Construction administration begins after the design is complete and approved, and construction starts. We act as overseer of the project, making sure what gets built matches the design documents.',
-      'That means periodic site visits, reviewing samples and submittals against specification, handling requests for information in writing, documenting any change, and running the punch list at completion so final handover is a formality rather than a negotiation.',
-      'Submittal review is deliberately unhurried. A shop drawing that gets waved through because the programme is tight becomes a defect three months later at ten times the cost, so we review against the specification and the coordinated model, and we say no when the answer is no.',
-      'Change is the thing that quietly destroys budgets, and it destroys them fastest when it is verbal. Every instruction is written, priced and dated before it is built, so the account at the end of the job reconciles to a record both sides have been reading all along.',
-      'We also certify payment against work genuinely in place, which protects the client from paying ahead of progress and protects the contractor from arguing for money they have already earned. Neither party benefits from a valuation that is a matter of opinion.',
-      'Where we are administering someone else’s construction contract, we say so plainly and act impartially within it. Our own construction arm never bids work we are administering.',
+      'Construction administration starts once the design is signed off and the build begins. We oversee the project and make sure what goes up matches the documents.',
+      'In practice that means site visits, reviewing samples and submittals against the specification, answering requests for information in writing, documenting every change, and running the punch list at the end so handover is a formality.',
+      'Submittal review is deliberately slow. A shop drawing waved through because the programme is tight turns into a defect three months later at ten times the cost. We check against the specification and the coordinated model, and we say no when the answer is no.',
+      'Change is what quietly eats budgets, and it does it fastest when it is verbal. Every instruction gets written down, priced and dated before it is built, so the final account reconciles against a record you have been reading all along.',
+      'We certify payment against work that is genuinely in place. That keeps you from paying ahead of progress, and it keeps the contractor from chasing money they have already earned.',
+      'When we are administering somebody else’s contract we say so and we act impartially inside it. Our construction arm does not bid work we are administering.',
     ],
     image: images.siteReview,
   },
@@ -174,7 +173,7 @@ export const capabilities: Capability[] = [
     index: '08',
     title: 'Geology & Mine Engineering',
     summary:
-      'Ground investigation, resource assessment and the geotechnical case for what can be built.',
+      'Ground investigation, resource assessment, and the geotechnical case for what you can build.',
     scope: [
       'Geological assessment and site characterisation',
       'Mining feasibility studies',
@@ -183,12 +182,12 @@ export const capabilities: Capability[] = [
       'Environmental compliance and permitting support',
     ],
     body: [
-      'Every structure ultimately rests on ground, and the ground is the one variable that cannot be specified, only discovered. Our geologists assess the conditions at your site: rock formations, soil composition, groundwater and the hazards that bear on stability.',
-      'Investigation is scoped to the question being asked. A pad foundation on known ground does not need the programme a tunnel portal needs, and boreholes sunk without a hypothesis are just expensive holes. We agree what we are trying to find out, then design the ground investigation to find it out.',
-      'For mining clients we run feasibility studies covering mineral resource, extraction method and environmental impact, alongside pit and slope design and rehabilitation planning. Slope stability is monitored as a live condition rather than certified once: groundwater, blast damage and weathering all move the answer over the life of a pit.',
-      'The geotechnical output feeds straight into foundation design: bearing capacity, settlement, piling type and depth, earth pressures on retaining structures, and the ground improvement worth doing versus the ground worth avoiding. Because the same firm carries the work through to construction, the assumptions in the report are the assumptions the site crew is actually working to.',
-      'Environmental compliance and permitting support sits alongside all of it: baseline surveys, contamination assessment, discharge and dewatering consents, and the monitoring regimes that keep them valid.',
-      'Where conditions turn out worse than assumed, we would rather tell you at investigation stage than at excavation stage. That is the entire point of the discipline.',
+      'Everything ends up sitting on ground, and the ground is the one thing you cannot specify. You can only go and find out what is there. Our geologists look at the rock formations, the soil, the groundwater and whatever else bears on stability.',
+      'Investigation gets scoped to the question being asked. A pad foundation on ground you already know does not need what a tunnel portal needs, and boreholes sunk without a hypothesis are just expensive holes. We agree what we are trying to establish, then design the investigation to establish it.',
+      'For mining clients we run feasibility studies covering mineral resource, extraction method and environmental impact, along with pit and slope design and rehabilitation planning. Slope stability gets monitored as a live thing. Groundwater, blast damage and weathering all move the answer over the life of a pit.',
+      'The geotechnical work feeds straight into foundation design. Bearing capacity, settlement, pile type and depth, earth pressures on retaining structures, where ground improvement is worth doing and where you are better off building somewhere else. Because we carry it through to construction, the assumptions in the report are the ones the site crew ends up working to.',
+      'Environmental compliance sits alongside all of it. Baseline surveys, contamination assessment, discharge and dewatering consents, and the monitoring that keeps them valid.',
+      'If the ground turns out worse than anyone assumed, you want to hear about it at investigation stage and not once the excavator is already sat there.',
     ],
     image: images.civilWorks,
   },
@@ -202,7 +201,7 @@ export type Project = {
   image: ImageSlot
 }
 
-/** Featured work — all drawn from the full-resolution photography. */
+/** Featured work, all drawn from the full-resolution photography. */
 export const projects: Project[] = [
   {
     id: 'offshore-platform',
@@ -254,10 +253,10 @@ export type Metric = {
 }
 
 export const metrics: Metric[] = [
-  { value: '25', label: 'Years operating' },
-  { value: '640', label: 'Projects delivered' },
+  { value: '25', label: 'Years going' },
+  { value: '640', label: 'Projects finished' },
   { value: '1200', label: 'People on the tools' },
-  { value: '4', label: 'Regions covered' },
+  { value: '4', label: 'Regions we work in' },
 ]
 
 export type ProcessStep = {
@@ -270,22 +269,22 @@ export const processSteps: ProcessStep[] = [
   {
     index: '01',
     title: 'Scope & feasibility',
-    body: 'We walk the site, read the constraints and tell you what the job actually involves before anyone commits to a number.',
+    body: 'We walk the site, look at what is in the way, and tell you what the job really involves before anyone commits to a number.',
   },
   {
     index: '02',
     title: 'Engineering & planning',
-    body: 'Work packs, method statements and a programme built around your shutdown window rather than our convenience.',
+    body: 'Work packs, method statements and a programme built around your shutdown window instead of our convenience.',
   },
   {
     index: '03',
     title: 'Fabrication & build',
-    body: 'As much as possible built and tested in the workshop, so site time is spent installing rather than fixing.',
+    body: 'As much built and tested in the workshop as we can manage, so site time goes on installing instead of fixing.',
   },
   {
     index: '04',
     title: 'Commission & hand over',
-    body: 'Tested, documented and handed back running, with the test packs assembled as the work went in.',
+    body: 'Tested, documented and handed back running, with the test packs built up as the work went in.',
   },
 ]
 
@@ -309,27 +308,27 @@ export const disciplines: Discipline[] = [
   {
     id: 'roadworks',
     title: 'Roadworks',
-    body: 'Design and construction of roads and highways, covering site preparation, grading, pavement construction, signage installation and road marking, across projects from small local roads through to large-scale highways.',
+    body: 'Roads and highways built from the ground up. Site prep, grading, pavement, signage and road marking, on jobs running from a few hundred metres of estate road through to full highway schemes.',
   },
   {
     id: 'tunnels',
     title: 'Tunnels',
-    body: 'Excavation, structural design, reinforcement, ventilation and safety systems for transport, utility and mining tunnels. Each drive is planned around the ground conditions actually encountered rather than the ones assumed.',
+    body: 'Excavation, structural design, reinforcement, ventilation and safety systems, for transport, utility and mining tunnels. Every drive gets planned around the ground we actually hit rather than the ground the desk study hoped for.',
   },
   {
     id: 'bridges',
     title: 'Bridges',
-    body: 'Beam, arch, suspension and cable-stayed crossings. Structural analysis, foundation design, support piers and deck installation, sequenced so staging and traffic management are settled before anyone mobilises.',
+    body: 'Beam, arch, suspension and cable-stayed crossings. Structural analysis, foundation design, piers and deck installation, sequenced so staging and traffic management are sorted before anyone mobilises.',
   },
   {
     id: 'drainage',
     title: 'Drainage',
-    body: 'Stormwater and subsurface systems that manage runoff and prevent flooding and erosion: pipes, culverts, catch basins and retention, sized to the catchment they serve.',
+    body: 'Stormwater and subsurface systems that take the runoff away before it takes the road with it. Pipes, culverts, catch basins and retention, sized for the catchment they serve.',
   },
   {
     id: 'concrete',
     title: 'Concrete Structures',
-    body: 'Foundations, retaining walls, culverts and reservoirs in reinforced and post-tensioned concrete, with mix design, formwork and curing controlled on site and testing at every pour.',
+    body: 'Foundations, retaining walls, culverts and reservoirs in reinforced and post-tensioned concrete. Mix design, formwork and curing controlled on site, with testing at every pour.',
   },
 ]
 

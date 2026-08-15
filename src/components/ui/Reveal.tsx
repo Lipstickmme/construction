@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 type RevealProps = {
   children: ReactNode
-  /** Milliseconds to hold before this element animates — for stagger. */
+  /** Milliseconds to hold before this element animates, for stagger. */
   delay?: number
   className?: string
   as?: 'div' | 'li' | 'section' | 'article' | 'header'

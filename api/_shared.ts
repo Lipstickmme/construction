@@ -36,7 +36,7 @@ export const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
 /**
  * The company domain, in one place.
  *
- * It must match the domain verified in Resend exactly — sending from anything
+ * It must match the domain verified in Resend exactly. Sending from anything
  * else returns 403 "Domain not verified" and the mail never leaves. Overridable
  * so a change does not need a code edit, but the default is the source of
  * truth for every address below.
@@ -78,7 +78,7 @@ export function json(status: number, payload: unknown): Response {
   })
 }
 
-/** Service-role client. Bypasses row level security — server side only. */
+/** Service-role client. Bypasses row level security, server side only. */
 export function adminClient(): SupabaseClient {
   return createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
     auth: { persistSession: false },
@@ -103,7 +103,7 @@ export function secretsMatch(a: string, b: string): boolean {
  * Verifies a Resend webhook, which is delivered through Svix.
  *
  * The signature covers `id.timestamp.rawBody`, so the body must be the exact
- * bytes received — parsing to JSON first and re-serialising changes key order
+ * bytes received. Parsing to JSON first and re-serialising changes key order
  * and whitespace and the HMAC no longer matches.
  */
 export async function verifyResendWebhook(
@@ -141,14 +141,14 @@ export async function verifyResendWebhook(
   if (!Number.isFinite(age)) return fail(`unparseable svix-timestamp: ${timestamp}`)
   if (age > 300) {
     return fail(
-      `webhook is ${Math.round(age)}s old, outside the 300s window — ` +
+      `webhook is ${Math.round(age)}s old, outside the 300s window: ` +
         'either a replay, or this deployment\'s clock is wrong',
     )
   }
 
   if (!/^whsec_/.test(RESEND_WEBHOOK_SECRET)) {
     console.warn(
-      'RESEND_WEBHOOK_SECRET does not start with whsec_ — check it was copied whole',
+      'RESEND_WEBHOOK_SECRET does not start with whsec_, check it was copied whole',
     )
   }
 
@@ -177,7 +177,7 @@ export async function verifyResendWebhook(
     // bare 500, Resend retries forever, and nothing says the secret is the
     // problem. A malformed paste is the usual cause.
     return fail(
-      `RESEND_WEBHOOK_SECRET is not usable as a signing key — ${errorMessage(error)}. ` +
+      `RESEND_WEBHOOK_SECRET is not usable as a signing key: ${errorMessage(error)}. ` +
         'Re-copy it whole from Resend, including the whsec_ prefix and nothing else.',
     )
   }
@@ -191,7 +191,7 @@ export async function verifyResendWebhook(
   return matched
     ? { ok: true, reason: '' }
     : fail(
-        'signature did not match — the RESEND_WEBHOOK_SECRET in Vercel is not ' +
+        'signature did not match. The RESEND_WEBHOOK_SECRET in Vercel is not ' +
           'the signing secret of the webhook that sent this',
       )
 }
@@ -236,8 +236,8 @@ type SendOptions = {
 }
 
 /**
- * Hands a message to Resend. Returns its id, or null if it was not accepted —
- * callers decide whether that is fatal. For notifications it is not: the
+ * Hands a message to Resend. Returns its id, or null if it was not accepted.
+ * Callers decide whether that is fatal. For notifications it is not: the
  * record is already stored and the dashboard is the source of truth.
  */
 export async function sendEmail(options: SendOptions): Promise<string | null> {
@@ -299,7 +299,7 @@ export function emailBody(rows: Array<[string, string]>): string {
  *
  * Forwarding an inbound message to one of these would loop: the copy arrives
  * back at the same mailbox, fires the webhook again, and is forwarded again.
- * Each hop is a fresh Resend id, so nothing dedupes it — it runs until the
+ * Each hop is a fresh Resend id, so nothing dedupes it. It runs until the
  * sending quota is gone.
  */
 export function ownAddresses(): Set<string> {
@@ -314,7 +314,7 @@ export function ownAddresses(): Set<string> {
  * Readable text out of anything thrown.
  *
  * Supabase rejects with a plain `{ message, code, details, hint }` object
- * rather than an Error, so `String(error)` on one yields "[object Object]" —
+ * rather than an Error, so `String(error)` on one yields "[object Object]",
  * losing the detail at exactly the moment it is needed.
  */
 export function errorMessage(error: unknown): string {
@@ -323,7 +323,7 @@ export function errorMessage(error: unknown): string {
     const shaped = error as { message?: unknown; code?: unknown; details?: unknown }
     const parts = [shaped.code, shaped.message, shaped.details]
       .filter((part) => typeof part === 'string' && part)
-      .join(' — ')
+      .join(': ')
     if (parts) return parts
     try {
       return JSON.stringify(error)

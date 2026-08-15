@@ -6,7 +6,7 @@ import { images } from '@/data/images'
 import { leader } from '@/data/site'
 
 /**
- * Leadership note, sitting between the metrics and the civil scope — a face
+ * Leadership note, sitting between the metrics and the civil scope. A face
  * and a position after the numbers, before the detail.
  */
 export function Leadership() {

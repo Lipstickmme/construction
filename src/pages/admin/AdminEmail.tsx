@@ -36,7 +36,7 @@ function when(value: string) {
  * Mail addressed to the company mailbox, and replies sent back from it.
  *
  * Inbound message bodies are external content, so they are rendered as plain
- * text rather than as their original HTML — displaying that would mean
+ * text rather than as their original HTML. Displaying that would mean
  * running a stranger's markup inside an authenticated dashboard.
  */
 export default function AdminEmail() {
@@ -277,7 +277,7 @@ export default function AdminEmail() {
 
                   <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap text-ink">
                     {message.body_text?.trim() ||
-                      '(no plain-text body — open it in your mail app)'}
+                      '(no plain-text body, open it in your mail app)'}
                   </p>
 
                   {message.has_attachments && (

@@ -9,8 +9,8 @@ export default function Projects() {
   return (
     <>
       <PageHeader underlay={images.gasFacility} index="04" title="Projects">
-        A selection of recent work. Client names and figures are withheld
-        pending approval.
+        Some recent work. We hold back client names and figures until they
+        tell us we can use them.
       </PageHeader>
 
       <section className="shell py-20 lg:py-28">
@@ -40,8 +40,8 @@ export default function Projects() {
 
         <Reveal className="mt-20 border-t border-hairline pt-10">
           <p className="max-w-xl text-sm leading-relaxed">
-            Further case studies are available on request, including scope,
-            programme and outcome for projects comparable to yours.
+            Ask us for case studies and we will send you scope, programme and
+            outcome on jobs close to yours.
           </p>
         </Reveal>
       </section>
