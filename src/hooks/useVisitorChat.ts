@@ -139,17 +139,24 @@ export function useVisitorChat() {
 
         if (sessionError) throw sessionError
 
-        const { error: messageError } = await client
+        // Select the row back and show it immediately rather than waiting for
+        // the realtime echo — a slow or blocked websocket would otherwise
+        // leave the visitor staring at an empty thread. The subscription
+        // dedupes by id when its copy arrives.
+        const { data: first, error: messageError } = await client
           .from('chat_messages')
           .insert({
             session_id: session.id,
             sender: 'visitor',
             body: visitor.message,
           })
+          .select('id, created_at, sender, body')
+          .single()
 
         if (messageError) throw messageError
 
         window.localStorage.setItem(STORAGE_KEY, session.id)
+        setMessages([first as ChatMessage])
         setSessionId(session.id)
         setStatus('ready')
 
@@ -188,13 +195,28 @@ export function useVisitorChat() {
       const client = supabase
       if (!client || !sessionId || !body.trim()) return
 
-      const { error: sendError } = await client.from('chat_messages').insert({
-        session_id: sessionId,
-        sender: 'visitor',
-        body: body.trim(),
-      })
+      const { data: sent, error: sendError } = await client
+        .from('chat_messages')
+        .insert({
+          session_id: sessionId,
+          sender: 'visitor',
+          body: body.trim(),
+        })
+        .select('id, created_at, sender, body')
+        .single()
 
-      if (sendError) setError('That message did not send. Try again.')
+      if (sendError) {
+        setError('That message did not send. Try again.')
+        return
+      }
+
+      // Shown straight away; the subscription dedupes its own copy by id.
+      const message = sent as ChatMessage
+      setMessages((current) =>
+        current.some((entry) => entry.id === message.id)
+          ? current
+          : [...current, message],
+      )
     },
     [sessionId],
   )

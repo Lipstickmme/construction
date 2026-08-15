@@ -31,6 +31,11 @@ export default function AdminChat() {
   const [error, setError] = useState<string | null>(null)
   const threadRef = useRef<HTMLOListElement>(null)
 
+  // The realtime handler is registered once; a ref keeps it reading the
+  // conversation that is open now rather than the one open when it was bound.
+  const activeIdRef = useRef<string | null>(null)
+  activeIdRef.current = activeId
+
   const loadSessions = useCallback(async () => {
     const { data, error: loadError } = await requireSupabase()
       .from('chat_sessions')
@@ -61,16 +66,17 @@ export default function AdminChat() {
         (payload) => {
           const incoming = payload.new as ChatMessage & { session_id: string }
           loadSessions()
-          setActiveId((current) => {
-            if (current === incoming.session_id) {
-              setMessages((rows) =>
-                rows.some((row) => row.id === incoming.id)
-                  ? rows
-                  : [...rows, incoming],
-              )
-            }
-            return current
-          })
+
+          // Read the open conversation from a ref, not by abusing a state
+          // updater: React may run an updater twice, and appending from
+          // inside one is a side effect.
+          if (activeIdRef.current !== incoming.session_id) return
+
+          setMessages((rows) =>
+            rows.some((row) => row.id === incoming.id)
+              ? rows
+              : [...rows, incoming],
+          )
         },
       )
       .subscribe()
@@ -115,15 +121,24 @@ export default function AdminChat() {
     setDraft('')
     const client = requireSupabase()
 
-    const { error: sendError } = await client
+    // Select the row back so the reply appears immediately, rather than only
+    // once realtime echoes it. The subscription dedupes by id.
+    const { data: sent, error: sendError } = await client
       .from('chat_messages')
       .insert({ session_id: activeId, sender: 'agent', body })
+      .select('id, created_at, sender, body')
+      .single()
 
     if (sendError) {
       setError(sendError.message)
       setDraft(body)
       return
     }
+
+    const message = sent as ChatMessage
+    setMessages((rows) =>
+      rows.some((row) => row.id === message.id) ? rows : [...rows, message],
+    )
 
     // Answering is what moves a conversation off the new pile.
     await client
@@ -160,7 +175,7 @@ export default function AdminChat() {
       )}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[20rem_1fr]">
-        <ul className="border-t border-hairline bg-white">
+        <ul className="self-start border-t border-hairline bg-white">
           {sessions.length === 0 && (
             <li className="p-6 text-sm text-body">
               No conversations yet. The widget on the public site opens them.

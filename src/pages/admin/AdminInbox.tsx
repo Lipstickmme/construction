@@ -139,7 +139,7 @@ function Inbox({
       )}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.1fr]">
-        <ul className="border-t border-hairline bg-white">
+        <ul className="self-start border-t border-hairline bg-white">
           {loading && (
             <li className="p-6 text-sm text-body">Loading…</li>
           )}

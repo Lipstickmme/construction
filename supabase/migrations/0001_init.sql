@@ -205,7 +205,11 @@ as $$
 begin
   update public.chat_sessions
      set last_message_at = new.created_at,
-         status = case when status = 'closed' then 'new' else status end
+         -- A visitor speaking puts the conversation back on the waiting pile,
+         -- including one already answered or closed, so a follow-up cannot go
+         -- unnoticed. An agent reply leaves the status alone; the dashboard
+         -- sets it to in_progress itself.
+         status = case when new.sender = 'visitor' then 'new' else status end
    where id = new.session_id;
   return new;
 end;
