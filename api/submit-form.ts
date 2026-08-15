@@ -19,12 +19,28 @@ const FORM_TO = process.env.FORM_TO ?? 'Contact@axisconstructionltd.com'
 const FORM_FROM =
   process.env.FORM_FROM ?? 'Axis Website <website@axisconstructionltd.com>'
 
-// The Supabase marketplace integration injects the unprefixed names; the
-// VITE_ ones are what the browser build uses. Accept either so the project
-// works whichever way it was connected.
-const SUPABASE_URL =
-  process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? ''
-const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
+// The Vercel Supabase integration injects unprefixed names; a hand-wired
+// project may only have the VITE_ pair. Newer Supabase projects issue a
+// "secret key" where older ones issue a service role key. Accept all of them
+// so the function works however the project was connected.
+function pick(names: string[]): string {
+  for (const name of names) {
+    const value = process.env[name]
+    if (value) return value
+  }
+  return ''
+}
+
+const SUPABASE_URL = pick([
+  'SUPABASE_URL',
+  'VITE_SUPABASE_URL',
+  'NEXT_PUBLIC_SUPABASE_URL',
+])
+
+const SERVICE_ROLE_KEY = pick([
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'SUPABASE_SECRET_KEY',
+])
 
 /** Trim, cap and reject anything that is not a usable string. */
 function text(value: unknown, max: number): string {

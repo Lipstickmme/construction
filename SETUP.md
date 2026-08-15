@@ -54,18 +54,14 @@ cache headers for the hashed assets and the photography.
 1. In the project: **Storage** (or Integrations) → **Marketplace** →
    **Supabase** → Add. Pick the free plan and the region closest to your users.
 2. Vercel creates the Supabase project and pushes its connection variables into
-   this Vercel project automatically, including `SUPABASE_URL` and
-   `SUPABASE_SERVICE_ROLE_KEY`, which is what the API route needs.
-3. **Add two more variables by hand**, under Settings → Environment Variables.
-   The integration only injects unprefixed names, and Vite only exposes
-   variables beginning with `VITE_` to the browser:
+   this Vercel project automatically: `SUPABASE_URL`, `SUPABASE_ANON_KEY` and
+   `SUPABASE_SERVICE_ROLE_KEY` are the three that matter here.
 
-   | Name | Value |
-   | --- | --- |
-   | `VITE_SUPABASE_URL` | same as the injected `SUPABASE_URL` |
-   | `VITE_SUPABASE_ANON_KEY` | the **anon public** key, from Supabase → Project Settings → API |
-
-   Set both for Production, Preview and Development.
+**Nothing to copy by hand.** Vite normally only exposes `VITE_`-prefixed
+variables to the browser, which would mean duplicating two of those under new
+names. `vite.config.ts` reads whichever naming the integration used —
+unprefixed, `NEXT_PUBLIC_`, or `VITE_` — and defines the browser pair from it.
+A `VITE_` variable you set yourself still wins, if you ever need to override.
 
 The anon key is *meant* to be public — row level security is what protects the
 data, not key secrecy. The service role key is the opposite: it bypasses every
@@ -120,15 +116,18 @@ Open the Supabase project from the Vercel integration panel.
    hard-coded in it. A verified domain is what lets you send from your own
    address to your own inbox.
 
-3. **Add two more variables** in Vercel → Settings → Environment Variables:
+3. **Optionally set the addresses.** The function already defaults to
+   `Contact@axisconstructionltd.com` for the recipient and
+   `Axis Website <website@axisconstructionltd.com>` for the sender. Override
+   either in Vercel → Settings → Environment Variables:
 
    | Name | Value |
    | --- | --- |
-   | `FORM_TO` | `Contact@axisconstructionltd.com` |
-   | `FORM_FROM` | `Axis Website <website@axisconstructionltd.com>` |
+   | `FORM_TO` | where notifications arrive |
+   | `FORM_FROM` | must be at the domain verified in step 2 |
 
-   `FORM_FROM` must be at the verified domain. Using a send-only address
-   distinct from the receiving mailbox is the usual convention.
+   Using a send-only from-address distinct from the receiving mailbox is the
+   usual convention.
 
 ## 5. Redeploy
 
@@ -148,6 +147,27 @@ deploy to pick them up: Deployments → the latest one → Redeploy.
   answering moves a conversation to In progress by itself.
 
 ## Checking it works
+
+**Start with `https://your-site.vercel.app/api/health`.** It reports which
+variables the running function can actually see, without printing any of their
+values:
+
+```json
+{
+  "ready": true,
+  "missing": [],
+  "supabaseUrl": "https://lmgbnfovgqgatntthufg.supabase.co",
+  "supabaseAnonKey": true,
+  "supabaseServiceRoleKey": true,
+  "resendApiKey": true,
+  "formTo": "Contact@axisconstructionltd.com",
+  "formFrom": "Axis Website <website@axisconstructionltd.com>"
+}
+```
+
+`ready: false` lists exactly what is missing, and it warns if `FORM_FROM` is at
+a different domain from `FORM_TO`, which is the usual reason mail reports as
+sent and never arrives. Then:
 
 1. Submit the contact form on the live site.
 2. It should appear in `/admin` within a second or two.
