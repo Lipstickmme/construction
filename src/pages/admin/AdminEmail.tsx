@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { requireSupabase } from '@/lib/supabase'
+import { site } from '@/data/site'
 
 type Thread = {
   id: string
@@ -183,8 +184,14 @@ export default function AdminEmail() {
         <ul className="self-start border-t border-hairline bg-white">
           {threads.length === 0 && (
             <li className="p-6 text-sm leading-relaxed text-body">
-              Nothing yet. Mail sent to the company address appears here once
-              the Cloudflare route is live.
+              Nothing yet. Mail sent to{' '}
+              <span className="text-ink">{site.contact.email}</span> appears
+              here within a few seconds of arriving.
+              <span className="mt-3 block text-xs">
+                Sent a test and nothing showed? Resend → Webhooks → your
+                endpoint has a delivery log with the exact response this site
+                gave.
+              </span>
             </li>
           )}
 
