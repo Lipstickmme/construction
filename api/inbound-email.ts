@@ -1,73 +1,108 @@
 import {
-  INBOUND_SECRET,
+  FORWARD_TO,
+  MAILBOX,
+  RESEND_API_KEY,
+  RESEND_WEBHOOK_SECRET,
   adminClient,
+  escapeHtml,
   json,
   normaliseSubject,
   parseAddress,
-  secretsMatch,
+  sendEmail,
   text,
+  verifyResendWebhook,
 } from './_shared'
 
 /**
- * Receives mail forwarded by the Cloudflare Email Worker.
+ * Receives mail through Resend Inbound.
  *
- * The worker has already parsed the MIME, so this route only has to file the
- * message: find or open the thread, then insert. It is authenticated with a
- * shared secret rather than left open, since anything reaching it appears in
- * the dashboard as genuine correspondence.
- *
- * Delivery is retried on failure, so inserts are made idempotent by the
- * unique index on `message_id`.
+ * Resend holds the MX records for the domain, accepts the message, and posts
+ * an `email.received` webhook here. That payload is metadata only — sender,
+ * recipient, subject, attachment list — so the body is fetched separately
+ * from `GET /emails/receiving/{id}`. Resend keeps its own copy either way, so
+ * a failure in this route loses nothing.
  */
 export const config = { runtime: 'edge' }
 
-type Payload = {
-  from?: string
-  fromName?: string
-  to?: string
-  subject?: string
-  text?: string
-  html?: string
-  messageId?: string
-  inReplyTo?: string
-  hasAttachments?: boolean
+type ReceivedEmail = {
+  id: string
+  from: string
+  to: string[]
+  subject: string
+  html: string | null
+  text: string | null
+  headers: Record<string, string> | null
+  message_id: string
+}
+
+/** Header lookup that does not care how the sending client cased the name. */
+function header(headers: Record<string, string> | null, name: string): string {
+  if (!headers) return ''
+  const wanted = name.toLowerCase()
+  for (const [key, value] of Object.entries(headers)) {
+    if (key.toLowerCase() === wanted) return value
+  }
+  return ''
 }
 
 export default async function handler(request: Request): Promise<Response> {
   if (request.method !== 'POST') return json(405, { error: 'Method not allowed' })
 
-  if (!INBOUND_SECRET) {
-    console.error('INBOUND_SECRET is not set; refusing inbound mail')
+  if (!RESEND_WEBHOOK_SECRET) {
+    console.error('RESEND_WEBHOOK_SECRET is not set; refusing inbound mail')
     return json(503, { error: 'Inbound mail is not configured.' })
   }
 
-  const presented = request.headers.get('x-axis-inbound-secret') ?? ''
-  if (!secretsMatch(presented, INBOUND_SECRET)) {
+  // Read the body as raw text: the signature covers the exact bytes sent, so
+  // parsing first and re-serialising would break verification.
+  const rawBody = await request.text()
+
+  if (!(await verifyResendWebhook(rawBody, request.headers))) {
     return json(401, { error: 'Unauthorised' })
   }
 
   try {
-    const payload = (await request.json()) as Payload
-    const from = parseAddress(text(payload.from, 320))
+    const event = JSON.parse(rawBody) as {
+      type?: string
+      data?: { email_id?: string }
+    }
 
-    if (!from.email) return json(400, { error: 'Missing sender' })
+    // Resend can be configured to send other events to the same endpoint.
+    if (event.type !== 'email.received') {
+      return json(200, { ok: true, ignored: event.type ?? 'unknown' })
+    }
 
-    const subject = text(payload.subject, 300) || '(no subject)'
-    const matchSubject = normaliseSubject(subject)
-    const messageId = text(payload.messageId, 300) || null
-    const inReplyTo = text(payload.inReplyTo, 300) || null
+    const emailId = text(event.data?.email_id, 64)
+    if (!emailId) return json(400, { error: 'Missing email_id' })
+
     const db = adminClient()
 
-    // Already filed? Delivery retries must not duplicate a conversation.
-    if (messageId) {
-      const { data: seen } = await db
-        .from('email_messages')
-        .select('id')
-        .eq('message_id', messageId)
-        .maybeSingle()
+    // Retries deliver the same id; filing it twice would duplicate the thread.
+    const { data: seen } = await db
+      .from('email_messages')
+      .select('id')
+      .eq('message_id', `resend-in:${emailId}`)
+      .maybeSingle()
 
-      if (seen) return json(200, { ok: true, duplicate: true })
+    if (seen) return json(200, { ok: true, duplicate: true })
+
+    const response = await fetch(
+      `https://api.resend.com/emails/receiving/${emailId}`,
+      { headers: { Authorization: `Bearer ${RESEND_API_KEY}` } },
+    )
+
+    if (!response.ok) {
+      console.error('Could not fetch received email:', await response.text())
+      return json(502, { error: 'Could not retrieve the message body.' })
     }
+
+    const email = (await response.json()) as ReceivedEmail
+    const from = parseAddress(email.from)
+    if (!from.email) return json(400, { error: 'Missing sender' })
+
+    const subject = text(email.subject, 300) || '(no subject)'
+    const matchSubject = normaliseSubject(subject)
+    const inReplyTo = text(header(email.headers, 'in-reply-to'), 300) || null
 
     // Prefer the header trail: if this answers something we sent, it belongs
     // on that thread whatever the subject has been rewritten to.
@@ -77,7 +112,7 @@ export default async function handler(request: Request): Promise<Response> {
       const { data: parent } = await db
         .from('email_messages')
         .select('thread_id')
-        .eq('message_id', inReplyTo)
+        .eq('in_reply_to', inReplyTo)
         .maybeSingle()
 
       if (parent) threadId = parent.thread_id
@@ -116,18 +151,35 @@ export default async function handler(request: Request): Promise<Response> {
       direction: 'inbound',
       from_email: from.email,
       from_name: from.name || null,
-      to_email: text(payload.to, 320),
+      to_email: (email.to ?? []).join(', ').slice(0, 320),
       subject,
-      body_text: text(payload.text, 100000) || null,
-      body_html: text(payload.html, 200000) || null,
-      message_id: messageId,
-      in_reply_to: inReplyTo,
-      has_attachments: Boolean(payload.hasAttachments),
+      body_text: text(email.text, 100000) || null,
+      body_html: text(email.html, 200000) || null,
+      // Resend's own id, so a redelivery is recognised. The RFC Message-ID is
+      // kept separately for threading replies in the recipient's client.
+      message_id: `resend-in:${emailId}`,
+      in_reply_to: text(email.message_id, 300) || null,
     })
 
-    // A concurrent delivery of the same message loses the race on the unique
-    // index; that is the desired outcome, not an error worth reporting.
     if (messageError && messageError.code !== '23505') throw messageError
+
+    // Safety copy to a real mailbox, so the dashboard is never the only place
+    // a message exists. Failure here must not fail the webhook.
+    if (FORWARD_TO) {
+      const body = email.text?.trim() || 'See the dashboard for the full message.'
+      sendEmail({
+        to: FORWARD_TO,
+        from: MAILBOX,
+        subject: `Fwd: ${subject}`,
+        html: `<p style="color:#5c6467;font:400 13px/1.6 system-ui">From ${escapeHtml(
+          email.from,
+        )}</p><div style="color:#0c0d0e;font:400 15px/1.6 system-ui">${escapeHtml(
+          body,
+        ).replace(/\n/g, '<br>')}</div>`,
+        text: `From ${email.from}\n\n${body}`,
+        replyTo: from.email,
+      }).catch((error) => console.error('forward failed:', error))
+    }
 
     return json(200, { ok: true, thread_id: threadId })
   } catch (error) {

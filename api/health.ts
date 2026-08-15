@@ -40,7 +40,8 @@ export default function handler(): Response {
   ])
 
   const resendKey = process.env.RESEND_API_KEY ?? ''
-  const inboundSecret = process.env.INBOUND_SECRET ?? ''
+  const webhookSecret = process.env.RESEND_WEBHOOK_SECRET ?? ''
+  const forwardTo = process.env.FORWARD_TO ?? ''
   const mailbox =
     process.env.MAILBOX_ADDRESS ??
     'Axis Construction <Contact@axisconstructionltd.com>'
@@ -57,7 +58,7 @@ export default function handler(): Response {
 
   // Inbound mail is optional: the site works without it, so a missing secret
   // is reported rather than counted as not ready.
-  const inboundReady = Boolean(inboundSecret)
+  const inboundReady = Boolean(webhookSecret)
 
   // The from address has to be at a domain verified in Resend. Catching the
   // obvious mismatch here saves a round of "it says sent but nothing arrives".
@@ -74,6 +75,7 @@ export default function handler(): Response {
         supabaseServiceRoleKey: Boolean(serviceRoleKey),
         resendApiKey: Boolean(resendKey),
         inboundEmail: inboundReady ? 'configured' : 'not configured (optional)',
+        inboundForwardCopyTo: forwardTo || null,
         mailbox,
         formTo,
         formFrom,

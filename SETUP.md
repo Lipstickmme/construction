@@ -25,13 +25,13 @@ through Vercel"; the alternative is more code doing a worse job.
 
 ## Before you start: one thing about Resend
 
-**Resend sends email. It does not receive it.**
+Sending and receiving are two separate products in Resend, set up separately.
+Sending is covered below. Receiving — so that `Contact@axisconstructionltd.com`
+actually collects the notifications rather than sending them into the void — is
+Resend Inbound, covered in [EMAIL.md](EMAIL.md).
 
-For `Contact@axisconstructionltd.com` to actually receive the notifications,
-that address needs a real mailbox somewhere — Google Workspace, Microsoft 365,
-Zoho Mail (free for one domain), or whatever your registrar bundles. If that
-mailbox does not exist yet, set it up first or point `FORM_TO` at an address
-that does. Otherwise Resend reports the message as sent and it goes nowhere.
+Until receiving is set up, point `FORM_TO` at an inbox that already exists, or
+the notifications will report as sent and go nowhere.
 
 ---
 
@@ -135,10 +135,9 @@ Open the Supabase project from the Vercel integration panel.
    Using a send-only from-address distinct from the receiving mailbox is the
    usual convention.
 
-4. **Receiving mail** is a separate job — Resend only sends. See
-   [EMAIL.md](EMAIL.md) for the Cloudflare Email Routing setup that gives
-   `Contact@axisconstructionltd.com` a real inbox and feeds the dashboard's
-   Email tab.
+4. **Receiving mail** is a separate product, Resend Inbound. See
+   [EMAIL.md](EMAIL.md) — it takes the MX records for the domain and posts a
+   webhook, which fills the dashboard's Email tab. No DNS migration needed.
 
 ## 5. Redeploy
 

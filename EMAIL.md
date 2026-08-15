@@ -1,168 +1,97 @@
 # Email setup
 
-How `Contact@axisconstructionltd.com` sends and receives, and how it reaches
+How `Contact@axisconstructionltd.com` sends and receives, and how both reach
 the dashboard.
 
-## What each piece actually does
+**No DNS migration is needed.** Everything runs on Resend, with DNS staying at
+Namecheap.
 
-**Resend only sends.** It is a delivery API: your server hands it a message and
-it delivers. There is no inbox, no webmail, no login for reading mail. Verifying
-the domain proved you own it so mail *from* it is not treated as spam — it did
-not create any addresses. `website@axisconstructionltd.com` in `FORM_FROM` is a
-label on outgoing mail, not a mailbox; nobody can send to it.
+## What each piece does
 
-**Cloudflare Email Routing receives.** It owns the MX records for the domain and
-decides what happens to each incoming message. It is free.
-
-Put together:
+Resend used to be send-only, which is why an earlier version of this guide
+routed incoming mail through Cloudflare. Resend now has an **Inbound** product:
+it takes the MX records for the domain, accepts mail, and posts a webhook. That
+removes the whole Cloudflare layer.
 
 ```
 someone emails Contact@axisconstructionltd.com
                     │
-       Cloudflare Email Routing (MX)
+        Resend Inbound (MX on the root domain)
                     │
-          Email Worker  ──────────►  forwards a copy to your normal inbox
-                    │                (so mail is never lost)
-                    └──────────────►  POST /api/inbound-email
-                                             │
-                                     Supabase: email_threads / email_messages
-                                             │
-                                       /admin → Email tab
-                                             │
-                          reply ──► POST /api/send-email ──► Resend ──► them
+        email.received webhook ──►  POST /api/inbound-email
+                                          │
+                                    fetches the body from
+                                    GET /emails/receiving/{id}
+                                          │
+                              ┌───────────┴───────────┐
+                              │                       │
+                   Supabase email_threads    forwarded copy to
+                   / email_messages          your normal inbox
+                              │
+                        /admin → Email tab
+                              │
+             reply ──► POST /api/send-email ──► Resend ──► them
 ```
 
-The forward happens **first and independently**. If the site, the database or
-the worker is having a bad day, the message still lands in a real inbox. The
-dashboard is a convenience on top, never the only copy.
+Three copies of every message exist: Resend's own storage, your forwarded
+inbox, and the dashboard. Losing one loses nothing.
+
+The webhook carries **metadata only** — sender, recipient, subject, attachment
+list. The body is fetched separately, which is deliberate on Resend's part: it
+keeps large attachments out of a serverless request body.
 
 ---
 
-## 1. Move DNS from Namecheap to Cloudflare
+## 1. Check the MX record
 
-Cloudflare Email Routing requires Cloudflare to be the domain's DNS host —
-it has to own the MX records to intercept mail. On the free plan that means
-delegating the nameservers; the partial "CNAME setup" that avoids this is a
-Business-plan feature.
+You already have this. In Namecheap → Advanced DNS → Mail Settings you should
+see, on the **root** (`@`):
 
-This does not move the site. Vercel still hosts it and Namecheap still owns the
-registration; only the DNS answers move.
-
-**Take stock first.** In Namecheap → Domain List → Manage → Advanced DNS,
-screenshot or copy out every record. You should have at least:
-
-| Purpose | Typical record |
-| --- | --- |
-| Resend DKIM | `TXT` on `resend._domainkey` (long `p=` value) |
-| Resend SPF | `TXT` on `send` — `v=spf1 include:amazonses.com ~all` |
-| Resend return path | `MX` on `send` → `feedback-smtp.<region>.amazonses.com` |
-| Site | `A` on `@` → `76.76.21.21`, `CNAME` on `www` → `cname.vercel-dns.com` |
-
-Getting this list wrong is the only way this step bites: anything you fail to
-recreate stops working when the nameservers change.
-
-**Then:**
-
-1. Create a free account at [dash.cloudflare.com](https://dash.cloudflare.com)
-   if you do not have one. Free plan is enough — this is DNS and email routing,
-   not CDN.
-
-2. **Add a site** → `axisconstructionltd.com` → **Free** plan. Cloudflare scans
-   Namecheap and imports what it finds.
-
-3. **Check the import against your list.** The scan is good but not perfect,
-   and long DKIM `TXT` values are the ones that most often come across
-   truncated. Add anything missing by hand before going further.
-
-4. **Set the site records to DNS only.** Click the orange cloud next to the `@`
-   and `www` records so it turns grey. Proxying Vercel through Cloudflare
-   causes certificate and redirect problems; Vercel wants plain DNS.
-
-5. Cloudflare shows two nameservers, e.g. `dana.ns.cloudflare.com`. In Namecheap
-   → Domain List → Manage → **Nameservers** → change *Namecheap BasicDNS* to
-   **Custom DNS**, paste both, save.
-
-6. Wait for Cloudflare to report the domain **Active**. Usually minutes,
-   occasionally up to 24 hours.
-
-7. **Confirm nothing broke** before continuing: load the site, and check Resend
-   → Domains still reads **Verified**. If Resend has gone amber, a DKIM or SPF
-   record did not survive the move — fix it in Cloudflare DNS.
-
-## 2. Turn on Email Routing
-
-1. Cloudflare → your domain → **Email** → **Email Routing** → Enable. It offers
-   to add the MX and SPF records; accept.
-
-   ⚠️ **Check the Resend MX first.** Resend's return-path MX belongs on the
-   `send` subdomain, where it coexists with Email Routing on the root. If it
-   ended up on the **root** (`@`), the two conflict and receiving will break —
-   move it to `send` before enabling.
-
-2. **Destination addresses** → add the personal or work inbox that should get
-   the forwarded copy (a Gmail address is fine). Cloudflare emails it a
-   verification link; click it.
-
-### If you would rather not move nameservers
-
-Email Routing is not the only way to feed the dashboard. Mailgun and Postmark
-both do inbound routing by MX record, so they work with DNS left at Namecheap,
-and both post to a webhook. `/api/inbound-email` takes a simple JSON body, so
-adapting it is a small change — ask and I will do it. The trade-off is another
-account and another service to keep an eye on, against a one-off nameserver
-change.
-
-## 3. Deploy the Email Worker
-
-```bash
-cd cloudflare/email-worker
-npm install
-npx wrangler login
+```
+MX   @   inbound-smtp.eu-west-1.amazonses.com   priority 9
 ```
 
-Edit `wrangler.toml`:
+That is Resend Inbound. The other one, `MX send → feedback-smtp…`, is the
+return path for *sending* and is unrelated.
 
-| Variable | Set it to |
+⚠️ The inbound MX must have the **lowest priority number** of any MX on the
+root, or mail routes elsewhere. With only one root MX, nothing to do.
+
+## 2. Turn on receiving in Resend
+
+Resend → **Domains** → `axisconstructionltd.com`. The domain needs *Receiving*
+enabled as well as sending; if the panel offers an MX record you already added,
+it should show as verified.
+
+## 3. Create the webhook
+
+Resend → **Webhooks** → Add:
+
+| Field | Value |
 | --- | --- |
-| `FORWARD_TO` | the destination address you verified above |
-| `WEBHOOK_URL` | `https://your-live-domain/api/inbound-email` |
+| Endpoint URL | `https://axisconstructionltd.com/api/inbound-email` |
+| Event | `email.received` |
 
-Then set the shared secret and deploy. Generate the secret with
-`openssl rand -hex 32`, or any long random string:
+Copy the **signing secret** it shows — it starts `whsec_`. That is the only
+time it is displayed.
 
-```bash
-npx wrangler secret put INBOUND_SECRET     # paste the secret
-npx wrangler deploy
-```
-
-Add **the same value** in Vercel → Settings → Environment Variables as
-`INBOUND_SECRET`, then redeploy. The endpoint refuses everything without it —
-anything reaching it shows up in the dashboard as genuine correspondence, so it
-is not left open.
-
-## 4. Point the address at the worker
-
-Cloudflare → Email → Email Routing → **Routing rules** → Create:
-
-- Custom address: `contact@axisconstructionltd.com`
-- Action: **Send to a Worker** → `axis-inbound-email`
-
-A catch-all rule to the same worker also works if you want every address on the
-domain in one place.
-
-## 5. Tell the site which address it speaks as
+## 4. Environment variables
 
 Vercel → Settings → Environment Variables:
 
 | Name | Value |
 | --- | --- |
+| `RESEND_WEBHOOK_SECRET` | the `whsec_…` value from step 3 |
 | `MAILBOX_ADDRESS` | `Axis Construction <Contact@axisconstructionltd.com>` |
-| `INBOUND_SECRET` | the value from step 3 |
+| `FORWARD_TO` | your normal inbox, e.g. a Gmail address (optional but recommended) |
 
-`MAILBOX_ADDRESS` is what dashboard replies are sent as, and it must be at the
-domain verified in Resend. Redeploy afterwards.
+`MAILBOX_ADDRESS` is what dashboard replies are sent as, and must be at the
+domain verified in Resend. `FORWARD_TO` gets a copy of everything that arrives,
+so the dashboard is never the only place a message exists.
 
-## 6. Run the migration
+Redeploy afterwards.
+
+## 5. Run the migration
 
 Supabase SQL Editor → paste `supabase/migrations/0002_email.sql` → Run. It
 creates `email_threads` and `email_messages`, admin-only row level security, and
@@ -173,36 +102,48 @@ a reload. Safe to run more than once.
 
 ## Checking it works
 
-`https://your-site/api/health` should now report:
+`https://your-site/api/health` should report:
 
 ```json
 "inboundEmail": "configured",
+"inboundForwardCopyTo": "you@gmail.com",
 "mailbox": "Axis Construction <Contact@axisconstructionltd.com>"
 ```
 
 Then send a real message to `Contact@axisconstructionltd.com` from any account:
 
-1. A copy should arrive at your `FORWARD_TO` inbox within seconds.
-2. It should appear in `/admin` → **Email**, marked unread.
-3. Reply from the dashboard. It arrives from `Contact@axisconstructionltd.com`,
-   threaded under the original in their mail client.
-4. Reply to *that*, and it should land back on the same conversation rather
-   than opening a second one.
+1. It appears in `/admin` → **Email**, marked unread.
+2. A copy arrives at your `FORWARD_TO` inbox.
+3. Reply from the dashboard. It arrives from
+   `Contact@axisconstructionltd.com`, threaded under the original.
+4. Reply to *that*, and it lands back on the same conversation rather than
+   opening a second one.
 
-If the forward arrives but the dashboard stays empty, the worker reached
-Cloudflare but not the site. `npx wrangler tail` in `cloudflare/email-worker`
-shows the response the webhook gave — a 401 there means `INBOUND_SECRET` does
-not match between Cloudflare and Vercel.
+**If nothing arrives at all**, the MX is not routing — check it in Namecheap
+and confirm Receiving is enabled on the domain in Resend.
+
+**If Resend shows the message but the dashboard stays empty**, the webhook is
+failing. Resend → Webhooks → the endpoint → its delivery log shows the response
+the site gave:
+
+| Response | Cause |
+| --- | --- |
+| `401 Unauthorised` | `RESEND_WEBHOOK_SECRET` does not match, or is unset in Vercel |
+| `502` | the body fetch failed — usually `RESEND_API_KEY` lacks read access |
+| `503` | `RESEND_WEBHOOK_SECRET` is not set at all |
+| timeout | the deploy is cold or the function errored; check Vercel logs |
+
+Signature failures are deliberately indistinguishable from the outside, so the
+delivery log is where to look rather than the response body.
 
 ---
 
-## Also replying from Gmail
+## Also replying from your own mail client
 
-If you would rather answer from your normal mail client and still have it come
-from the company address, Resend provides SMTP credentials (`smtp.resend.com`,
-username `resend`, password = your API key). Gmail → Settings → Accounts →
-**Send mail as** → add `Contact@axisconstructionltd.com` using those. Replies
-then leave through the domain you have already verified.
+If you would rather answer from Gmail and still have it come from the company
+address, Resend provides SMTP credentials (`smtp.resend.com`, username
+`resend`, password = your API key). Gmail → Settings → Accounts → **Send mail
+as** → add `Contact@axisconstructionltd.com` using those.
 
 Those replies will not appear in the dashboard — it only records what it sends
 itself. Pick one habit or accept a partial record.
@@ -211,12 +152,14 @@ itself. Pick one habit or accept a partial record.
 
 ## Deliberate limits
 
-- **Attachments are not stored.** A message carrying them is flagged in the
-  dashboard, and the full copy with the files is in your forwarded inbox.
-  Storing them would mean Supabase Storage and a virus-scanning question.
+- **Attachments are not stored.** Resend keeps them and exposes them through
+  its attachments API; the dashboard flags that a message has them, and the
+  forwarded copy is in your inbox. Pulling them into Supabase Storage is a
+  separate job, with a virus-scanning question attached.
 - **Inbound HTML is rendered as plain text.** Displaying a stranger's markup
   inside an authenticated dashboard is how you get an XSS, so the text part is
   shown and the HTML kept in the database unrendered.
-- **No spam filtering of our own.** Cloudflare drops the obvious cases; anything
-  it passes reaches the dashboard. If it becomes a problem, filter in the worker
-  before calling the webhook.
+- **Webhooks older than five minutes are rejected**, so a captured request
+  cannot be replayed later.
+- **No spam filtering of our own.** Anything Resend accepts reaches the
+  dashboard.

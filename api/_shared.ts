@@ -38,7 +38,10 @@ export const FORM_FROM =
 /** The address staff correspond from. Replies are sent as this. */
 export const MAILBOX =
   process.env.MAILBOX_ADDRESS ?? 'Axis Construction <Contact@axisconstructionltd.com>'
-export const INBOUND_SECRET = process.env.INBOUND_SECRET ?? ''
+/** Svix signing secret from Resend → Webhooks. Starts `whsec_`. */
+export const RESEND_WEBHOOK_SECRET = process.env.RESEND_WEBHOOK_SECRET ?? ''
+/** Optional: every inbound message is also forwarded here as a safety copy. */
+export const FORWARD_TO = process.env.FORWARD_TO ?? ''
 
 /** Trim, cap and reject anything that is not a usable string. */
 export function text(value: unknown, max: number): string {
@@ -83,6 +86,51 @@ export function secretsMatch(a: string, b: string): boolean {
     diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
   }
   return diff === 0
+}
+
+/**
+ * Verifies a Resend webhook, which is delivered through Svix.
+ *
+ * The signature covers `id.timestamp.rawBody`, so the body must be the exact
+ * bytes received — parsing to JSON first and re-serialising changes key order
+ * and whitespace and the HMAC no longer matches.
+ */
+export async function verifyResendWebhook(
+  rawBody: string,
+  headers: Headers,
+): Promise<boolean> {
+  if (!RESEND_WEBHOOK_SECRET) return false
+
+  const id = headers.get('svix-id')
+  const timestamp = headers.get('svix-timestamp')
+  const signatures = headers.get('svix-signature')
+  if (!id || !timestamp || !signatures) return false
+
+  // Reject anything old enough to be a replay of a captured request.
+  const age = Math.abs(Date.now() / 1000 - Number(timestamp))
+  if (!Number.isFinite(age) || age > 300) return false
+
+  const secret = RESEND_WEBHOOK_SECRET.replace(/^whsec_/, '')
+  const key = await crypto.subtle.importKey(
+    'raw',
+    Uint8Array.from(atob(secret), (character) => character.charCodeAt(0)),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  )
+
+  const signed = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    new TextEncoder().encode(`${id}.${timestamp}.${rawBody}`),
+  )
+  const expected = btoa(String.fromCharCode(...new Uint8Array(signed)))
+
+  // The header carries a space-delimited list of `v1,<base64>` entries, so a
+  // secret can be rotated without dropping deliveries mid-flight.
+  return signatures
+    .split(' ')
+    .some((entry) => secretsMatch(entry.split(',')[1] ?? '', expected))
 }
 
 /**
