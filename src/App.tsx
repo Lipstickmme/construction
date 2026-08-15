@@ -14,6 +14,7 @@ import Projects from '@/pages/Projects'
 // split out of the bundle every visitor downloads.
 const AdminLayout = lazy(() => import('@/pages/admin/AdminLayout'))
 const AdminChat = lazy(() => import('@/pages/admin/AdminChat'))
+const AdminEmail = lazy(() => import('@/pages/admin/AdminEmail'))
 const AdminEnquiries = lazy(() =>
   import('@/pages/admin/AdminInbox').then((module) => ({
     default: module.AdminEnquiries,
@@ -58,6 +59,7 @@ export default function App() {
         <Route index element={<AdminEnquiries />} />
         <Route path="applications" element={<AdminApplications />} />
         <Route path="chat" element={<AdminChat />} />
+        <Route path="email" element={<AdminEmail />} />
       </Route>
     </Routes>
   )

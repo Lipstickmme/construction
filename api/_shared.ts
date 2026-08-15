@@ -1,0 +1,198 @@
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+
+// Files under api/ whose name starts with an underscore are not routed by
+// Vercel, so this is shared code rather than an endpoint.
+
+/** First non-empty environment variable from a list of accepted names. */
+export function env(names: string[]): string {
+  for (const name of names) {
+    const value = process.env[name]
+    if (value) return value
+  }
+  return ''
+}
+
+export const SUPABASE_URL = env([
+  'SUPABASE_URL',
+  'VITE_SUPABASE_URL',
+  'NEXT_PUBLIC_SUPABASE_URL',
+])
+
+export const SUPABASE_ANON_KEY = env([
+  'SUPABASE_ANON_KEY',
+  'VITE_SUPABASE_ANON_KEY',
+  'NEXT_PUBLIC_SUPABASE_ANON_KEY',
+  'SUPABASE_PUBLISHABLE_KEY',
+  'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
+])
+
+export const SERVICE_ROLE_KEY = env([
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'SUPABASE_SECRET_KEY',
+])
+
+export const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
+export const FORM_TO = process.env.FORM_TO ?? 'Contact@axisconstructionltd.com'
+export const FORM_FROM =
+  process.env.FORM_FROM ?? 'Axis Website <website@axisconstructionltd.com>'
+/** The address staff correspond from. Replies are sent as this. */
+export const MAILBOX =
+  process.env.MAILBOX_ADDRESS ?? 'Axis Construction <Contact@axisconstructionltd.com>'
+export const INBOUND_SECRET = process.env.INBOUND_SECRET ?? ''
+
+/** Trim, cap and reject anything that is not a usable string. */
+export function text(value: unknown, max: number): string {
+  return typeof value === 'string' ? value.trim().slice(0, max) : ''
+}
+
+export function isEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254
+}
+
+export function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+export function json(status: number, payload: unknown): Response {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+  })
+}
+
+/** Service-role client. Bypasses row level security — server side only. */
+export function adminClient(): SupabaseClient {
+  return createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+    auth: { persistSession: false },
+  })
+}
+
+/**
+ * Compares two secrets without leaking their difference through timing.
+ * `crypto.subtle.timingSafeEqual` is not available on the edge runtime, so
+ * this walks both strings in full regardless of where they diverge.
+ */
+export function secretsMatch(a: string, b: string): boolean {
+  if (!a || !b || a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i += 1) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  }
+  return diff === 0
+}
+
+/**
+ * Resolves the caller to a signed-in admin, or null.
+ *
+ * The bearer token is validated by Supabase Auth rather than decoded here, so
+ * a forged or expired one fails, and admin membership is then read with the
+ * service role. Both checks are server side; nothing trusts the browser.
+ */
+export async function requireAdmin(request: Request): Promise<string | null> {
+  const authorization = request.headers.get('authorization') ?? ''
+  if (!authorization.toLowerCase().startsWith('bearer ')) return null
+
+  const asCaller = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: false },
+    global: { headers: { Authorization: authorization } },
+  })
+
+  const { data, error } = await asCaller.auth.getUser()
+  if (error || !data.user || data.user.is_anonymous) return null
+
+  const { data: admin } = await adminClient()
+    .from('admins')
+    .select('user_id')
+    .eq('user_id', data.user.id)
+    .maybeSingle()
+
+  return admin ? data.user.id : null
+}
+
+type SendOptions = {
+  to: string
+  subject: string
+  html: string
+  text?: string
+  from?: string
+  replyTo?: string
+  /** Message-ID of the message being answered, so clients thread the reply. */
+  inReplyTo?: string
+}
+
+/**
+ * Hands a message to Resend. Returns its id, or null if it was not accepted —
+ * callers decide whether that is fatal. For notifications it is not: the
+ * record is already stored and the dashboard is the source of truth.
+ */
+export async function sendEmail(options: SendOptions): Promise<string | null> {
+  if (!RESEND_API_KEY) {
+    console.warn('RESEND_API_KEY is not set; skipping send')
+    return null
+  }
+
+  const headers: Record<string, string> = {}
+  if (options.inReplyTo) {
+    headers['In-Reply-To'] = options.inReplyTo
+    headers['References'] = options.inReplyTo
+  }
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: options.from ?? FORM_FROM,
+      to: [options.to],
+      subject: options.subject,
+      html: options.html,
+      ...(options.text ? { text: options.text } : {}),
+      ...(options.replyTo ? { reply_to: options.replyTo } : {}),
+      ...(Object.keys(headers).length ? { headers } : {}),
+    }),
+  })
+
+  if (!response.ok) {
+    console.error('Resend rejected the message:', await response.text())
+    return null
+  }
+
+  const body = (await response.json()) as { id?: string }
+  return body.id ?? null
+}
+
+/** Renders a label/value table, skipping anything empty. */
+export function emailBody(rows: Array<[string, string]>): string {
+  const cells = rows
+    .filter(([, value]) => value)
+    .map(
+      ([label, value]) =>
+        `<tr>
+           <td style="padding:6px 16px 6px 0;color:#5c6467;font:500 12px/1.5 system-ui;text-transform:uppercase;letter-spacing:.08em;vertical-align:top;white-space:nowrap">${escapeHtml(label)}</td>
+           <td style="padding:6px 0;color:#0c0d0e;font:400 15px/1.6 system-ui">${escapeHtml(value).replace(/\n/g, '<br>')}</td>
+         </tr>`,
+    )
+    .join('')
+
+  return `<table style="border-collapse:collapse">${cells}</table>`
+}
+
+/** "Re: Re: Fwd: Site visit" → "Site visit", for matching replies to threads. */
+export function normaliseSubject(subject: string): string {
+  return subject.replace(/^((re|fw|fwd)\s*:\s*)+/i, '').trim() || '(no subject)'
+}
+
+/** Splits `Jane Roberts <jane@example.com>` into its parts. */
+export function parseAddress(value: string): { name: string; email: string } {
+  const match = value.match(/^\s*"?([^"<]*)"?\s*<([^>]+)>\s*$/)
+  if (match) {
+    return { name: match[1].trim(), email: match[2].trim().toLowerCase() }
+  }
+  return { name: '', email: value.trim().toLowerCase() }
+}

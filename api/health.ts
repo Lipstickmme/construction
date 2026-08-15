@@ -40,6 +40,10 @@ export default function handler(): Response {
   ])
 
   const resendKey = process.env.RESEND_API_KEY ?? ''
+  const inboundSecret = process.env.INBOUND_SECRET ?? ''
+  const mailbox =
+    process.env.MAILBOX_ADDRESS ??
+    'Axis Construction <Contact@axisconstructionltd.com>'
   const formTo = process.env.FORM_TO ?? 'Contact@axisconstructionltd.com'
   const formFrom =
     process.env.FORM_FROM ?? 'Axis Website <website@axisconstructionltd.com>'
@@ -50,6 +54,10 @@ export default function handler(): Response {
     !serviceRoleKey && 'SUPABASE_SERVICE_ROLE_KEY',
     !resendKey && 'RESEND_API_KEY',
   ].filter(Boolean)
+
+  // Inbound mail is optional: the site works without it, so a missing secret
+  // is reported rather than counted as not ready.
+  const inboundReady = Boolean(inboundSecret)
 
   // The from address has to be at a domain verified in Resend. Catching the
   // obvious mismatch here saves a round of "it says sent but nothing arrives".
@@ -65,6 +73,8 @@ export default function handler(): Response {
         supabaseAnonKey: Boolean(anonKey),
         supabaseServiceRoleKey: Boolean(serviceRoleKey),
         resendApiKey: Boolean(resendKey),
+        inboundEmail: inboundReady ? 'configured' : 'not configured (optional)',
+        mailbox,
         formTo,
         formFrom,
         note:

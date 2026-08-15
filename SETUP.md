@@ -135,6 +135,11 @@ Open the Supabase project from the Vercel integration panel.
    Using a send-only from-address distinct from the receiving mailbox is the
    usual convention.
 
+4. **Receiving mail** is a separate job — Resend only sends. See
+   [EMAIL.md](EMAIL.md) for the Cloudflare Email Routing setup that gives
+   `Contact@axisconstructionltd.com` a real inbox and feeds the dashboard's
+   Email tab.
+
 ## 5. Redeploy
 
 Vite bakes `VITE_` variables in at build time, so the site needs one more

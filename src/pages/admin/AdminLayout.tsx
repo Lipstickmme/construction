@@ -8,6 +8,7 @@ const tabs = [
   { to: '/admin', label: 'Enquiries', end: true },
   { to: '/admin/applications', label: 'Applications', end: false },
   { to: '/admin/chat', label: 'Chat', end: false },
+  { to: '/admin/email', label: 'Email', end: false },
 ]
 
 /** Auth gate and chrome for everything under `/admin`. */
