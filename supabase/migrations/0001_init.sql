@@ -1,5 +1,8 @@
 -- Axis Construction — backend schema.
 --
+-- Safe to run more than once: every statement is guarded, so re-running the
+-- file after an edit updates what changed rather than erroring half way.
+--
 -- Four tables: two form inboxes (enquiries, applications) and a two-table
 -- live chat. Everything is behind row level security; the only writes the
 -- browser can make directly are a visitor creating their own chat session
@@ -31,6 +34,7 @@ as $$
   select exists (select 1 from public.admins where user_id = auth.uid());
 $$;
 
+drop policy if exists "admins read own row" on public.admins;
 create policy "admins read own row"
   on public.admins for select
   to authenticated
@@ -72,9 +76,11 @@ alter table public.enquiries enable row level security;
 
 -- No anon policy at all: inserts arrive via the edge function's service role,
 -- which bypasses RLS. Only signed-in admins can read or triage.
+drop policy if exists "admins read enquiries" on public.enquiries;
 create policy "admins read enquiries"
   on public.enquiries for select to authenticated using (public.is_admin());
 
+drop policy if exists "admins update enquiries" on public.enquiries;
 create policy "admins update enquiries"
   on public.enquiries for update to authenticated
   using (public.is_admin()) with check (public.is_admin());
@@ -99,9 +105,11 @@ create index if not exists applications_created_at_idx
 
 alter table public.applications enable row level security;
 
+drop policy if exists "admins read applications" on public.applications;
 create policy "admins read applications"
   on public.applications for select to authenticated using (public.is_admin());
 
+drop policy if exists "admins update applications" on public.applications;
 create policy "admins update applications"
   on public.applications for update to authenticated
   using (public.is_admin()) with check (public.is_admin());
@@ -140,22 +148,27 @@ create index if not exists chat_messages_session_idx
 alter table public.chat_sessions enable row level security;
 alter table public.chat_messages enable row level security;
 
+drop policy if exists "visitor creates own session" on public.chat_sessions;
 create policy "visitor creates own session"
   on public.chat_sessions for insert to authenticated
   with check (visitor_id = auth.uid());
 
+drop policy if exists "visitor or admin reads session" on public.chat_sessions;
 create policy "visitor or admin reads session"
   on public.chat_sessions for select to authenticated
   using (visitor_id = auth.uid() or public.is_admin());
 
+drop policy if exists "visitor names own session" on public.chat_sessions;
 create policy "visitor names own session"
   on public.chat_sessions for update to authenticated
   using (visitor_id = auth.uid()) with check (visitor_id = auth.uid());
 
+drop policy if exists "admin triages session" on public.chat_sessions;
 create policy "admin triages session"
   on public.chat_sessions for update to authenticated
   using (public.is_admin()) with check (public.is_admin());
 
+drop policy if exists "visitor posts to own session" on public.chat_messages;
 create policy "visitor posts to own session"
   on public.chat_messages for insert to authenticated
   with check (
@@ -166,10 +179,12 @@ create policy "visitor posts to own session"
     )
   );
 
+drop policy if exists "admin posts as agent" on public.chat_messages;
 create policy "admin posts as agent"
   on public.chat_messages for insert to authenticated
   with check (sender = 'agent' and public.is_admin());
 
+drop policy if exists "visitor or admin reads messages" on public.chat_messages;
 create policy "visitor or admin reads messages"
   on public.chat_messages for select to authenticated
   using (

@@ -85,15 +85,15 @@ Open the Supabase project from the Vercel integration panel.
 3. **Your staff login.** Authentication → Users → Add user → email and
    password, tick *Auto Confirm User*.
 
-4. **Make that user an admin.** SQL Editor — no UUID to copy, it looks the id
-   up by address:
+4. **Make that user an admin.** Run `supabase/grant-admin.sql`, changing only
+   the address on the marked line. It looks the id up by email, so there is no
+   UUID to copy, and it stops with a clear message if no user exists under
+   that address yet.
 
-   ```sql
-   insert into public.admins (user_id, email)
-   select id, email from auth.users
-    where lower(email) = lower('you@axisconstructionltd.com')
-       on conflict (user_id) do nothing;
-   ```
+   Note this step is deliberately *not* in `0001_init.sql` — a migration
+   cannot know your address, so it creates the `admins` table empty. Until you
+   run the grant, signing in at `/admin` will succeed and then tell you the
+   account is not on the admin list.
 
    Repeat 3–4 for anyone else who needs the dashboard. `supabase/verify.sql`
    has the revoke statement; it takes effect on their next page load, with no

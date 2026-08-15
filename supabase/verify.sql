@@ -53,27 +53,15 @@ from auth.users where is_anonymous
 union all
 select 'admin accounts', case
          when count(*) > 0 then 'OK (' || count(*) || ')'
-         else 'NONE YET — run the grant below'
+         else 'NONE YET — run grant-admin.sql'
        end
 from public.admins;
 
 
--- ---------------------------------------------------------------------------
--- Grant admin access
--- ---------------------------------------------------------------------------
--- Create the user first under Authentication → Users → Add user (tick Auto
--- Confirm User), then run this with the same address. Looking the id up by
--- email avoids copying a UUID by hand.
 
--- insert into public.admins (user_id, email)
--- select id, email from auth.users
---  where lower(email) = lower('you@axisconstructionltd.com')
---     on conflict (user_id) do nothing;
-
--- Confirm it took:
--- select a.email, a.created_at from public.admins a;
-
--- Revoke someone (takes effect on their next page load, no redeploy):
--- delete from public.admins
---  where user_id = (select id from auth.users
---                    where lower(email) = lower('them@axisconstructionltd.com'));
+-- Granting dashboard access is a separate one-off: see grant-admin.sql.
+-- Revoking someone takes effect on their next page load, no redeploy:
+--
+--   delete from public.admins
+--    where user_id = (select id from auth.users
+--                      where lower(email) = lower('them@axisconstructionltd.com'));
