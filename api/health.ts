@@ -42,12 +42,13 @@ export default function handler(): Response {
   const resendKey = process.env.RESEND_API_KEY ?? ''
   const webhookSecret = process.env.RESEND_WEBHOOK_SECRET ?? ''
   const forwardTo = process.env.FORWARD_TO ?? ''
+  // Kept in step with api/_shared.ts, which is what actually sends.
+  const domain = process.env.MAIL_DOMAIN ?? 'axisconstructionltds.com'
   const mailbox =
-    process.env.MAILBOX_ADDRESS ??
-    'Axis Construction <Contact@axisconstructionltd.com>'
-  const formTo = process.env.FORM_TO ?? 'Contact@axisconstructionltd.com'
+    process.env.MAILBOX_ADDRESS ?? `Axis Construction <Contact@${domain}>`
+  const formTo = process.env.FORM_TO ?? `Contact@${domain}`
   const formFrom =
-    process.env.FORM_FROM ?? 'Axis Website <website@axisconstructionltd.com>'
+    process.env.FORM_FROM ?? `Axis Website <website@${domain}>`
 
   const missing = [
     !supabaseUrl && 'SUPABASE_URL',

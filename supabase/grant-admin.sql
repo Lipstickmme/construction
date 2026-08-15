@@ -11,7 +11,7 @@
 do $$
 declare
   -- ↓↓↓ THE ONLY LINE TO EDIT ↓↓↓
-  admin_email text := 'you@axisconstructionltd.com';
+  admin_email text := 'you@axisconstructionltds.com';
   -- ↑↑↑ THE ONLY LINE TO EDIT ↑↑↑
   target uuid;
 begin

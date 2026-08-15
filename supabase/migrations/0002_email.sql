@@ -1,6 +1,6 @@
 -- Axis Construction — email inbox for the admin dashboard.
 --
--- Mail addressed to contact@axisconstructionltd.com arrives through Resend
+-- Mail addressed to contact@axisconstructionltds.com arrives through Resend
 -- Inbound, which holds the MX records and posts an `email.received` webhook
 -- to /api/inbound-email. Replies are sent from the dashboard through Resend
 -- and recorded here alongside the inbound side, so a thread reads as one

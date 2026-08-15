@@ -32,12 +32,23 @@ export const SERVICE_ROLE_KEY = env([
 ])
 
 export const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
-export const FORM_TO = process.env.FORM_TO ?? 'Contact@axisconstructionltd.com'
+
+/**
+ * The company domain, in one place.
+ *
+ * It must match the domain verified in Resend exactly — sending from anything
+ * else returns 403 "Domain not verified" and the mail never leaves. Overridable
+ * so a change does not need a code edit, but the default is the source of
+ * truth for every address below.
+ */
+export const DOMAIN = process.env.MAIL_DOMAIN ?? 'axisconstructionltds.com'
+
+export const FORM_TO = process.env.FORM_TO ?? `Contact@${DOMAIN}`
 export const FORM_FROM =
-  process.env.FORM_FROM ?? 'Axis Website <website@axisconstructionltd.com>'
+  process.env.FORM_FROM ?? `Axis Website <website@${DOMAIN}>`
 /** The address staff correspond from. Replies are sent as this. */
 export const MAILBOX =
-  process.env.MAILBOX_ADDRESS ?? 'Axis Construction <Contact@axisconstructionltd.com>'
+  process.env.MAILBOX_ADDRESS ?? `Axis Construction <Contact@${DOMAIN}>`
 /** Svix signing secret from Resend → Webhooks. Starts `whsec_`. */
 export const RESEND_WEBHOOK_SECRET = process.env.RESEND_WEBHOOK_SECRET ?? ''
 /** Optional: every inbound message is also forwarded here as a safety copy. */
