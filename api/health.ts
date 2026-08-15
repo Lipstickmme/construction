@@ -125,6 +125,10 @@ export default async function handler(request: Request): Promise<Response> {
     JSON.stringify(
       {
         ready: missing.length === 0,
+        // Which build is actually answering. A stale deployment explains more
+        // confusing symptoms than anything else, and is invisible otherwise.
+        deployedCommit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
+        deployedBranch: process.env.VERCEL_GIT_COMMIT_REF ?? null,
         missing,
         supabaseUrl: supabaseUrl || null,
         supabaseAnonKey: Boolean(anonKey),

@@ -114,6 +114,10 @@ a reload. Safe to run more than once.
 
 ## Checking it works
 
+**Check which build is answering first.** `/api/health` reports
+`deployedCommit` and `deployedBranch`; if the commit is behind what is pushed,
+the symptom is a stale deployment and nothing else needs investigating.
+
 **`https://your-site/api/health?probe=1`** is the quickest check. The `probe`
 parameter asks Resend whether the API key can actually *read* received mail —
 a sending-only key passes every other check and still fails the webhook, so
