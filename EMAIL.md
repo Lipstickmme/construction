@@ -114,7 +114,21 @@ a reload. Safe to run more than once.
 
 ## Checking it works
 
-`https://your-site/api/health` should report:
+**`https://your-site/api/health?probe=1`** is the quickest check. The `probe`
+parameter asks Resend whether the API key can actually *read* received mail —
+a sending-only key passes every other check and still fails the webhook, so
+this is the difference between "a key is set" and "the key works":
+
+```json
+"resendKeyCanReadInbound": "yes"
+```
+
+If it answers `no — HTTP 401: This API key is restricted to sending`, issue a
+new key in Resend with **full access**, update `RESEND_API_KEY` in Vercel and
+redeploy. Create the new key before deleting the old one, or sending breaks in
+between.
+
+Without the parameter it reports configuration only:
 
 ```json
 "inboundEmail": "configured",

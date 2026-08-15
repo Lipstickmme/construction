@@ -19,7 +19,7 @@ function pick(names: string[]): string {
   return ''
 }
 
-export default function handler(): Response {
+export default async function handler(request: Request): Promise<Response> {
   const supabaseUrl = pick([
     'SUPABASE_URL',
     'VITE_SUPABASE_URL',
@@ -78,6 +78,25 @@ export default function handler(): Response {
   const fromDomain = formFrom.match(/@([^\s>]+)/)?.[1] ?? null
   const toDomain = formTo.match(/@([^\s>]+)/)?.[1] ?? null
 
+  // ?probe=1 asks Resend whether the key can actually read received mail.
+  // A sending-only key passes every check above and still fails the webhook,
+  // so this is the difference between "a key is set" and "the key works".
+  let resendKeyCanRead: string | null = null
+
+  if (new URL(request.url).searchParams.has('probe') && resendKey) {
+    try {
+      const probe = await fetch(
+        'https://api.resend.com/emails/receiving?limit=1',
+        { headers: { Authorization: `Bearer ${resendKey}` } },
+      )
+      resendKeyCanRead = probe.ok
+        ? 'yes'
+        : `no — HTTP ${probe.status}: ${(await probe.text()).slice(0, 160)}`
+    } catch (error) {
+      resendKeyCanRead = `could not reach Resend: ${String(error).slice(0, 120)}`
+    }
+  }
+
   return new Response(
     JSON.stringify(
       {
@@ -87,6 +106,8 @@ export default function handler(): Response {
         supabaseAnonKey: Boolean(anonKey),
         supabaseServiceRoleKey: Boolean(serviceRoleKey),
         resendApiKey: Boolean(resendKey),
+        resendKeyCanReadInbound:
+          resendKeyCanRead ?? 'not checked — add ?probe=1 to test it',
         inboundEmail: inboundReady ? 'configured' : 'not configured (optional)',
         inboundForwardCopyTo: forwardTo || null,
         mailbox,
