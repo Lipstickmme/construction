@@ -116,14 +116,23 @@ export async function verifyResendWebhook(
     return fail('RESEND_WEBHOOK_SECRET is not set on this deployment')
   }
 
-  const id = headers.get('svix-id')
-  const timestamp = headers.get('svix-timestamp')
-  const signatures = headers.get('svix-signature')
+  // Svix delivers under either its own prefix or the unbranded Standard
+  // Webhooks names, depending on how the sender is configured. Accepting both
+  // costs nothing and removes a failure that looks identical to a bad secret.
+  const id = headers.get('svix-id') ?? headers.get('webhook-id')
+  const timestamp =
+    headers.get('svix-timestamp') ?? headers.get('webhook-timestamp')
+  const signatures =
+    headers.get('svix-signature') ?? headers.get('webhook-signature')
 
   if (!id || !timestamp || !signatures) {
+    // `Headers.keys()` needs dom.iterable, which this project does not pull in.
+    const seen: string[] = []
+    headers.forEach((_value, name) => seen.push(name))
+
     return fail(
-      'missing svix headers — is this request actually from Resend? ' +
-        `id=${Boolean(id)} timestamp=${Boolean(timestamp)} signature=${Boolean(signatures)}`,
+      'no signature headers under either the svix-* or webhook-* names. ' +
+        `Headers seen: ${seen.join(', ')}`,
     )
   }
 
