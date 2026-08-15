@@ -21,8 +21,19 @@ where relnamespace = 'public'::regnamespace
       ('admins', 'enquiries', 'applications', 'chat_sessions', 'chat_messages')
 
 union all
+select 'email tables (0002)', case
+         when count(*) = 2 then 'OK'
+         else 'MISSING — run supabase/migrations/0002_email.sql'
+       end
+from information_schema.tables
+where table_schema = 'public'
+  and table_name in ('email_threads', 'email_messages')
+
+union all
+-- 12 from 0001, plus 3 more once 0002 has run.
 select 'policies', case
-         when count(*) >= 12 then 'OK (' || count(*) || ')'
+         when count(*) >= 15 then 'OK (' || count(*) || ', both migrations)'
+         when count(*) >= 12 then 'OK (' || count(*) || ', 0001 only — 0002 not run)'
          else 'INCOMPLETE — expected 12, found ' || count(*)
        end
 from pg_policies where schemaname = 'public'
@@ -35,13 +46,15 @@ from pg_proc
 where proname = 'is_admin' and pronamespace = 'public'::regnamespace
 
 union all
-select 'realtime on chat tables', case
-         when count(*) = 2 then 'OK'
-         else 'INCOMPLETE — found ' || count(*) || ' of 2'
+select 'realtime on chat + email', case
+         when count(*) = 4 then 'OK'
+         when count(*) = 2 then 'chat only — 0002 not run'
+         else 'INCOMPLETE — found ' || count(*) || ' of 4'
        end
 from pg_publication_tables
 where pubname = 'supabase_realtime'
-  and tablename in ('chat_sessions', 'chat_messages')
+  and tablename in
+      ('chat_sessions', 'chat_messages', 'email_threads', 'email_messages')
 
 union all
 select 'anonymous sign-ins', case
