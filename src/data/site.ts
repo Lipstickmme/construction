@@ -15,7 +15,7 @@ export const site = {
   founded: '1998',
 
   contact: {
-    email: 'Contact@axisconstructionltds.com',
+    email: 'Contact@axisconstructionsltd.com',
   },
 
   /** Leadership note on the home page. */

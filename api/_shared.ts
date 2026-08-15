@@ -41,7 +41,7 @@ export const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
  * so a change does not need a code edit, but the default is the source of
  * truth for every address below.
  */
-export const DOMAIN = process.env.MAIL_DOMAIN ?? 'axisconstructionltds.com'
+export const DOMAIN = process.env.MAIL_DOMAIN ?? 'axisconstructionsltd.com'
 
 export const FORM_TO = process.env.FORM_TO ?? `Contact@${DOMAIN}`
 export const FORM_FROM =

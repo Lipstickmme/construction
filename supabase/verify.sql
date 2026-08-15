@@ -64,4 +64,4 @@ from public.admins;
 --
 --   delete from public.admins
 --    where user_id = (select id from auth.users
---                      where lower(email) = lower('them@axisconstructionltds.com'));
+--                      where lower(email) = lower('them@axisconstructionsltd.com'));

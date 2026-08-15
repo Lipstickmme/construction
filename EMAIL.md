@@ -1,6 +1,6 @@
 # Email setup
 
-How `Contact@axisconstructionltds.com` sends and receives, and how both reach
+How `Contact@axisconstructionsltd.com` sends and receives, and how both reach
 the dashboard.
 
 **No DNS migration is needed.** Everything runs on Resend, with DNS staying at
@@ -14,7 +14,7 @@ it takes the MX records for the domain, accepts mail, and posts a webhook. That
 removes the whole Cloudflare layer.
 
 ```
-someone emails Contact@axisconstructionltds.com
+someone emails Contact@axisconstructionsltd.com
                     │
         Resend Inbound (MX on the root domain)
                     │
@@ -59,7 +59,7 @@ root, or mail routes elsewhere. With only one root MX, nothing to do.
 
 ## 2. Turn on receiving in Resend
 
-Resend → **Domains** → `axisconstructionltds.com`. The domain needs *Receiving*
+Resend → **Domains** → `axisconstructionsltd.com`. The domain needs *Receiving*
 enabled as well as sending; if the panel offers an MX record you already added,
 it should show as verified.
 
@@ -69,7 +69,7 @@ Resend → **Webhooks** → Add:
 
 | Field | Value |
 | --- | --- |
-| Endpoint URL | `https://axisconstructionltds.com/api/inbound-email` |
+| Endpoint URL | `https://axisconstructionsltd.com/api/inbound-email` |
 | Event | `email.received` |
 
 Copy the **signing secret** it shows — it starts `whsec_`. That is the only
@@ -82,15 +82,15 @@ Vercel → Settings → Environment Variables:
 | Name | Value |
 | --- | --- |
 | `RESEND_WEBHOOK_SECRET` | the `whsec_…` value from step 3 |
-| `MAILBOX_ADDRESS` | `Axis Construction <Contact@axisconstructionltds.com>` |
+| `MAILBOX_ADDRESS` | `Axis Construction <Contact@axisconstructionsltd.com>` |
 | `FORWARD_TO` | a mailbox **on another domain**, e.g. your Gmail (optional) |
 
 `MAILBOX_ADDRESS` is what dashboard replies are sent as. It must be at the
-domain verified in Resend, so `Contact@axisconstructionltds.com` is right — and
+domain verified in Resend, so `Contact@axisconstructionsltd.com` is right — and
 it is already the default, so setting it is optional.
 
 ⚠️ **`FORWARD_TO` must not be an address on your own domain.** Setting it to
-`Contact@axisconstructionltds.com` creates a mail loop: the copy is delivered
+`Contact@axisconstructionsltd.com` creates a mail loop: the copy is delivered
 back to the same mailbox, fires the webhook again, and is forwarded again.
 Every hop has a fresh Resend id so nothing dedupes it, and it runs until the
 day's sending quota is gone.
@@ -119,15 +119,15 @@ a reload. Safe to run more than once.
 ```json
 "inboundEmail": "configured",
 "inboundForwardCopyTo": "you@gmail.com",
-"mailbox": "Axis Construction <Contact@axisconstructionltds.com>"
+"mailbox": "Axis Construction <Contact@axisconstructionsltd.com>"
 ```
 
-Then send a real message to `Contact@axisconstructionltds.com` from any account:
+Then send a real message to `Contact@axisconstructionsltd.com` from any account:
 
 1. It appears in `/admin` → **Email**, marked unread.
 2. A copy arrives at your `FORWARD_TO` inbox.
 3. Reply from the dashboard. It arrives from
-   `Contact@axisconstructionltds.com`, threaded under the original.
+   `Contact@axisconstructionsltd.com`, threaded under the original.
 4. Reply to *that*, and it lands back on the same conversation rather than
    opening a second one.
 
@@ -155,7 +155,7 @@ delivery log is where to look rather than the response body.
 If you would rather answer from Gmail and still have it come from the company
 address, Resend provides SMTP credentials (`smtp.resend.com`, username
 `resend`, password = your API key). Gmail → Settings → Accounts → **Send mail
-as** → add `Contact@axisconstructionltds.com` using those.
+as** → add `Contact@axisconstructionsltd.com` using those.
 
 Those replies will not appear in the dashboard — it only records what it sends
 itself. Pick one habit or accept a partial record.

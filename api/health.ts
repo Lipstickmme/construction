@@ -43,7 +43,7 @@ export default function handler(): Response {
   const webhookSecret = process.env.RESEND_WEBHOOK_SECRET ?? ''
   const forwardTo = process.env.FORWARD_TO ?? ''
   // Kept in step with api/_shared.ts, which is what actually sends.
-  const domain = process.env.MAIL_DOMAIN ?? 'axisconstructionltds.com'
+  const domain = process.env.MAIL_DOMAIN ?? 'axisconstructionsltd.com'
   const mailbox =
     process.env.MAILBOX_ADDRESS ?? `Axis Construction <Contact@${domain}>`
   const formTo = process.env.FORM_TO ?? `Contact@${domain}`

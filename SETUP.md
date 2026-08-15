@@ -26,7 +26,7 @@ through Vercel"; the alternative is more code doing a worse job.
 ## Before you start: one thing about Resend
 
 Sending and receiving are two separate products in Resend, set up separately.
-Sending is covered below. Receiving — so that `Contact@axisconstructionltds.com`
+Sending is covered below. Receiving — so that `Contact@axisconstructionsltd.com`
 actually collects the notifications rather than sending them into the void — is
 Resend Inbound, covered in [EMAIL.md](EMAIL.md).
 
@@ -111,7 +111,7 @@ Open the Supabase project from the Vercel integration panel.
    the result is the same.)
 
 2. **Verify the domain**, in the Resend dashboard: Domains → Add Domain →
-   `axisconstructionltds.com`. Resend gives you DNS records (a DKIM `TXT`, an
+   `axisconstructionsltd.com`. Resend gives you DNS records (a DKIM `TXT`, an
    SPF `TXT`, usually an `MX` for the return path). Add them wherever your DNS
    lives and wait for the status to go green — usually minutes, occasionally
    hours.
@@ -123,8 +123,8 @@ Open the Supabase project from the Vercel integration panel.
    address to your own inbox.
 
 3. **Optionally set the addresses.** The function already defaults to
-   `Contact@axisconstructionltds.com` for the recipient and
-   `Axis Website <website@axisconstructionltds.com>` for the sender. Override
+   `Contact@axisconstructionsltd.com` for the recipient and
+   `Axis Website <website@axisconstructionsltd.com>` for the sender. Override
    either in Vercel → Settings → Environment Variables:
 
    | Name | Value |
@@ -170,8 +170,8 @@ values:
   "supabaseAnonKey": true,
   "supabaseServiceRoleKey": true,
   "resendApiKey": true,
-  "formTo": "Contact@axisconstructionltds.com",
-  "formFrom": "Axis Website <website@axisconstructionltds.com>"
+  "formTo": "Contact@axisconstructionsltd.com",
+  "formFrom": "Axis Website <website@axisconstructionsltd.com>"
 }
 ```
 
@@ -181,7 +181,7 @@ sent and never arrives. Then:
 
 1. Submit the contact form on the live site.
 2. It should appear in `/admin` within a second or two.
-3. An email should reach `Contact@axisconstructionltds.com`. If the row is
+3. An email should reach `Contact@axisconstructionsltd.com`. If the row is
    there but no email arrives, the problem is Resend and not Supabase — check
    the function logs in Vercel (Deployments → Functions → `submit-form`) for
    the response Resend gave, and confirm the domain is verified and
