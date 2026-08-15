@@ -38,23 +38,81 @@ dashboard is a convenience on top, never the only copy.
 
 ---
 
-## 1. Cloudflare Email Routing
+## 1. Move DNS from Namecheap to Cloudflare
 
-DNS is already on Cloudflare, so this is a few clicks.
+Cloudflare Email Routing requires Cloudflare to be the domain's DNS host —
+it has to own the MX records to intercept mail. On the free plan that means
+delegating the nameservers; the partial "CNAME setup" that avoids this is a
+Business-plan feature.
 
-1. Cloudflare dashboard → your domain → **Email** → **Email Routing** → Enable.
-   It offers to add the MX and SPF records; accept.
+This does not move the site. Vercel still hosts it and Namecheap still owns the
+registration; only the DNS answers move.
 
-   ⚠️ **Check Resend first.** Resend's verification adds records too. Its MX
-   normally sits on a `send.` subdomain, which coexists with Email Routing on
-   the root fine. If Resend put an MX on the **root**, the two conflict — move
-   Resend's to a subdomain before enabling routing, or receiving will break.
+**Take stock first.** In Namecheap → Domain List → Manage → Advanced DNS,
+screenshot or copy out every record. You should have at least:
+
+| Purpose | Typical record |
+| --- | --- |
+| Resend DKIM | `TXT` on `resend._domainkey` (long `p=` value) |
+| Resend SPF | `TXT` on `send` — `v=spf1 include:amazonses.com ~all` |
+| Resend return path | `MX` on `send` → `feedback-smtp.<region>.amazonses.com` |
+| Site | `A` on `@` → `76.76.21.21`, `CNAME` on `www` → `cname.vercel-dns.com` |
+
+Getting this list wrong is the only way this step bites: anything you fail to
+recreate stops working when the nameservers change.
+
+**Then:**
+
+1. Create a free account at [dash.cloudflare.com](https://dash.cloudflare.com)
+   if you do not have one. Free plan is enough — this is DNS and email routing,
+   not CDN.
+
+2. **Add a site** → `axisconstructionltd.com` → **Free** plan. Cloudflare scans
+   Namecheap and imports what it finds.
+
+3. **Check the import against your list.** The scan is good but not perfect,
+   and long DKIM `TXT` values are the ones that most often come across
+   truncated. Add anything missing by hand before going further.
+
+4. **Set the site records to DNS only.** Click the orange cloud next to the `@`
+   and `www` records so it turns grey. Proxying Vercel through Cloudflare
+   causes certificate and redirect problems; Vercel wants plain DNS.
+
+5. Cloudflare shows two nameservers, e.g. `dana.ns.cloudflare.com`. In Namecheap
+   → Domain List → Manage → **Nameservers** → change *Namecheap BasicDNS* to
+   **Custom DNS**, paste both, save.
+
+6. Wait for Cloudflare to report the domain **Active**. Usually minutes,
+   occasionally up to 24 hours.
+
+7. **Confirm nothing broke** before continuing: load the site, and check Resend
+   → Domains still reads **Verified**. If Resend has gone amber, a DKIM or SPF
+   record did not survive the move — fix it in Cloudflare DNS.
+
+## 2. Turn on Email Routing
+
+1. Cloudflare → your domain → **Email** → **Email Routing** → Enable. It offers
+   to add the MX and SPF records; accept.
+
+   ⚠️ **Check the Resend MX first.** Resend's return-path MX belongs on the
+   `send` subdomain, where it coexists with Email Routing on the root. If it
+   ended up on the **root** (`@`), the two conflict and receiving will break —
+   move it to `send` before enabling.
 
 2. **Destination addresses** → add the personal or work inbox that should get
    the forwarded copy (a Gmail address is fine). Cloudflare emails it a
    verification link; click it.
 
-## 2. Deploy the Email Worker
+### If you would rather not move nameservers
+
+Email Routing is not the only way to feed the dashboard. Mailgun and Postmark
+both do inbound routing by MX record, so they work with DNS left at Namecheap,
+and both post to a webhook. `/api/inbound-email` takes a simple JSON body, so
+adapting it is a small change — ask and I will do it. The trade-off is another
+account and another service to keep an eye on, against a one-off nameserver
+change.
+
+## 3. Deploy the Email Worker
 
 ```bash
 cd cloudflare/email-worker
@@ -82,7 +140,7 @@ Add **the same value** in Vercel → Settings → Environment Variables as
 anything reaching it shows up in the dashboard as genuine correspondence, so it
 is not left open.
 
-## 3. Point the address at the worker
+## 4. Point the address at the worker
 
 Cloudflare → Email → Email Routing → **Routing rules** → Create:
 
@@ -92,19 +150,19 @@ Cloudflare → Email → Email Routing → **Routing rules** → Create:
 A catch-all rule to the same worker also works if you want every address on the
 domain in one place.
 
-## 4. Tell the site which address it speaks as
+## 5. Tell the site which address it speaks as
 
 Vercel → Settings → Environment Variables:
 
 | Name | Value |
 | --- | --- |
 | `MAILBOX_ADDRESS` | `Axis Construction <Contact@axisconstructionltd.com>` |
-| `INBOUND_SECRET` | the value from step 2 |
+| `INBOUND_SECRET` | the value from step 3 |
 
 `MAILBOX_ADDRESS` is what dashboard replies are sent as, and it must be at the
 domain verified in Resend. Redeploy afterwards.
 
-## 5. Run the migration
+## 6. Run the migration
 
 Supabase SQL Editor → paste `supabase/migrations/0002_email.sql` → Run. It
 creates `email_threads` and `email_messages`, admin-only row level security, and
