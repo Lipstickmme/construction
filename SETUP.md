@@ -83,18 +83,24 @@ Open the Supabase project from the Vercel integration panel.
    Without it the chat cannot open a session.
 
 3. **Your staff login.** Authentication → Users → Add user → email and
-   password, tick *Auto Confirm User*. Copy the new user's UUID.
+   password, tick *Auto Confirm User*.
 
-4. **Make that user an admin.** SQL Editor:
+4. **Make that user an admin.** SQL Editor — no UUID to copy, it looks the id
+   up by address:
 
    ```sql
    insert into public.admins (user_id, email)
-   values ('paste-the-uuid-here', 'you@axisconstructionltd.com');
+   select id, email from auth.users
+    where lower(email) = lower('you@axisconstructionltd.com')
+       on conflict (user_id) do nothing;
    ```
 
-   Repeat 3–4 for anyone else who needs the dashboard. Removing someone is
-   `delete from public.admins where user_id = '…';` and takes effect
-   immediately, no redeploy.
+   Repeat 3–4 for anyone else who needs the dashboard. `supabase/verify.sql`
+   has the revoke statement; it takes effect on their next page load, with no
+   redeploy.
+
+5. **Check the schema.** Run `supabase/verify.sql`. Every row should read OK,
+   except the two that are expected to be empty until the site is in use.
 
 ## 4. Add Resend
 
