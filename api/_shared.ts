@@ -109,17 +109,39 @@ export function secretsMatch(a: string, b: string): boolean {
 export async function verifyResendWebhook(
   rawBody: string,
   headers: Headers,
-): Promise<boolean> {
-  if (!RESEND_WEBHOOK_SECRET) return false
+): Promise<{ ok: boolean; reason: string }> {
+  const fail = (reason: string) => ({ ok: false, reason })
+
+  if (!RESEND_WEBHOOK_SECRET) {
+    return fail('RESEND_WEBHOOK_SECRET is not set on this deployment')
+  }
 
   const id = headers.get('svix-id')
   const timestamp = headers.get('svix-timestamp')
   const signatures = headers.get('svix-signature')
-  if (!id || !timestamp || !signatures) return false
+
+  if (!id || !timestamp || !signatures) {
+    return fail(
+      'missing svix headers — is this request actually from Resend? ' +
+        `id=${Boolean(id)} timestamp=${Boolean(timestamp)} signature=${Boolean(signatures)}`,
+    )
+  }
 
   // Reject anything old enough to be a replay of a captured request.
   const age = Math.abs(Date.now() / 1000 - Number(timestamp))
-  if (!Number.isFinite(age) || age > 300) return false
+  if (!Number.isFinite(age)) return fail(`unparseable svix-timestamp: ${timestamp}`)
+  if (age > 300) {
+    return fail(
+      `webhook is ${Math.round(age)}s old, outside the 300s window — ` +
+        'either a replay, or this deployment\'s clock is wrong',
+    )
+  }
+
+  if (!/^whsec_/.test(RESEND_WEBHOOK_SECRET)) {
+    console.warn(
+      'RESEND_WEBHOOK_SECRET does not start with whsec_ — check it was copied whole',
+    )
+  }
 
   const secret = RESEND_WEBHOOK_SECRET.replace(/^whsec_/, '')
   const key = await crypto.subtle.importKey(
@@ -139,9 +161,16 @@ export async function verifyResendWebhook(
 
   // The header carries a space-delimited list of `v1,<base64>` entries, so a
   // secret can be rotated without dropping deliveries mid-flight.
-  return signatures
+  const matched = signatures
     .split(' ')
     .some((entry) => secretsMatch(entry.split(',')[1] ?? '', expected))
+
+  return matched
+    ? { ok: true, reason: '' }
+    : fail(
+        'signature did not match — the RESEND_WEBHOOK_SECRET in Vercel is not ' +
+          'the signing secret of the webhook that sent this',
+      )
 }
 
 /**
