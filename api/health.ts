@@ -129,6 +129,11 @@ export default async function handler(request: Request): Promise<Response> {
         // confusing symptoms than anything else, and is invisible otherwise.
         deployedCommit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
         deployedBranch: process.env.VERCEL_GIT_COMMIT_REF ?? null,
+        // The host this request actually landed on. If it differs from the
+        // host you typed, a redirect is in play — and webhook senders do not
+        // follow redirects, so the URL registered with Resend must be this
+        // one, not the one that bounces to it.
+        servedFrom: request.headers.get('host') ?? null,
         missing,
         supabaseUrl: supabaseUrl || null,
         supabaseAnonKey: Boolean(anonKey),

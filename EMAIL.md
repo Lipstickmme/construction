@@ -158,10 +158,25 @@ the site gave:
 
 | Response | Cause |
 | --- | --- |
+| `308 Permanent Redirect` | **the URL redirects, and webhook senders do not follow redirects.** See below |
 | `401 Unauthorised` | `RESEND_WEBHOOK_SECRET` does not match, or is unset in Vercel |
-| `502` | the body fetch failed — usually `RESEND_API_KEY` lacks read access |
+| `502` | the body fetch failed — the response body names the upstream status |
 | `503` | `RESEND_WEBHOOK_SECRET` is not set at all |
+| `500` | the response body names the stage and the failure |
 | timeout | the deploy is cold or the function errored; check Vercel logs |
+
+### 308 is the one that looks like nothing is wrong
+
+A project serving both `example.com` and `www.example.com` has one canonical
+and the other 308s to it. A browser follows that without showing you — Chrome
+even hides the `www.` — so the endpoint looks healthy while every webhook dies
+at the redirect.
+
+`/api/health` reports `servedFrom`, the host the request actually landed on.
+Load it at the same URL the webhook uses: if `servedFrom` comes back as a
+different host from the one you typed, that is the redirect, and **the webhook
+URL in Resend must be changed to the host it reports**. Vercel → Settings →
+Domains shows which name is canonical and which redirects to it.
 
 Signature failures are deliberately indistinguishable from the outside, so the
 delivery log is where to look rather than the response body.
