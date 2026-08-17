@@ -107,12 +107,15 @@ export default function Contact() {
 
           <div className="mt-10 border-t border-hairline pt-8">
             <p className="index-num text-concrete uppercase">Phone</p>
-            <a
-              href={site.contact.phoneHref}
-              className="link-wipe mt-2 inline-block font-display text-lg font-medium text-ink"
-            >
-              {site.contact.phone}
-            </a>
+            {site.contact.phones.map((phone) => (
+              <a
+                key={phone.href}
+                href={phone.href}
+                className="link-wipe mt-2 block w-fit font-display text-lg font-medium text-ink"
+              >
+                {phone.display}
+              </a>
+            ))}
           </div>
 
           <div className="mt-10 border-t border-hairline pt-8">
@@ -120,7 +123,7 @@ export default function Contact() {
             <p className="mt-3 max-w-sm text-sm leading-relaxed">
               We answer project enquiries inside one working day, and whoever
               comes back to you will be from the discipline you need. If it is
-              a quick question, call the number above or use the chat box in
+              a quick question, call either number above or use the chat box in
               the corner.
             </p>
           </div>

@@ -60,12 +60,15 @@ export function Footer() {
             >
               {site.contact.email}
             </a>
-            <a
-              href={site.contact.phoneHref}
-              className="link-wipe block text-white/80 transition-colors hover:text-orange"
-            >
-              {site.contact.phone}
-            </a>
+            {site.contact.phones.map((phone) => (
+              <a
+                key={phone.href}
+                href={phone.href}
+                className="link-wipe block text-white/80 transition-colors hover:text-orange"
+              >
+                {phone.display}
+              </a>
+            ))}
           </address>
         </div>
       </div>

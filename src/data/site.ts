@@ -16,9 +16,14 @@ export const site = {
 
   contact: {
     email: 'Contact@axisconstructionsltd.com',
-    /** Spaced for reading. `phoneHref` is the same number for `tel:`. */
-    phone: '+61 405 407 696',
-    phoneHref: 'tel:+61405407696',
+    /**
+     * Spaced for reading, with the same digits unspaced for the `tel:` link,
+     * so no component has to strip anything. Listed in calling order.
+     */
+    phones: [
+      { display: '+61 405 407 696', href: 'tel:+61405407696' },
+      { display: '+1 929 647 6610', href: 'tel:+19296476610' },
+    ],
   },
 
   /** Leadership note on the home page. */
