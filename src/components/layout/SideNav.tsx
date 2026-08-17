@@ -201,6 +201,12 @@ export function SideNav({ open, onClose }: SideNavProps) {
           >
             {site.contact.email}
           </a>
+          <a
+            href={site.contact.phoneHref}
+            className="link-wipe mt-1 block font-display text-base font-medium text-white"
+          >
+            {site.contact.phone}
+          </a>
         </div>
       </div>
     </>

@@ -53,12 +53,18 @@ export function Footer() {
 
         <div>
           <p className={columnLabel}>Contact</p>
-          <address className="mt-5 text-sm not-italic">
+          <address className="mt-5 space-y-3 text-sm not-italic">
             <a
               href={`mailto:${site.contact.email}`}
               className="link-wipe block break-all text-white/80 transition-colors hover:text-orange"
             >
               {site.contact.email}
+            </a>
+            <a
+              href={site.contact.phoneHref}
+              className="link-wipe block text-white/80 transition-colors hover:text-orange"
+            >
+              {site.contact.phone}
             </a>
           </address>
         </div>

@@ -106,11 +106,22 @@ export default function Contact() {
           </div>
 
           <div className="mt-10 border-t border-hairline pt-8">
+            <p className="index-num text-concrete uppercase">Phone</p>
+            <a
+              href={site.contact.phoneHref}
+              className="link-wipe mt-2 inline-block font-display text-lg font-medium text-ink"
+            >
+              {site.contact.phone}
+            </a>
+          </div>
+
+          <div className="mt-10 border-t border-hairline pt-8">
             <p className="index-num text-concrete uppercase">Enquiries</p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed">
               We answer project enquiries inside one working day, and whoever
               comes back to you will be from the discipline you need. If it is
-              a quick question, the chat box in the corner is faster.
+              a quick question, call the number above or use the chat box in
+              the corner.
             </p>
           </div>
         </Reveal>
