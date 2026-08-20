@@ -201,15 +201,6 @@ export function SideNav({ open, onClose }: SideNavProps) {
           >
             {site.contact.email}
           </a>
-          {site.contact.phones.map((phone) => (
-            <a
-              key={phone.href}
-              href={phone.href}
-              className="link-wipe mt-1 block font-display text-base font-medium text-white"
-            >
-              {phone.display}
-            </a>
-          ))}
         </div>
       </div>
     </>

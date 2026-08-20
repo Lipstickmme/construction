@@ -1,7 +1,7 @@
 /**
  * Company details.
  *
- * Contact is the enquiry mailbox and the phone number, no street address. Form
+ * Contact is the enquiry mailbox only, no address and no phone number. Form
  * submissions are delivered to the same address by `api/submit-form.ts`, so
  * this constant and the `FORM_TO` environment variable should stay in step.
  */
@@ -16,14 +16,6 @@ export const site = {
 
   contact: {
     email: 'Contact@axisconstructionsltd.com',
-    /**
-     * Spaced for reading, with the same digits unspaced for the `tel:` link,
-     * so no component has to strip anything. Listed in calling order.
-     */
-    phones: [
-      { display: '+61 405 407 696', href: 'tel:+61405407696' },
-      { display: '+1 929 647 6610', href: 'tel:+19296476610' },
-    ],
   },
 
   /** Leadership note on the home page. */
